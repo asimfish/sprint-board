@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 18:05 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 18:50 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -408,15 +408,16 @@ a{color:var(--eval)}
         <tr><td>Memory replay (recurring), all three suites</td><td><span class="tag t-ok">swap +40 pp (10) · task +4.2 · goal +2.9</span></td><td>B · CC</td><td class="mono">15:04</td></tr>
         <tr><td>λ calibration, 312 training-context episodes (six λ)</td><td><span class="tag t-ok">frozen: ASBS 0.068, WF 0.1</span></td><td>B</td><td class="mono">14:55</td></tr>
         <tr><td>goal_task · ASBS (v5.2a), weighted fitting, rerank</td><td><span class="tag t-risk">ASBS +2.5 pp, p = 0.75 (n.s.)</span></td><td>B · CC</td><td class="mono">official 17:52</td></tr>
-        <tr><td>spatial_task · learned arms (80 + 40 per arm)</td><td><span class="tag t-run">running, 32 workers</span></td><td>B</td><td class="mono">≈19:00</td></tr>
-        <tr><td>E6 consolidation confirmatory (16 states × 8 seeds × 3 arms)</td><td><span class="tag t-run">replay table + registration</span></td><td>CC · B</td><td class="mono">≈21:00</td></tr>
+        <tr><td>spatial_task · learned arms</td><td><span class="tag t-ok">done</span></td><td>B</td><td class="mono">≈18:30</td></tr>
+        <tr><td>spatial_swap · learned arms</td><td><span class="tag t-run">108/360</span></td><td>B</td><td class="mono">≈19:20</td></tr>
+        <tr><td>E6 consolidation confirmatory (16 states × 16 seeds × 3 arms, power 0.96)</td><td><span class="tag t-run">table frozen · registering</span></td><td>CC · B</td><td class="mono">≈21:15</td></tr>
         <tr><td>spatial_task, spatial_swap · all core arms (40 + 40 units)</td><td><span class="tag t-wait">queued</span></td><td>B</td><td class="mono">≈17:30</td></tr>
         <tr><td>Online simulator rerank (10 reference units, capped at 4 workers)</td><td><span class="tag t-wait">background</span></td><td>B</td><td class="mono">≈19:00</td></tr>
         <tr><td>Paired statistics per arm (CI, McNemar, Holm)</td><td><span class="tag t-run">auto on completion</span></td><td>CC</td><td class="mono">rolling</td></tr>
         <tr><td>Theory validation: value–divergence frontier, Prop. 1, cost table</td><td><span class="tag t-ok">computed</span></td><td>CC · F</td><td class="mono">figure in v4</td></tr>
         <tr><td>LIBERO-10 · ASBS transfer pairs</td><td><span class="tag t-ok">60 pairs: 56 vs 55, 4 rescued / 3 broken</span></td><td>A</td><td class="mono">29 units left</td></tr>
         <tr><td>RoboDojo · native (3–5 tasks × 10), noise leverage</td><td><span class="tag t-run">27 GiB checkpoint downloading</span></td><td>gpumgr</td><td class="mono">17:30</td></tr>
-        <tr><td>Synthetic dimension sweep (d = 2…512): Gibbs frontier and Prop. 1 corollary</td><td><span class="tag t-run">new, CPU</span></td><td>W3</td><td class="mono">≈17:50</td></tr>
+        <tr><td>Synthetic dimension sweep (d = 2…512): Gibbs frontier and Prop. 1 corollary</td><td><span class="tag t-ok">done</span></td><td>W3</td><td class="mono">18:3x</td></tr>
         <tr><td>Synthetic fidelity (E3), AUC curve, overdispersion</td><td><span class="tag t-ok">done</span></td><td>CC</td><td class="mono">—</td></tr>
         <tr><td>Reading version v4 with measured cells replacing forecasts</td><td><span class="tag t-run">rolling</span></td><td>W1</td><td class="mono">per result</td></tr>
       </tbody></table></div>
@@ -484,7 +485,7 @@ a{color:var(--eval)}
       <div class="label" style="color:var(--asbs)">Where our advantage comes from (CC, 11:10, training data only)</div>
       <p style="margin-top:6px;font-size:14px">Two fixes, registered as v5.2a before evaluation. (1) λ matched to best-of-8's KL (1.204 nats): the exact tilt then lifts E[Â] by 0.146, above rerank's 0.133, as the Gibbs principle predicts. (2) ASBS was under-trained: at the registered 200 updates it realised only 24% of the exact tilt; 16,000 updates (about 2 min per λ) realise 70%, and at the 2×KL point ASBS matches rerank's E[Â]. Forecast: <b>goal_task +11.4 pp [2.5, 20.9] at zero critic calls</b>, versus rerank's +10.3 with 8 calls. Caveats: the rerank baseline is optimistic, and the conversion assumes success rises linearly with Â.</p>
     </div>
-  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>18:05: official goal_task statistics (registered 80 pairs).</b> Native 18.75%, ASBS 21.25% (+2.5 pp, CI [−8.75, 15], 6 vs 4 discordant, McNemar p = 0.75), weighted fitting 22.5%, rerank 22.5%. All learned arms are statistically indistinguishable from native on held-out states, as the within-state AUC of 0.53 predicts. spatial_task learned arms are running (32 workers; recurring 70/120 done), spatial_swap follows, and E6 is being registered. <b>Blocker:</b> Cluster B's local data disk is down to 4.6 GiB, mostly from another project's revision archives (about 800 MB per revision). A is freeing 20 GiB from our own duplicated snapshots; CC's statistics and W3's synthetic sweep have moved to other machines.</p>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>18:50: blockers cleared, main table almost complete, E6 sized for power.</b> The main table is at 1,188/1,440 episodes; spatial_swap learned arms are running (32 workers) and finish around 19:20. goal_task (registered 80 pairs): ASBS +2.5 pp, p = 0.75, n.s. E6 selection table is frozen on training data; CC's training-data forecast for replay − native is +12.7 pp [1.9, 24.6]. E6 is now registered at 16 fresh seeds per state, 256 pairs, power 0.96, and runs after spatial_swap, targeting 21:15 UTC. With your authorisation, the supervisor freed 24.6 GiB on the data disk (intermediate epochs of two finished July runs, keeping latest and final, plus a regenerable pip cache), taking free space from 9.4 to 34 GiB. LIBERO-10 resumes with its last 29 units, and figures can render again. The synthetic dimension sweep has finished on another machine.</p>
   </div>
 </section>
 
