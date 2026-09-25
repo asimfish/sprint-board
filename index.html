@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 11:15 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 11:20 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -376,6 +376,17 @@ a{color:var(--eval)}
       </tbody></table></div>
   </div>
 
+  <div class="panel" style="margin-top:16px;border-left:4px solid var(--asbs)">
+    <h3>Theory validation on the real π<sub>0.5</sub> critic (computational, training data only, due 12:15)</h3>
+    <ul class="status-list" style="margin-top:10px">
+      <li><span class="mark m-ok"></span><span><b>Gibbs optimality, confirmed:</b> at equal KL (1.204 nats) the exact tilt lifts E[Â] by 0.146, against 0.133 for best-of-8 reranking.</span></li>
+      <li><span class="mark m-ok"></span><span><b>Sampler convergence, measured:</b> ASBS realises 24% → 34% → 51% → 70% of the exact tilt at 200 / 1k / 4k / 16k updates.</span></li>
+      <li><span class="mark m-run"></span><span><b>Value–divergence frontier figure:</b> exact-tilt curve against best-of-K (K = 2…32), ASBS training trajectory and weighted fitting.</span></li>
+      <li><span class="mark m-run"></span><span><b>Proposition 1 check:</b> empirical density ratios against the Δ/λ bound, plus the high-dimensional corollary as a worked instance.</span></li>
+      <li><span class="mark m-run"></span><span><b>Deployment cost table:</b> critic calls and wall-clock per decision for ASBS (0), rerank (K) and online simulator reranking.</span></li>
+    </ul>
+  </div>
+
   <h3 style="margin:22px 0 10px">Main evaluation design (PREREG v5 → v5.1)</h3>
   <div class="tbl-wrap">
     <table>
@@ -508,7 +519,7 @@ a{color:var(--eval)}
   <div class="panel">
     <div class="risk"><span class="sev t-bad">High</span><div><b>Candidate choice may carry little generalisable signal.</b> <span class="muted">Advantage Q̂ memorises training states and ranks held-out states at chance. Mitigation: leverage test at M=8, low-dimensional noise features, more mixed states, recurring cohort, λ calibration that can fall back to ρ<sub>0</sub> so ASBS never hurts native. Gate at 12:30; below 0.55 we switch to Scenario B claims.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>Evaluation window is 4.5 h for 1,440 episodes plus 30 online units.</b> <span class="muted">About 3.1 h at measured throughput. Slack before 22:00 is about 4 h.</span></div></div>
-    <div class="risk"><span class="sev t-risk">Medium</span><div><b>RoboDojo is blocked (10:25 check by gpumgr).</b> <span class="muted">Both the 5090 host cards are busy with another user's training, all cluster B A100s have processes, there is no RoboDojo checkout or pi05_base_aloha cache, and Isaac Sim 5.1 needs about 300 GiB. It needs a free RTX card and a large disk from you.</span></div></div>
+    <div class="risk"><span class="sev t-risk">Medium</span><div><b>RoboDojo: second attempt under way (you authorised 5090 and the 4090 host).</b> <span class="muted">the 4090 host is reachable through its reverse tunnel, idle (0.6 of 24.6 GiB, 2% util), with 273 GiB free. gpumgr is checking Vulkan, network and whether Isaac Sim 5.1 fits. The 5090s are shared only if at least 14 GiB is free and the other user's training is unaffected. First episode by 14:00, results by 18:00.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>Source archive leaked internal paths and host names.</b> <span class="muted">W4's packager fails closed on paths, hosts, draft banners, TBD and projected values.</span></div></div>
     <div class="risk"><span class="sev t-ok">Low</span><div><b>Disk space.</b> <span class="muted">Cleaned intermediate checkpoints; shared disk is being watched.</span></div></div>
   </div>
