@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 10:30 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 10:45 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -362,6 +362,18 @@ a{color:var(--eval)}
       </g>
     </svg>
     <p class="faint" style="font-size:12px;margin-top:6px">Overdispersion across 50 informative states: candidate-mean variance is 1.19× the binomial expectation (dispersion ratio 1.21, permutation p = 1e-4). φ(z) trend: 0.544 at 236 states → 0.560 at 268 states.</p>
+  </div>
+
+  <div class="panel" style="margin-top:16px;border-left:4px solid var(--eval)">
+    <h3>Benchmark coverage: every benchmark partly measured, the rest forecast (your decision, 10:40)</h3>
+    <p class="cap" style="margin-top:6px">Every cell in the reading version will be labelled measured, forecast (cross-fitted from training data) or assumption.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Benchmark</th><th>Measured today</th><th>Forecast</th><th>Owner · due (UTC)</th></tr></thead>
+      <tbody>
+        <tr><td><b>LIBERO-PRO</b></td><td>Full pre-registered paired evaluation on 8 non-saturated tasks: native, ASBS, weighted fitting, learned rerank, no-feedback, online rerank (30), memory replay (recurring)</td><td>Until each suite finishes: cells from forecast_v1</td><td>B · goal_task ≈15:00, all ≈18:30</td></tr>
+        <tr><td><b>LIBERO-10</b></td><td>Native per-task rates (10 × 20); chunk-0 candidate leverage on non-saturated tasks; ASBS vs native transfer test (10 tasks × 10 pairs)</td><td>Rerank and weighted fitting, scaled from measured leverage</td><td>A · leverage 13:30, pairs 17:30</td></tr>
+        <tr><td><b>RoboDojo</b></td><td>π<sub>0.5</sub> (pi05_base_aloha) native rates on 3–5 tasks; noise leverage at t = 0 (K = 4 × M = 2) through the policy’s noise hook</td><td>ASBS if collected and trained the same way (different robot, so the LIBERO proposal cannot transfer), marked as an assumption</td><td>gpumgr · go/no-go 13:00, results 17:00</td></tr>
+      </tbody></table></div>
   </div>
 
   <h3 style="margin:22px 0 10px">Main evaluation design (PREREG v5 → v5.1)</h3>
@@ -554,7 +566,7 @@ a{color:var(--eval)}
   <div class="panel">
     <div class="risk"><span class="sev t-bad">High</span><div><b>Candidate choice may carry little generalisable signal.</b> <span class="muted">Advantage Q̂ memorises training states and ranks held-out states at chance. Mitigation: leverage test at M=8, low-dimensional noise features, more mixed states, recurring cohort, λ calibration that can fall back to ρ<sub>0</sub> so ASBS never hurts native. Gate at 12:30; below 0.55 we switch to Scenario B claims.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>Evaluation window is 4.5 h for 1,440 episodes plus 30 online units.</b> <span class="muted">About 3.1 h at measured throughput. Slack before 22:00 is about 4 h.</span></div></div>
-    <div class="risk"><span class="sev t-risk">Medium</span><div><b>RoboDojo is not run.</b> <span class="muted">Blocked by Isaac version, disk space and busy 5090s. The paper aligns on LIBERO-PRO; LIBERO-10 appears via the leverage study and retention tasks.</span></div></div>
+    <div class="risk"><span class="sev t-risk">Medium</span><div><b>RoboDojo bring-up may fail.</b> <span class="muted">Needs Isaac Sim 5.1 on an RT-core GPU (5090/4090) installed off the root disk. Go/no-go at 13:00; if it fails, the table says “not run” rather than a number.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>Source archive leaked internal paths and host names.</b> <span class="muted">W4's packager fails closed on paths, hosts, draft banners, TBD and projected values.</span></div></div>
     <div class="risk"><span class="sev t-ok">Low</span><div><b>Disk space.</b> <span class="muted">Cleaned intermediate checkpoints; shared disk is being watched.</span></div></div>
   </div>
