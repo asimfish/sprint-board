@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 08:55 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 09:15 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -222,7 +222,7 @@ a{color:var(--eval)}
     <div class="panel lead-panel">
       <div class="label" style="margin-bottom:8px">Where we stand</div>
       <p><strong>Training data is collected; the risk is whether the value model can rank candidates inside a state.</strong> Collection finished 236 of 240 training states on cluster A (16 accelerators). A trial fit on 200 states learned how hard each state is (pooled AUC 0.79) but ranked candidates within a held-out state at chance (0.44).</p>
-      <p>We changed course before any evaluation ran. The learned 3,200-d value memorised training states (held-out within-state AUC 0.33–0.44). Two training-data diagnostics then showed <strong>real signal</strong>: which noise candidate you pick changes success beyond continuation noise (dispersion ratio 1.21, permutation p = 1e-4), and a low-capacity value on the 7 action-relevant noise dimensions ranks candidates in unseen states at <strong>0.56</strong>, up from 0.54 as data grew. The 25 dimensions that do not reach the actions stay at chance, a clean negative control. v5.2 adopts this value and concentrates evaluation on non-saturated tasks, both registered before any evaluation.</p>
+      <p>We changed course before any evaluation ran. The learned 3,200-d value memorised training states (held-out within-state AUC 0.33–0.44). Two training-data diagnostics then showed <strong>real signal</strong>: which noise candidate you pick changes success beyond continuation noise (dispersion ratio 1.21, permutation p = 1e-4), and a low-capacity value on the 7 action-relevant noise dimensions ranks candidates in unseen states at <strong>0.56</strong>, up from 0.54 as data grew. The same features built from the other 25 noise dimensions stay near chance. They still pass through π<sub>0.5</sub>'s action network, so they are a comparison, not a strict negative control. v5.2 adopts this value and concentrates evaluation on non-saturated tasks, both registered before any evaluation.</p>
       <p>The paper compiles at 8 main-text pages with Table 1, figures V26 are in, and results are still TBD. The expected-results preview below shows what the paper will say if the target is met. Those numbers are <em>not</em> measurements.</p>
     </div>
     <div class="panel">
@@ -348,9 +348,9 @@ a{color:var(--eval)}
         <text style="fill:var(--ink-3)" x="230" y="198" text-anchor="middle">0</text>
         <text style="fill:var(--ink-2)" x="0" y="28">Learned 128-d projection</text>
         <rect style="fill:var(--ink-3)" x="230" y="14" width="130.8" height="20" rx="3"/><text style="fill:var(--ink);font-family:var(--mono)" x="366" y="29">0.436</text>
-        <text style="fill:var(--ink-2)" x="0" y="62">Control dims (no action effect)</text>
+        <text style="fill:var(--ink-2)" x="0" y="62">Other 25 dims, same features</text>
         <rect style="fill:var(--ink-3)" x="230" y="48" width="132" height="20" rx="3" opacity=".6"/><text style="fill:var(--ink);font-family:var(--mono)" x="367" y="63">0.440</text>
-        <text style="fill:var(--ink-2)" x="0" y="96">All 25 control dims</text>
+        <text style="fill:var(--ink-2)" x="0" y="96">Other 25 dims, all</text>
         <rect style="fill:var(--ink-3)" x="230" y="82" width="153" height="20" rx="3" opacity=".6"/><text style="fill:var(--ink);font-family:var(--mono)" x="388" y="97">0.510</text>
         <text style="fill:var(--ink-2)" x="0" y="130">Executed first-chunk actions</text>
         <rect style="fill:var(--eval)" x="230" y="116" width="164.4" height="20" rx="3"/><text style="fill:var(--ink);font-family:var(--mono)" x="400" y="131">0.548</text>
