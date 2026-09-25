@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 20:45 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 22:00 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -410,8 +410,9 @@ a{color:var(--eval)}
         <tr><td>goal_task · ASBS (v5.2a), weighted fitting, rerank</td><td><span class="tag t-risk">ASBS +2.5 pp, p = 0.75 (n.s.)</span></td><td>B · CC</td><td class="mono">official 17:52</td></tr>
         <tr><td>spatial_task · learned arms</td><td><span class="tag t-ok">done</span></td><td>B</td><td class="mono">≈18:30</td></tr>
         <tr><td>Held-out main table, all suites (240 pairs)</td><td><span class="tag t-risk">ASBS +0.06 pp, p = 1.0</span></td><td>B · CC</td><td class="mono">done ≈20:00</td></tr>
-        <tr><td>E6 consolidation confirmatory (16 states × 16 seeds × 3 arms, power 0.96)</td><td><span class="tag t-run">registered · workers loading</span></td><td>CC · B</td><td class="mono">≈22:30</td></tr>
-        <tr><td>Post-hoc global-temperature diagnostic (explains weighted fitting)</td><td><span class="tag t-wait">after E6</span></td><td>CC · B</td><td class="mono">≈23:00</td></tr>
+        <tr><td>E6 consolidation confirmatory, primary (256 pairs × 3 arms)</td><td><span class="tag t-ok">replay +10.5 pp, p ≈ 0.005 · ASBS +0.4 pp</span></td><td>CC · B</td><td class="mono">21:51</td></tr>
+        <tr><td>E6 secondary population (166 pairs, native vs replay)</td><td><span class="tag t-run">loading</span></td><td>B</td><td class="mono">≈23:00</td></tr>
+        <tr><td>Post-hoc temperature diagnostic, τ<sub>σ</sub> = 0.920 (scale-matched to weighted fitting)</td><td><span class="tag t-wait">after E6 secondary</span></td><td>CC · B</td><td class="mono">≈23:45</td></tr>
         <tr><td>spatial_task, spatial_swap · all core arms (40 + 40 units)</td><td><span class="tag t-wait">queued</span></td><td>B</td><td class="mono">≈17:30</td></tr>
         <tr><td>Online simulator rerank (10 reference units, capped at 4 workers)</td><td><span class="tag t-wait">background</span></td><td>B</td><td class="mono">≈19:00</td></tr>
         <tr><td>Paired statistics per arm (CI, McNemar, Holm)</td><td><span class="tag t-run">auto on completion</span></td><td>CC</td><td class="mono">rolling</td></tr>
@@ -486,7 +487,7 @@ a{color:var(--eval)}
       <div class="label" style="color:var(--asbs)">Where our advantage comes from (CC, 11:10, training data only)</div>
       <p style="margin-top:6px;font-size:14px">Two fixes, registered as v5.2a before evaluation. (1) λ matched to best-of-8's KL (1.204 nats): the exact tilt then lifts E[Â] by 0.146, above rerank's 0.133, as the Gibbs principle predicts. (2) ASBS was under-trained: at the registered 200 updates it realised only 24% of the exact tilt; 16,000 updates (about 2 min per λ) realise 70%, and at the 2×KL point ASBS matches rerank's E[Â]. Forecast: <b>goal_task +11.4 pp [2.5, 20.9] at zero critic calls</b>, versus rerank's +10.3 with 8 calls. Caveats: the rerank baseline is optimistic, and the conversion assumes success rises linearly with Â.</p>
     </div>
-  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>20:45: the held-out main table is complete (240 pairs, equal-suite average), with no significant differences.</b> Native 27.6%, ASBS 27.6% (+0.06 pp [−7.2, 7.6], 27 vs 28 discordant, p = 1.0), weighted fitting 32.2%, rerank 29.9%. The largest gap is weighted fitting on spatial_swap, +10 pp [−5.3, 24.3], p = 0.39, not significant. Weighted fitting is known to shrink the noise norm, so a post-hoc global-temperature arm will test whether that gap is just cooling. Recurring spatial_swap: native 42.5%, ASBS 37.5%, weighted 45%, rerank 52.5%. <b>E6 is registered</b> (PREREG_E6_CONSOLIDATION.json) and its 32 workers are loading (15 ready at 20:38); results are expected around 22:30 UTC. LIBERO-10 is closed at 68 pairs (native 63, ASBS 64). The RoboDojo background pipeline is running (checkpoint verification).</p>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>22:00: E6 confirmatory result is positive for memory replay.</b> Pre-registered E6: 16 recurring mixed starts × 16 fresh seeds = 256 pairs per arm. Native 106/256 (41.4%), <b>memory replay 133/256 (52.0%, +10.5 pp)</b>, ASBS 107/256 (41.8%). Discordant pairs: replay vs native 57 vs 30 (exact McNemar p ≈ 0.005); replay vs ASBS 50 vs 24 (p ≈ 0.003); ASBS vs native 32 vs 31 (p = 1.0). With Holm over the three contrasts, both replay comparisons stay at p ≈ 0.01. The training-data forecast was +12.7 pp [1.9, 24.6]. These are the supervisor's count-level checks; CC's context-clustered bootstrap CIs are final. Scope: recurring starts with exact identity lookup, first segment only, 16 mixed states chosen on training data. Held-out main table: no learned method differs from native (ASBS +0.06 pp). Both halves of “Propose or Remember?” now have measured evidence.</p>
   </div>
 </section>
 
