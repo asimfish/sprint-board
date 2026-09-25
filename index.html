@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 11:20 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 12:15 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -248,9 +248,9 @@ a{color:var(--eval)}
       <div class="step done"><div class="node"></div><div class="when">06:00</div><div class="what">Trial fit: within-state AUC 0.44</div></div>
       <div class="step done"><div class="node"></div><div class="when">06:40</div><div class="what">v5.1 prereg + extra collection</div></div>
       <div class="step now"><div class="node"></div><div class="when">10:10</div><div class="what">v5.2 registered; replay arm by 11:00</div></div>
-      <div class="step"><div class="node"></div><div class="when">11:45</div><div class="what">Cutoff moved up; weight-free arms start</div></div>
-      <div class="step"><div class="node"></div><div class="when">12:30</div><div class="what">Weights incl. KL-matched λ*</div></div>
-      <div class="step"><div class="node"></div><div class="when">≈14:15</div><div class="what">goal_task real, all arms</div></div>
+      <div class="step done"><div class="node"></div><div class="when">12:08</div><div class="what">v5.2 weights delivered (12:00 snapshot)</div></div>
+      <div class="step now"><div class="node"></div><div class="when">12:15</div><div class="what">Calibration + weight-free arms start</div></div>
+      <div class="step"><div class="node"></div><div class="when">≈14:45</div><div class="what">goal_task real, core arms</div></div>
       <div class="step"><div class="node"></div><div class="when">19:00</div><div class="what">Stats + JSON export</div></div>
       <div class="step"><div class="node"></div><div class="when">22:00</div><div class="what">Numbers freeze, title chosen</div></div>
       <div class="step"><div class="node"></div><div class="when">+10h</div><div class="what">Final PDF 08:00, deadline 11:59</div></div>
@@ -449,7 +449,7 @@ a{color:var(--eval)}
       <div class="label" style="color:var(--asbs)">Where our advantage comes from (CC, 11:10, training data only)</div>
       <p style="margin-top:6px;font-size:14px">Two fixes, registered as v5.2a before evaluation. (1) λ matched to best-of-8's KL (1.204 nats): the exact tilt then lifts E[Â] by 0.146, above rerank's 0.133, as the Gibbs principle predicts. (2) ASBS was under-trained: at the registered 200 updates it realised only 24% of the exact tilt; 16,000 updates (about 2 min per λ) realise 70%, and at the 2×KL point ASBS matches rerank's E[Â]. Forecast: <b>goal_task +11.4 pp [2.5, 20.9] at zero critic calls</b>, versus rerank's +10.3 with 8 calls. Caveats: the rerank baseline is optimistic, and the conversion assumes success rises linearly with Â.</p>
     </div>
-  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>Honest read at 10:50:</b> the best-supported advantage is on <b>goal_task</b>: the learned critic's choice beats native by +10.3 pp [2.3, 19.0] in cross-fitted training data, the only effect with meaningful power (0.41 at 80 pairs). ASBS was forecast at only +3.4 pp because its λ was too weak for v5.2's score scale; the KL-matched λ* should bring it to rerank level at zero calls. Collection now stops at 11:45 and evaluation starts early, so real goal_task numbers target 14:15 UTC. Memory replay is weaker than first estimated (+1.5 pp in both directions).</p>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>Honest read at 12:15: the target is not reached yet, because formal evaluation has not started.</b> CC delivered v5.2 production candidates at 12:08 (12:00 snapshot; calibration AUC 0.49, gate not passed). B had planned to start at 14:00; I have asked for calibration and the weight-free arms to start now, with online reranking capped so it cannot block the core arms. Target: goal_task core arms by 14:45 UTC. The development critic keeps weakening (φ AUC 0.544 → 0.560 → 0.543 → 0.526), so the held-out gains will likely be small outside goal_task. Measured cost corrects one claim: a learned critic is cheap (rerank 1.2 ms against ASBS 45.7 ms per decision), so the zero-call advantage is real only against online System-2 feedback (about 1,950 s of simulation per decision; 61–73 s per frontier-model teacher call).</p>
   </div>
 </section>
 
