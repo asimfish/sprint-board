@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 06:40 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 06:55 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -222,7 +222,7 @@ a{color:var(--eval)}
     <div class="panel lead-panel">
       <div class="label" style="margin-bottom:8px">Where we stand</div>
       <p><strong>Training data is collected; the risk is whether the value model can rank candidates inside a state.</strong> Collection finished 236 of 240 training states on cluster A (16 accelerators). A trial fit on 200 states learned how hard each state is (pooled AUC 0.79) but ranked candidates within a held-out state at chance (0.44).</p>
-      <p>We fixed this before any evaluation ran. Protocol v5.1 switches to an advantage-form value (state mean removed, within-state ranking loss), adds deeper and wider collection until 12:30 UTC, and adds a second evaluation cohort on recurring states. The held-out cohort stays the primary result.</p>
+      <p>We changed course before any evaluation ran. Protocol v5.1 (frozen 06:34 UTC) uses an advantage-form value (state mean removed, within-state ranking loss), deeper and wider collection until 12:30 UTC, and a second cohort on recurring states. The first advantage fits are <strong>still at chance on held-out states (0.33, then 0.44)</strong> while fitting training states perfectly. The next 60 minutes test whether candidate choice matters at all (overdispersion test, M=8 re-scoring), and whether low-dimensional noise features generalise where the learned projection memorises.</p>
       <p>The paper compiles at 8 main-text pages with Table 1, figures V26 are in, and results are still TBD. The expected-results preview below shows what the paper will say if the target is met. Those numbers are <em>not</em> measurements.</p>
     </div>
     <div class="panel">
@@ -230,7 +230,7 @@ a{color:var(--eval)}
       <ul class="status-list">
         <li><span class="mark m-ok"></span><span><b>Collection v5</b> — 236/240 states, 39 mixed (16.5%)</span></li>
         <li><span class="mark m-run"></span><span><b>Collection v5.1</b> — extra depth and width on cluster A, cutoff 12:30 UTC</span></li>
-        <li><span class="mark m-risk"></span><span><b>Value model</b> — within-state AUC 0.44 in trial; advantage retraining each hour</span></li>
+        <li><span class="mark m-bad"></span><span><b>Value model</b> — advantage Q̂ still at chance on held-out states (0.33 → 0.44); signal diagnostics running</span></li>
         <li><span class="mark m-wait"></span><span><b>Evaluation</b> — 240 held-out + 120 recurring paired units, 13:30–18:00 UTC</span></li>
         <li><span class="mark m-ok"></span><span><b>Synthetic fidelity (E3)</b> — ASBS TV 0.082 with 0 online calls, 3 seeds</span></li>
         <li><span class="mark m-run"></span><span><b>Paper</b> — round-4 merge and expected-values preview in progress</span></li>
@@ -247,7 +247,7 @@ a{color:var(--eval)}
       <div class="step done"><div class="node"></div><div class="when">01:00</div><div class="what">v5 collection starts, 32 procs</div></div>
       <div class="step done"><div class="node"></div><div class="when">06:00</div><div class="what">Trial fit: within-state AUC 0.44</div></div>
       <div class="step now"><div class="node"></div><div class="when">06:40</div><div class="what">v5.1 prereg + extra collection</div></div>
-      <div class="step"><div class="node"></div><div class="when">hourly</div><div class="what">Snapshot → advantage retrain → AUC curve</div></div>
+      <div class="step"><div class="node"></div><div class="when">by 11:00</div><div class="what">Signal diagnostics → v5.2 decision</div></div>
       <div class="step"><div class="node"></div><div class="when">12:30</div><div class="what">Collection cutoff; A/B claim gate</div></div>
       <div class="step"><div class="node"></div><div class="when">13:30</div><div class="what">Final weights, 4 methods</div></div>
       <div class="step"><div class="node"></div><div class="when">13:30–18:00</div><div class="what">Paired evaluation, both cohorts</div></div>
@@ -263,7 +263,7 @@ a{color:var(--eval)}
   <div class="tiles">
     <div class="tile"><div class="label">Training states</div><div class="v">236<small> / 240</small></div><div class="d">LIBERO-PRO, init 0–24, K=8 candidates × M=2 continuations</div></div>
     <div class="tile"><div class="label">Mixed states</div><div class="v">39<small> · 16.5%</small></div><div class="d">States where some candidates succeed and others fail</div></div>
-    <div class="tile alert"><div class="label">Within-state AUC</div><div class="v">0.44</div><div class="d">Trial, held-out states (CI 0.29–0.60). Gate is &gt;0.55 at 12:30</div></div>
+    <div class="tile alert"><div class="label">Within-state AUC</div><div class="v">0.44</div><div class="d">Advantage Q̂, 236 states (CI 0.30–0.56). Gate is &gt;0.55 at 12:30</div></div>
     <div class="tile"><div class="label">Throughput</div><div class="v">~466<small> ep/h</small></div><div class="d">16 accelerators, 32 processes, OSMesa + tmpfs</div></div>
   </div>
 
@@ -299,6 +299,13 @@ a{color:var(--eval)}
         </g>
       </svg>
       <p class="faint" style="font-size:12px;margin-top:6px">Snapshot 20260925T045640Z, 200 states. The train value of 0.966 against 0.44 held-out indicates memorisation.</p>
+      <div class="tbl-wrap" style="margin-top:12px"><table>
+        <thead><tr><th>Advantage Q̂ (v5.1)</th><th class="r">States</th><th class="r">Mixed fit / held-out</th><th class="r">Held-out AUC</th><th class="r">CV</th><th class="r">Train</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">045640Z</td><td class="r mono">200</td><td class="r mono">25 / 10</td><td class="r mono">0.333 [0.19, 0.49]</td><td class="r mono">0.454</td><td class="r mono">1.000</td></tr>
+          <tr><td class="mono">060000Z</td><td class="r mono">236</td><td class="r mono">29 / 10</td><td class="r mono">0.436 [0.30, 0.56]</td><td class="r mono">0.486</td><td class="r mono">1.000</td></tr>
+          <tr><td class="faint">next: 32-candidate deepening</td><td class="r faint" colspan="5">hourly from ~08:00</td></tr>
+        </tbody></table></div>
     </div>
     <div class="panel">
       <h3>Where the signal is: mixed states per suite</h3>
@@ -448,7 +455,7 @@ a{color:var(--eval)}
         </ul>
       </div>
     </div>
-    <p class="muted" style="font-size:13.5px;margin-top:14px"><b>Honest read at 06:40:</b> the trial evidence points toward Scenario B on the held-out cohort unless the extra data and the advantage loss lift within-state AUC. The recurring cohort is where a positive effect is most likely. The hourly AUC curve decides this by 12:30.</p>
+    <p class="muted" style="font-size:13.5px;margin-top:14px"><b>Honest read at 06:55:</b> the trial evidence points toward Scenario B on the held-out cohort unless the extra data and the advantage loss lift within-state AUC. The recurring cohort is where a positive effect is most likely. The hourly AUC curve decides this by 12:30.</p>
   </div>
 </section>
 
@@ -485,9 +492,9 @@ a{color:var(--eval)}
     <table>
       <thead><tr><th>Agent</th><th>Current task</th><th>State</th><th>Next checkpoint</th></tr></thead>
       <tbody>
-        <tr><td class="who">B<small>experiment lead, cluster A, 16 accelerators</small></td><td>Write PREREG v5.1, launch extra collection (deeper mixed states, wider high-mix tasks), hourly snapshots to CC</td><td><span class="tag t-run">running</span></td><td class="mono">06:40 launch · 12:30 cutoff</td></tr>
-        <tr><td class="who">CC<small>training + statistics</small></td><td>Advantage-form Q̂ with within-state ranking loss; retrain per snapshot; AUC-vs-data curve</td><td><span class="tag t-run">running</span></td><td class="mono">hourly · weights 13:30</td></tr>
-        <tr><td class="who">A<small>cluster B GPUs</small></td><td>Run the same collector on cluster B GPUs, disjoint slice to add training data</td><td><span class="tag t-run">assigned 06:38</span></td><td class="mono">feasibility 07:00</td></tr>
+        <tr><td class="who">B<small>experiment lead, cluster A, 16 accelerators</small></td><td>v5.1 frozen 06:34; extra collection launched 06:39 (2,992 branches, 32 workers), deepening first; hourly snapshots to CC</td><td><span class="tag t-run">collecting</span></td><td class="mono">12:30 cutoff</td></tr>
+        <tr><td class="who">CC<small>training + statistics</small></td><td>Signal diagnostics: overdispersion test for segment leverage, low-dim structured noise features, action-space features; v5.2 proposal if a real signal appears</td><td><span class="tag t-run">running</span></td><td class="mono">07:55 report · weights 13:30</td></tr>
+        <tr><td class="who">A<small>cluster B GPUs</small></td><td>CUDA slice approved (≤960 branches): re-score 20 mixed states to M=8 for a clean leverage test and low-noise labels; fixing env in a data-disk venv</td><td><span class="tag t-run">env fix</span></td><td class="mono">start by ~07:40</td></tr>
         <tr><td class="who">W1<small>main.tex owner</small></td><td>Round-4 merge; projected-values preview PDF</td><td><span class="tag t-run">running</span></td><td class="mono">preview PDF</td></tr>
         <tr><td class="who">W2<small>abstract, intro</small></td><td>Round 4 delivered (A/B abstracts 174/177 words)</td><td><span class="tag t-ok">delivered</span></td><td class="mono">after merge</td></tr>
         <tr><td class="who">W3<small>method, experiments</small></td><td>Round 4 delivered (algorithm box, §4.2–4.6 wording)</td><td><span class="tag t-ok">delivered</span></td><td class="mono">after merge</td></tr>
@@ -502,7 +509,7 @@ a{color:var(--eval)}
 <section id="risks">
   <div class="sec-head"><div class="label">Ranked</div><h2>Risks and open decisions</h2></div>
   <div class="panel">
-    <div class="risk"><span class="sev t-bad">High</span><div><b>Within-state ranking may not be learnable from this much data.</b> <span class="muted">Mitigation: advantage loss, more mixed-state data (both clusters), recurring cohort. Gate at 12:30; below 0.55 we switch to the Scenario B claims.</span></div></div>
+    <div class="risk"><span class="sev t-bad">High</span><div><b>Candidate choice may carry little generalisable signal.</b> <span class="muted">Advantage Q̂ memorises training states and ranks held-out states at chance. Mitigation: leverage test at M=8, low-dimensional noise features, more mixed states, recurring cohort, λ calibration that can fall back to ρ<sub>0</sub> so ASBS never hurts native. Gate at 12:30; below 0.55 we switch to Scenario B claims.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>Evaluation window is 4.5 h for 1,440 episodes plus 30 online units.</b> <span class="muted">About 3.1 h at measured throughput. Slack before 22:00 is about 4 h.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>RoboDojo is not run.</b> <span class="muted">Blocked by Isaac version, disk space and busy 5090s. The paper aligns on LIBERO-PRO; LIBERO-10 appears via the leverage study and retention tasks.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>Source archive leaked internal paths and host names.</b> <span class="muted">W4's packager fails closed on paths, hosts, draft banners, TBD and projected values.</span></div></div>
