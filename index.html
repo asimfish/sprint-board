@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 06:55 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 08:55 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -222,7 +222,7 @@ a{color:var(--eval)}
     <div class="panel lead-panel">
       <div class="label" style="margin-bottom:8px">Where we stand</div>
       <p><strong>Training data is collected; the risk is whether the value model can rank candidates inside a state.</strong> Collection finished 236 of 240 training states on cluster A (16 accelerators). A trial fit on 200 states learned how hard each state is (pooled AUC 0.79) but ranked candidates within a held-out state at chance (0.44).</p>
-      <p>We changed course before any evaluation ran. Protocol v5.1 (frozen 06:34 UTC) uses an advantage-form value (state mean removed, within-state ranking loss), deeper and wider collection until 12:30 UTC, and a second cohort on recurring states. The first advantage fits are <strong>still at chance on held-out states (0.33, then 0.44)</strong> while fitting training states perfectly. The next 60 minutes test whether candidate choice matters at all (overdispersion test, M=8 re-scoring), and whether low-dimensional noise features generalise where the learned projection memorises.</p>
+      <p>We changed course before any evaluation ran. The learned 3,200-d value memorised training states (held-out within-state AUC 0.33–0.44). Two training-data diagnostics then showed <strong>real signal</strong>: which noise candidate you pick changes success beyond continuation noise (dispersion ratio 1.21, permutation p = 1e-4), and a low-capacity value on the 7 action-relevant noise dimensions ranks candidates in unseen states at <strong>0.56</strong>, up from 0.54 as data grew. The 25 dimensions that do not reach the actions stay at chance, a clean negative control. v5.2 adopts this value and concentrates evaluation on non-saturated tasks, both registered before any evaluation.</p>
       <p>The paper compiles at 8 main-text pages with Table 1, figures V26 are in, and results are still TBD. The expected-results preview below shows what the paper will say if the target is met. Those numbers are <em>not</em> measurements.</p>
     </div>
     <div class="panel">
@@ -230,7 +230,7 @@ a{color:var(--eval)}
       <ul class="status-list">
         <li><span class="mark m-ok"></span><span><b>Collection v5</b> — 236/240 states, 39 mixed (16.5%)</span></li>
         <li><span class="mark m-run"></span><span><b>Collection v5.1</b> — extra depth and width on cluster A, cutoff 12:30 UTC</span></li>
-        <li><span class="mark m-bad"></span><span><b>Value model</b> — advantage Q̂ still at chance on held-out states (0.33 → 0.44); signal diagnostics running</span></li>
+        <li><span class="mark m-risk"></span><span><b>Value model</b> — real signal found: candidate choice matters (p = 1e-4); low-dim noise features rank held-out states at 0.56 and rising → v5.2</span></li>
         <li><span class="mark m-wait"></span><span><b>Evaluation</b> — 240 held-out + 120 recurring paired units, 13:30–18:00 UTC</span></li>
         <li><span class="mark m-ok"></span><span><b>Synthetic fidelity (E3)</b> — ASBS TV 0.082 with 0 online calls, 3 seeds</span></li>
         <li><span class="mark m-run"></span><span><b>Paper</b> — round-4 merge and expected-values preview in progress</span></li>
@@ -246,8 +246,8 @@ a{color:var(--eval)}
     <div class="tl">
       <div class="step done"><div class="node"></div><div class="when">01:00</div><div class="what">v5 collection starts, 32 procs</div></div>
       <div class="step done"><div class="node"></div><div class="when">06:00</div><div class="what">Trial fit: within-state AUC 0.44</div></div>
-      <div class="step now"><div class="node"></div><div class="when">06:40</div><div class="what">v5.1 prereg + extra collection</div></div>
-      <div class="step"><div class="node"></div><div class="when">by 11:00</div><div class="what">Signal diagnostics → v5.2 decision</div></div>
+      <div class="step done"><div class="node"></div><div class="when">06:40</div><div class="what">v5.1 prereg + extra collection</div></div>
+      <div class="step now"><div class="node"></div><div class="when">08:55</div><div class="what">Signal found → v5.2 by 10:00</div></div>
       <div class="step"><div class="node"></div><div class="when">12:30</div><div class="what">Collection cutoff; A/B claim gate</div></div>
       <div class="step"><div class="node"></div><div class="when">13:30</div><div class="what">Final weights, 4 methods</div></div>
       <div class="step"><div class="node"></div><div class="when">13:30–18:00</div><div class="what">Paired evaluation, both cohorts</div></div>
@@ -263,7 +263,7 @@ a{color:var(--eval)}
   <div class="tiles">
     <div class="tile"><div class="label">Training states</div><div class="v">236<small> / 240</small></div><div class="d">LIBERO-PRO, init 0–24, K=8 candidates × M=2 continuations</div></div>
     <div class="tile"><div class="label">Mixed states</div><div class="v">39<small> · 16.5%</small></div><div class="d">States where some candidates succeed and others fail</div></div>
-    <div class="tile alert"><div class="label">Within-state AUC</div><div class="v">0.44</div><div class="d">Advantage Q̂, 236 states (CI 0.30–0.56). Gate is &gt;0.55 at 12:30</div></div>
+    <div class="tile alert"><div class="label">Within-state AUC</div><div class="v">0.56</div><div class="d">Low-dim noise features, 268 states, held-out (CI 0.50–0.63). Learned projection: 0.44</div></div>
     <div class="tile"><div class="label">Throughput</div><div class="v">~466<small> ep/h</small></div><div class="d">16 accelerators, 32 processes, OSMesa + tmpfs</div></div>
   </div>
 
@@ -333,6 +333,34 @@ a{color:var(--eval)}
         </g>
       </svg>
     </div>
+  </div>
+
+  <div class="panel" style="margin-top:16px">
+    <h3>Signal diagnostics (training data only, 08:00 snapshot, 268 states, 50 mixed)</h3>
+    <p class="cap">Held-out within-state ranking AUC by candidate representation. Chance is 0.5; the permutation 95th percentile is about 0.57–0.58.</p>
+    <svg class="chart" style="max-width:680px" viewBox="0 0 560 210" role="img" aria-label="Within-state AUC: learned projection 0.436, control noise dims 0.440, all 25 control dims 0.510, executed actions 0.548, action noise features 0.560">
+      <g font-size="12">
+        <line style="stroke:var(--line)" x1="230" y1="10" x2="230" y2="176"/>
+        <line style="stroke:var(--ink-3)" x1="380" y1="6" x2="380" y2="180" stroke-dasharray="3 3"/>
+        <text style="fill:var(--ink-3)" x="380" y="198" text-anchor="middle">0.5 chance</text>
+        <line style="stroke:var(--warn)" x1="404" y1="6" x2="404" y2="180" stroke-dasharray="6 3"/>
+        <text style="fill:var(--warn)" x="440" y="198" font-size="11">0.58 gate</text>
+        <text style="fill:var(--ink-3)" x="230" y="198" text-anchor="middle">0</text>
+        <text style="fill:var(--ink-2)" x="0" y="28">Learned 128-d projection</text>
+        <rect style="fill:var(--ink-3)" x="230" y="14" width="130.8" height="20" rx="3"/><text style="fill:var(--ink);font-family:var(--mono)" x="366" y="29">0.436</text>
+        <text style="fill:var(--ink-2)" x="0" y="62">Control dims (no action effect)</text>
+        <rect style="fill:var(--ink-3)" x="230" y="48" width="132" height="20" rx="3" opacity=".6"/><text style="fill:var(--ink);font-family:var(--mono)" x="367" y="63">0.440</text>
+        <text style="fill:var(--ink-2)" x="0" y="96">All 25 control dims</text>
+        <rect style="fill:var(--ink-3)" x="230" y="82" width="153" height="20" rx="3" opacity=".6"/><text style="fill:var(--ink);font-family:var(--mono)" x="388" y="97">0.510</text>
+        <text style="fill:var(--ink-2)" x="0" y="130">Executed first-chunk actions</text>
+        <rect style="fill:var(--eval)" x="230" y="116" width="164.4" height="20" rx="3"/><text style="fill:var(--ink);font-family:var(--mono)" x="400" y="131">0.548</text>
+        <text style="fill:var(--ink)" x="0" y="164" font-weight="600">Action-dim noise features φ(z)</text>
+        <rect style="fill:var(--asbs)" x="230" y="150" width="168" height="20" rx="3"/>
+        <line style="stroke:var(--ink)" x1="378.6" y1="160" x2="418.4" y2="160" stroke-width="1.5"/><line style="stroke:var(--ink)" x1="378.6" y1="154" x2="378.6" y2="166" stroke-width="1.5"/><line style="stroke:var(--ink)" x1="418.4" y1="154" x2="418.4" y2="166" stroke-width="1.5"/>
+        <text style="fill:var(--ink);font-family:var(--mono)" x="426" y="165" font-weight="600">0.560</text>
+      </g>
+    </svg>
+    <p class="faint" style="font-size:12px;margin-top:6px">Overdispersion across 50 informative states: candidate-mean variance is 1.19× the binomial expectation (dispersion ratio 1.21, permutation p = 1e-4). φ(z) trend: 0.544 at 236 states → 0.560 at 268 states.</p>
   </div>
 
   <h3 style="margin:22px 0 10px">Main evaluation design (PREREG v5 → v5.1)</h3>
@@ -455,7 +483,7 @@ a{color:var(--eval)}
         </ul>
       </div>
     </div>
-    <p class="muted" style="font-size:13.5px;margin-top:14px"><b>Honest read at 06:55:</b> the trial evidence points toward Scenario B on the held-out cohort unless the extra data and the advantage loss lift within-state AUC. The recurring cohort is where a positive effect is most likely. The hourly AUC curve decides this by 12:30.</p>
+    <p class="muted" style="font-size:13.5px;margin-top:14px"><b>Honest read at 08:55:</b> better than two hours ago. Candidate choice does change success (overdispersion p = 1e-4), and a low-capacity value on action-relevant noise features generalises weakly (0.56, rising with data). Concentrating evaluation on non-saturated tasks raises power. Scenario A is now plausible but not yet likely. The 12:30 gate decides.</p>
   </div>
 </section>
 
@@ -477,13 +505,26 @@ a{color:var(--eval)}
     <div class="g-half panel" style="grid-column:span 6">
       <h3>In progress this round</h3>
       <ul class="status-list" style="margin-top:10px">
-        <li><span class="mark m-run"></span><span><b>W1</b> merges W2's abstract and introduction, W3's method and experiments edits, V26 figures, and the v5.1 recurring cohort in §4.1 and Table 1.</span></li>
-        <li><span class="mark m-run"></span><span><b>W1</b> builds the watermarked preview PDF with the projected values above. Pages will be added here when it compiles.</span></li>
-        <li><span class="mark m-run"></span><span><b>F</b> fills the segment-level leverage panel from real data, adds a “data size vs within-state AUC” figure, and scripts Fig. 3.</span></li>
-        <li><span class="mark m-run"></span><span><b>W4</b> builds a fail-closed anonymous packager (paths, hosts, drafts, projected values) and reviews the projected preview.</span></li>
+        <li><span class="mark m-run"></span><span><b>W1</b> builds your reading version by 10:15: all round-4 merges, real Fig. 4, §4 version A, backend names neutralised.</span></li>
+        <li><span class="mark m-run"></span><span><b>F</b> redesigns Fig. 2 and the sampler figure and adds the Diffusion vs Flow vs ASBS comparison (V27, two variants each).</span></li>
+        <li><span class="mark m-run"></span><span><b>W2</b> verifies the sampler citations and adds DSRL; <b>W3</b> writes v5.2 and the non-saturated evaluation; <b>W4</b> audits and packages.</span></li>
+        <li><span class="mark m-ok"></span><span>Done: projected preview v1 (35 pp, watermarked), real segment-level Fig. 4, anonymous packager with 7 tests.</span></li>
       </ul>
     </div>
   </div>
+
+  <div class="panel" style="margin-top:16px;border-left:4px solid var(--asbs)">
+    <h3>Figures being redesigned (V27, your request)</h3>
+    <p class="cap" style="margin-top:6px">Two method figures and one new comparison figure. The design system is modular: numbered panels, one visual per panel, arrows in one direction, real frames.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Figure</th><th>Modules</th><th>Due (UTC)</th></tr></thead>
+      <tbody>
+        <tr><td><b>Fig. 2 · overview</b></td><td>① Collect (real-frame candidate fan, ✓/✗ continuations) → ② Advantage value (state-centred bars) → ③ Tilted target (λ = 0.5 / 0.1 / 0.05 small multiples) → ④ ASBS sampler (Dirac source, SDE fan, ∇Â/λ) ‖ ⑤ Deploy loop with cost badge</td><td class="mono">11:30</td></tr>
+        <tr><td><b>Fig. 3 · sampler internals</b></td><td>Frozen encoders → drift net u<sub>θ</sub>(s, x, h) with FiLM → 100 Euler steps → z split into 10 chunk slices → π<sub>0.5</sub> flow expert; dashed training loop for adjoint matching</td><td class="mono">12:30</td></tr>
+        <tr><td><b>New · Diffusion vs Flow vs ASBS</b></td><td>Same 2D tilted target in all three columns: source, exact trajectories, training signal (target samples vs ∇ reward only), fit to our setting, deployment cost; bottom strip shows ASBS feeding π<sub>0.5</sub>’s own flow</td><td class="mono">11:30</td></tr>
+      </tbody></table></div>
+  </div>
+
 </section>
 
 <section id="team">
@@ -492,14 +533,14 @@ a{color:var(--eval)}
     <table>
       <thead><tr><th>Agent</th><th>Current task</th><th>State</th><th>Next checkpoint</th></tr></thead>
       <tbody>
-        <tr><td class="who">B<small>experiment lead, cluster A, 16 accelerators</small></td><td>v5.1 frozen 06:34; extra collection launched 06:39 (2,992 branches, 32 workers), deepening first; hourly snapshots to CC</td><td><span class="tag t-run">collecting</span></td><td class="mono">12:30 cutoff</td></tr>
-        <tr><td class="who">CC<small>training + statistics</small></td><td>Signal diagnostics: overdispersion test for segment leverage, low-dim structured noise features, action-space features; v5.2 proposal if a real signal appears</td><td><span class="tag t-run">running</span></td><td class="mono">07:55 report · weights 13:30</td></tr>
-        <tr><td class="who">A<small>cluster B GPUs</small></td><td>CUDA slice approved (≤960 branches): re-score 20 mixed states to M=8 for a clean leverage test and low-noise labels; fixing env in a data-disk venv</td><td><span class="tag t-run">env fix</span></td><td class="mono">start by ~07:40</td></tr>
-        <tr><td class="who">W1<small>main.tex owner</small></td><td>Round-4 merge; projected-values preview PDF</td><td><span class="tag t-run">running</span></td><td class="mono">preview PDF</td></tr>
-        <tr><td class="who">W2<small>abstract, intro</small></td><td>Round 4 delivered (A/B abstracts 174/177 words)</td><td><span class="tag t-ok">delivered</span></td><td class="mono">after merge</td></tr>
-        <tr><td class="who">W3<small>method, experiments</small></td><td>Round 4 delivered (algorithm box, §4.2–4.6 wording)</td><td><span class="tag t-ok">delivered</span></td><td class="mono">after merge</td></tr>
-        <tr><td class="who">W4<small>review, compliance</small></td><td>Anonymous packager with leak checks; round-3 review on projected preview</td><td><span class="tag t-run">assigned 06:38</span></td><td class="mono">packager tests</td></tr>
-        <tr><td class="who">F<small>figures</small></td><td>Real segment-leverage panel, AUC curve figure, Fig. 3 script</td><td><span class="tag t-run">assigned 06:38</span></td><td class="mono">next render</td></tr>
+        <tr><td class="who">B<small>experiment lead, cluster A</small></td><td>Extra collection running (659 branches by 07:45, deepening to K=32 first). Registers v5.2 and the non-saturated-task allocation before any evaluation</td><td><span class="tag t-run">collecting</span></td><td class="mono">12:30 cutoff</td></tr>
+        <tr><td class="who">CC<small>training + statistics</small></td><td>Freeze v5.2 value model on low-dim noise features; report learned direction; fix 08:00 snapshot loader; production fit on 12:30 snapshot</td><td><span class="tag t-run">running</span></td><td class="mono">v5.2 by 10:00 · weights 13:30</td></tr>
+        <tr><td class="who">A<small>executor, cluster B</small></td><td>CUDA re-scoring stopped (strict state-replay check failed; not relaxed). Now rendering real frames for the redesigned method figures (illustration only)</td><td><span class="tag t-run">frames</span></td><td class="mono">11:00</td></tr>
+        <tr><td class="who">W1<small>main.tex owner</small></td><td>Full reading version for you: merge round 4, real Fig. 4, §4 version A; formal PDF plus projected preview v2</td><td><span class="tag t-run">running</span></td><td class="mono">10:15</td></tr>
+        <tr><td class="who">W2<small>abstract, intro, related work</small></td><td>Verify citations for the comparison figure (Adjoint Sampling, ASBS, Adjoint Matching, diffusion, flow matching) and add DSRL, the closest noise-space steering work</td><td><span class="tag t-run">running</span></td><td class="mono">11:30</td></tr>
+        <tr><td class="who">W3<small>method, experiments</small></td><td>Write v5.2 value model, non-saturated allocation, temperature ablation, and “why not diffusion/flow” paragraph</td><td><span class="tag t-run">running</span></td><td class="mono">11:30</td></tr>
+        <tr><td class="who">W4<small>review, compliance</small></td><td>Packager built (7 tests pass; current draft blocked as expected: 731 TBD, 4 backend identifiers, 3 draft marks). Takes over CC’s paper audit; cost-frontier framing</td><td><span class="tag t-run">running</span></td><td class="mono">after 10:15 build</td></tr>
+        <tr><td class="who">F<small>figures</small></td><td><b>V27 redesign</b>: modular Fig. 2 overview, sampler-internals figure, new Diffusion vs Flow vs ASBS comparison; two variants each</td><td><span class="tag t-run">top priority</span></td><td class="mono">11:30 · 12:30</td></tr>
         <tr><td class="who">Supervisor<small>me</small></td><td>Review each report, gate A/B claims at 12:30, choose title at freeze</td><td><span class="tag t-run">on loop</span></td><td class="mono">~07:05</td></tr>
       </tbody>
     </table>
