@@ -201,13 +201,13 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 17:10 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 17:30 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
   </div>
   <div class="clocks" aria-label="Countdowns">
-    <div class="clock hot"><div class="label">Numbers freeze</div><div class="t" data-until="2026-09-25T22:00:00Z">15h 20m</div><div class="w">25 Sep 22:00 UTC</div></div>
+    <div class="clock hot"><div class="label">Numbers freeze</div><div class="t" data-until="2026-09-26T01:00:00Z">7h 30m</div><div class="w">26 Sep 01:00 UTC (moved)</div></div>
     <div class="clock"><div class="label">Final PDF</div><div class="t" data-until="2026-09-26T08:00:00Z">25h 20m</div><div class="w">26 Sep 08:00 UTC</div></div>
     <div class="clock"><div class="label">ICLR deadline</div><div class="t" data-until="2026-09-26T11:59:00Z">29h 19m</div><div class="w">26 Sep 11:59 UTC (AoE)</div></div>
   </div>
@@ -384,6 +384,17 @@ a{color:var(--eval)}
       <li><span class="mark m-run"></span><span><b>Value–divergence frontier figure:</b> exact-tilt curve against best-of-K (K = 2…32), ASBS training trajectory and weighted fitting.</span></li>
       <li><span class="mark m-run"></span><span><b>Proposition 1 check:</b> empirical density ratios against the Δ/λ bound, plus the high-dimensional corollary as a worked instance.</span></li>
       <li><span class="mark m-run"></span><span><b>Deployment cost table:</b> critic calls and wall-clock per decision for ASBS (0), rerank (K) and online simulator reranking.</span></li>
+    </ul>
+  </div>
+
+  <div class="panel" style="margin-top:16px;border-left:4px solid var(--asbs)">
+    <h3>New plan after the goal_task result (17:30 UTC)</h3>
+    <ul class="status-list" style="margin-top:10px">
+      <li><span class="mark m-run"></span><span><b>Storyline: one KL objective, two reference priors.</b> Tilting the continuous prior ρ<sub>0</sub> gives proposal learning (ASBS, weighted fitting). Tilting the empirical prior of scored candidates gives selection and memory replay. Proposition 1 draws the boundary: in 3,200 dimensions the continuous tilt cannot concentrate on a stored candidate, so it needs a critic that ranks within unseen states; the empirical tilt can remember good candidates, but only when states recur. Every measured result maps to one prediction.</span></li>
+      <li><span class="mark m-run"></span><span><b>E6 consolidation experiment (confirmatory, registered before any episode):</b> 16 mixed chunk-0 training states re-scored to M = 8, times 8 fresh seeds, for 128 pairs per arm: native, memory replay (frozen selection table) and ASBS. Motivated by today's recurring pilot (6 improved vs 1 worse), reported as pilot → confirmatory.</span></li>
+      <li><span class="mark m-run"></span><span><b>Main table first:</b> the spatial_task and spatial_swap learned arms launch now on the runner that worked for goal_task. The online System-2 reference continues on 4 workers.</span></li>
+      <li><span class="mark m-risk"></span><span><b>Numbers freeze moved to 26 Sep 01:00 UTC</b> so E6 and its statistics fit. The final PDF stays at 08:00.</span></li>
+      <li><span class="mark m-run"></span><span><b>Writing:</b> W2 retitles and rewrites the abstract and introduction (lead candidate: “Propose or Remember? When Outcome Feedback Can Be Consolidated into VLA Noise”). W3 writes the two-prior proposition and the synthetic sweep. W1 reorganises §4 into four questions. W4 red-teams the risk of dressing a null result up as a finding. F draws a new teaser, novel vs recurring states.</span></li>
     </ul>
   </div>
 
