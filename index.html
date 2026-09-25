@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 10:45 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 10:50 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -248,9 +248,9 @@ a{color:var(--eval)}
       <div class="step done"><div class="node"></div><div class="when">06:00</div><div class="what">Trial fit: within-state AUC 0.44</div></div>
       <div class="step done"><div class="node"></div><div class="when">06:40</div><div class="what">v5.1 prereg + extra collection</div></div>
       <div class="step now"><div class="node"></div><div class="when">10:10</div><div class="what">v5.2 registered; replay arm by 11:00</div></div>
-      <div class="step"><div class="node"></div><div class="when">12:30</div><div class="what">Collection cutoff; A/B claim gate</div></div>
-      <div class="step"><div class="node"></div><div class="when">13:30</div><div class="what">Final weights, 4 methods</div></div>
-      <div class="step"><div class="node"></div><div class="when">13:30–18:00</div><div class="what">Evaluation; goal_task real ≈15:00</div></div>
+      <div class="step"><div class="node"></div><div class="when">11:45</div><div class="what">Cutoff moved up; weight-free arms start</div></div>
+      <div class="step"><div class="node"></div><div class="when">12:30</div><div class="what">Weights incl. KL-matched λ*</div></div>
+      <div class="step"><div class="node"></div><div class="when">≈14:15</div><div class="what">goal_task real, all arms</div></div>
       <div class="step"><div class="node"></div><div class="when">19:00</div><div class="what">Stats + JSON export</div></div>
       <div class="step"><div class="node"></div><div class="when">22:00</div><div class="what">Numbers freeze, title chosen</div></div>
       <div class="step"><div class="node"></div><div class="when">+10h</div><div class="what">Final PDF 08:00, deadline 11:59</div></div>
@@ -408,95 +408,36 @@ a{color:var(--eval)}
 </section>
 
 <section id="projected">
-  <div class="sec-head"><div class="label">Expected, not measured</div><h2>What the results table will look like</h2></div>
+  <div class="sec-head"><div class="label">Expected, not measured</div><h2>Forecast results table (evidence-based)</h2></div>
   <div class="proj-zone">
     <div class="proj-banner">
-      <div><b>Projected values — not experimental results</b><span style="display:block;margin:4px 0 6px;color:var(--ink)"><b>Being replaced (your decision, 10:25):</b> these Scenario A targets give way to <b>evidence-based forecasts</b> cross-fitted from training data (about 11:30 UTC). LIBERO-PRO then turns real suite by suite: goal_task first (about 15:00), all suites by about 18:30. Reading version v3 with a decision memo lands by 13:00.</span>These are the target effect sizes the paper is being written against, so you can read the finished story now. Every number below is replaced by the measured value at the 22:00 freeze. A fail-closed check stops any projected value from reaching the submission PDF or source archive.</div>
+      <div><b>Forecast values — cross-fitted from training data, not evaluation results</b><span style="display:block;margin:4px 0 6px;color:var(--ink)"><b>Now evidence-based (10:27):</b> every cell comes from training data only, with a 95% CI. Real LIBERO-PRO numbers replace them suite by suite: goal_task first (target 14:15 UTC).</span>A fail-closed check stops any projected value from reaching the submission PDF or source archive.</div>
     </div>
 
     <div class="tbl-wrap">
       <table>
-        <thead><tr><th>Method</th><th class="r">goal_task</th><th class="r">spatial_swap</th><th class="r">spatial_task</th><th class="r">Mean Δ vs native</th><th class="r">Calls / segment</th></tr></thead>
+        <thead><tr><th>Method (Δ in pp vs native)</th><th class="r">goal_task</th><th class="r">spatial_swap</th><th class="r">spatial_task</th><th class="r">Suite mean</th><th class="r">Calls / segment</th></tr></thead>
         <tbody>
-          <tr><td colspan="6" class="label" style="background:var(--sunk)">Held-out cohort (primary, 240 paired units)</td></tr>
-          <tr><td>Native π<sub>0.5</sub> <span class="faint" style="font-size:12px">(measured, 50 ep)</span></td><td class="r mono">28%</td><td class="r mono">54%</td><td class="r mono">56%</td><td class="r mono">—</td><td class="r mono">0</td></tr>
-          <tr><td>No-feedback</td><td class="r"><span class="pv">28%<sup>proj</sup></span></td><td class="r"><span class="pv">54%<sup>proj</sup></span></td><td class="r"><span class="pv">56%<sup>proj</sup></span></td><td class="r"><span class="pv">±0<sup>proj</sup></span></td><td class="r mono">0</td></tr>
-          <tr><td class="arm-eval">Weighted fitting</td><td class="r"><span class="pv">33%<sup>proj</sup></span></td><td class="r"><span class="pv">59%<sup>proj</sup></span></td><td class="r"><span class="pv">61%<sup>proj</sup></span></td><td class="r"><span class="pv">+5 pp<sup>proj</sup></span></td><td class="r mono">0</td></tr>
-          <tr><td class="arm-eval">Learned-value rerank K8</td><td class="r"><span class="pv">34%<sup>proj</sup></span></td><td class="r"><span class="pv">60%<sup>proj</sup></span></td><td class="r"><span class="pv">62%<sup>proj</sup></span></td><td class="r"><span class="pv">+6 pp<sup>proj</sup></span></td><td class="r mono">8 Q̂</td></tr>
-          <tr><td class="arm-asbs">ASBS (ours)</td><td class="r"><span class="pv">36%<sup>proj</sup></span></td><td class="r"><span class="pv">62%<sup>proj</sup></span></td><td class="r"><span class="pv">64%<sup>proj</sup></span></td><td class="r"><span class="pv">+8 pp<sup>proj</sup></span></td><td class="r mono">0</td></tr>
-          <tr><td>Online rerank K8 (S2-sim, 30 units)</td><td class="r"><span class="pv">40%<sup>proj</sup></span></td><td class="r"><span class="pv">66%<sup>proj</sup></span></td><td class="r"><span class="pv">68%<sup>proj</sup></span></td><td class="r"><span class="pv">+12 pp<sup>proj</sup></span></td><td class="r mono">16 rollouts</td></tr>
-          <tr><td colspan="6" class="label" style="background:var(--sunk)">Recurring-state cohort (secondary, 120 paired units)</td></tr>
-          <tr><td class="arm-eval">Weighted fitting</td><td class="r"><span class="pv">38%<sup>proj</sup></span></td><td class="r"><span class="pv">64%<sup>proj</sup></span></td><td class="r"><span class="pv">66%<sup>proj</sup></span></td><td class="r"><span class="pv">+10 pp<sup>proj</sup></span></td><td class="r mono">0</td></tr>
-          <tr><td class="arm-eval">Learned-value rerank K8</td><td class="r"><span class="pv">40%<sup>proj</sup></span></td><td class="r"><span class="pv">66%<sup>proj</sup></span></td><td class="r"><span class="pv">68%<sup>proj</sup></span></td><td class="r"><span class="pv">+12 pp<sup>proj</sup></span></td><td class="r mono">8 Q̂</td></tr>
-          <tr><td class="arm-asbs">ASBS (ours)</td><td class="r"><span class="pv">43%<sup>proj</sup></span></td><td class="r"><span class="pv">69%<sup>proj</sup></span></td><td class="r"><span class="pv">71%<sup>proj</sup></span></td><td class="r"><span class="pv">+15 pp<sup>proj</sup></span></td><td class="r mono">0</td></tr>
-          <tr><td colspan="6" class="label" style="background:var(--sunk)">Capability retention (saturated tasks)</td></tr>
-          <tr><td class="arm-asbs">ASBS vs native</td><td colspan="4" class="r"><span class="pv">≤ 1 of 20 tasks harmed<sup>proj</sup></span></td><td class="r mono">0</td></tr>
+          <tr><td colspan="6" class="label" style="background:var(--sunk)">Held-out cohort · forecast_v1 (CC, 10:27 UTC; 301 training states; task-clustered bootstrap CI)</td></tr>
+          <tr><td>Native π<sub>0.5</sub> (dev rate, %)</td><td class="r mono">37.3</td><td class="r mono">53.4</td><td class="r mono">58.8</td><td class="r mono">49.8</td><td class="r mono">0</td></tr>
+<tr><td><span class="arm-eval">Learned rerank K8</span></td><td class="r "><span class="pv">+10.3 [2.3, 19.0]<sup>fc</sup></span></td><td class="r "><span class="pv">+1.6 [−1.9, 6.6]<sup>fc</sup></span></td><td class="r "><span class="pv">−0.4 [−7.5, 6.3]<sup>fc</sup></span></td><td class="r "><span class="pv">+3.8<sup>fc</sup></span></td><td class="r mono">8 Â</td></tr>
+<tr><td><span class="arm-asbs">ASBS, λ = 0.05</span></td><td class="r "><span class="pv">+3.4 [0.8, 6.3]<sup>fc</sup></span></td><td class="r "><span class="pv">+0.5 [−0.6, 2.2]<sup>fc</sup></span></td><td class="r "><span class="pv">0.0<sup>fc</sup></span></td><td class="r "><span class="pv">+1.3<sup>fc</sup></span></td><td class="r mono">0</td></tr>
+<tr><td><span class="arm-asbs">ASBS, KL-matched λ*</span></td><td colspan="4" class="r"><span class="pv">pending (≈ rerank by Gibbs optimality)</span></td><td class="r mono">0</td></tr>
+<tr><td><span class="arm-eval">Weighted fitting, λ = 0.05</span></td><td class="r "><span class="pv">+4.6 [1.0, 8.5]<sup>fc</sup></span></td><td class="r "><span class="pv">+0.7 [−0.8, 2.9]<sup>fc</sup></span></td><td class="r "><span class="pv">0.0<sup>fc</sup></span></td><td class="r "><span class="pv">+1.8<sup>fc</sup></span></td><td class="r mono">0</td></tr>
+<tr><td>No-feedback K8</td><td class="r "><span class="pv">0<sup>fc</sup></span></td><td class="r "><span class="pv">0<sup>fc</sup></span></td><td class="r "><span class="pv">0<sup>fc</sup></span></td><td class="r "><span class="pv">0<sup>fc</sup></span></td><td class="r mono">0</td></tr>
+<tr><td>Online simulator rerank K8 (30 starts)</td><td class="r "><span class="pv">+5.2 [−2.1, 11.8]<sup>fc</sup></span></td><td class="r "><span class="pv">−3.4 [−9.7, 0.0]<sup>fc</sup></span></td><td class="r "><span class="pv">+2.9 [0.0, 8.3]<sup>fc</sup></span></td><td class="r "><span class="pv">+1.6<sup>fc</sup></span></td><td class="r mono">16 rollouts</td></tr>
+          <tr><td colspan="6" class="label" style="background:var(--sunk)">Recurring cohort</td></tr>
+          <tr><td>Native π<sub>0.5</sub> (dev rate, %)</td><td class="r mono">42.3</td><td class="r mono">66.7</td><td class="r mono">68.0</td><td class="r mono"></td><td class="r mono">0</td></tr>
+<tr><td>Memory replay (two-direction cross-fit)</td><td class="r "><span class="pv">+3.1<sup>fc</sup></span></td><td class="r "><span class="pv">0.0<sup>fc</sup></span></td><td class="r "><span class="pv">+1.6<sup>fc</sup></span></td><td class="r "><span class="pv">+1.5<sup>fc</sup></span></td><td class="r mono">0</td></tr>
         </tbody>
       </table>
     </div>
-
-    <svg class="chart" viewBox="0 0 720 250" role="img" aria-label="Projected held-out success by suite for native, weighted fitting, rerank and ASBS" style="margin-top:18px">
-      <defs>
-        <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect style="fill:var(--asbs)" width="6" height="6"/><line style="stroke:var(--surface)" x1="0" y1="0" x2="0" y2="6" stroke-width="2"/></pattern>
-        <pattern id="hatchE" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect style="fill:var(--eval)" width="6" height="6"/><line style="stroke:var(--surface)" x1="0" y1="0" x2="0" y2="6" stroke-width="2"/></pattern>
-        <pattern id="hatchE2" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect style="fill:var(--eval)" width="6" height="6" opacity=".5"/><line style="stroke:var(--surface)" x1="0" y1="0" x2="0" y2="6" stroke-width="2"/></pattern>
-      </defs>
-      <g font-size="12">
-        <!-- y = 210 - v*2.4 (0..80%) -->
-        <line style="stroke:var(--line)" x1="50" y1="210" x2="710" y2="210"/>
-        <g style="fill:var(--ink-3)" text-anchor="end">
-          <text x="42" y="214">0%</text><text x="42" y="166">20%</text><text x="42" y="118">40%</text><text x="42" y="70">60%</text><text x="42" y="22">80%</text>
-        </g>
-        <g style="stroke:var(--line-soft)"><line x1="50" y1="162" x2="710" y2="162"/><line x1="50" y1="114" x2="710" y2="114"/><line x1="50" y1="66" x2="710" y2="66"/><line x1="50" y1="18" x2="710" y2="18"/></g>
-        <!-- goal_task group at x=90 -->
-        <rect style="fill:var(--ink-3)" x="90" y="142.8" width="34" height="67.2"/>
-        <rect x="128" y="130.8" width="34" height="79.2" fill="url(#hatchE2)"/>
-        <rect x="166" y="128.4" width="34" height="81.6" fill="url(#hatchE)"/>
-        <rect x="204" y="123.6" width="34" height="86.4" fill="url(#hatch)"/>
-        <text style="fill:var(--ink-2)" x="164" y="230" text-anchor="middle">goal_task</text>
-        <!-- spatial_swap at 310 -->
-        <rect style="fill:var(--ink-3)" x="310" y="80.4" width="34" height="129.6"/>
-        <rect x="348" y="68.4" width="34" height="141.6" fill="url(#hatchE2)"/>
-        <rect x="386" y="66" width="34" height="144" fill="url(#hatchE)"/>
-        <rect x="424" y="61.2" width="34" height="148.8" fill="url(#hatch)"/>
-        <text style="fill:var(--ink-2)" x="384" y="230" text-anchor="middle">spatial_swap</text>
-        <!-- spatial_task at 530 -->
-        <rect style="fill:var(--ink-3)" x="530" y="75.6" width="34" height="134.4"/>
-        <rect x="568" y="63.6" width="34" height="146.4" fill="url(#hatchE2)"/>
-        <rect x="606" y="61.2" width="34" height="148.8" fill="url(#hatchE)"/>
-        <rect x="644" y="56.4" width="34" height="153.6" fill="url(#hatch)"/>
-        <text style="fill:var(--ink-2)" x="604" y="230" text-anchor="middle">spatial_task</text>
-        <text style="fill:var(--proj);font-family:var(--cond)" x="700" y="36" text-anchor="end" font-weight="600" letter-spacing=".08em" font-size="13">PROJECTED — NOT RESULTS</text>
-        <g font-size="11.5">
-          <rect style="fill:var(--ink-3)" x="60" y="238" width="11" height="11"/><text style="fill:var(--ink-2)" x="76" y="248">Native (measured)</text>
-          <rect x="190" y="238" width="11" height="11" fill="url(#hatchE2)"/><text style="fill:var(--ink-2)" x="206" y="248">Weighted fitting</text>
-          <rect x="310" y="238" width="11" height="11" fill="url(#hatchE)"/><text style="fill:var(--ink-2)" x="326" y="248">Rerank K8</text>
-          <rect x="410" y="238" width="11" height="11" fill="url(#hatch)"/><text style="fill:var(--ink-2)" x="426" y="248">ASBS</text>
-        </g>
-      </g>
-    </svg>
-
-    <div class="scen">
-      <div class="panel">
-        <div class="label" style="color:var(--proj)">Scenario A · target</div>
-        <h3 style="margin-top:4px">Within-state AUC clears 0.55 by 12:30</h3>
-        <ul>
-          <li>Paper claims: learning the proposal matches or beats learned-value reranking at 0 feedback calls, and consolidates feedback on recurring states.</li>
-          <li>Title ①. W4 mock-review estimate 7/10 if the results hold.</li>
-          <li>Numbers in the table above.</li>
-        </ul>
-      </div>
-      <div class="panel b">
-        <div class="label">Scenario B · fallback</div>
-        <h3 style="margin-top:4px">Within-state ranking stays at chance</h3>
-        <ul>
-          <li>Held-out: ASBS, weighted fitting and rerank all ≈ native. We report it as a finding: pooled value accuracy hides the lack of within-state ranking.</li>
-          <li>The recurring cohort, E3 fidelity, the leverage analysis and the cost accounting carry the paper.</li>
-          <li>Title ③. W4 estimate 4/10. Claims narrowed, never inflated.</li>
-        </ul>
-      </div>
+    <p class="faint" style="font-size:12.5px;margin-top:8px">Method: for each held-out training state, the critic's choice among stored candidates is scored by that candidate's observed continuations (unbiased for the rule, probably optimistic; feature family chosen on development data). Chunk-0 decision equals the episode effect; later segments add at most about ±3 pp. Power at 240 pairs: rerank 0.19 overall, 0.41 on goal_task alone; other arms ≤ 0.07.</p>
+    <div class="panel" style="margin-top:14px;border-top:3px solid var(--asbs)">
+      <div class="label" style="color:var(--asbs)">Where our advantage can come from (10:45 decision)</div>
+      <p style="margin-top:6px;font-size:14px">ASBS is under-tilted: at λ = 0.05 it moves E[Â] by 0.044 versus 0.134 for rerank-K8, because v5.2's score is on a small scale. By the Gibbs variational principle, the tilted target with the same KL as best-of-8 reranking (log 8 − 7/8 = 1.204 nats) has at least rerank's E[Â], but needs <b>0 critic calls instead of 8</b>. v5.2 now adds this KL-matched λ*, registered before evaluation. The target claim becomes: <b>rerank-level gains on goal_task at zero deployment calls</b>, a fair comparison matched on both divergence and value model.</p>
     </div>
-    <p class="muted" style="font-size:13.5px;margin-top:14px"><b>Honest read at 10:10: no positive result yet, and none can exist before evaluation starts at 13:30.</b> Development data says: candidate choice changes success (p = 1e-4), but which candidate is best does not transfer across states (AUC 0.54, flat), so ASBS on held-out states will most likely be close to native. My proposed “feedback memory” for ASBS was wrong: CC showed that a KL-regularised tilt in 3,200 dimensions cannot concentrate on a stored candidate (Proposition 1 caps the tilt at about 10<sup>4.3</sup> against a prior mass of 10<sup>−35.7</sup>). The one positive effect measured so far is <b>memory replay</b> (selection from stored feedback), cross-fitted on training data: goal_task +13.7 pp (n = 21), spatial_swap 0.0 (n = 15), spatial_task +1.6 pp (n = 16). It enters as a registered reference arm. Most likely paper: the Scenario B analysis, with replay as the consolidation result.</p>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>Honest read at 10:50:</b> the best-supported advantage is on <b>goal_task</b>: the learned critic's choice beats native by +10.3 pp [2.3, 19.0] in cross-fitted training data, the only effect with meaningful power (0.41 at 80 pairs). ASBS was forecast at only +3.4 pp because its λ was too weak for v5.2's score scale; the KL-matched λ* should bring it to rerank level at zero calls. Collection now stops at 11:45 and evaluation starts early, so real goal_task numbers target 14:15 UTC. Memory replay is weaker than first estimated (+1.5 pp in both directions).</p>
   </div>
 </section>
 
@@ -566,7 +507,7 @@ a{color:var(--eval)}
   <div class="panel">
     <div class="risk"><span class="sev t-bad">High</span><div><b>Candidate choice may carry little generalisable signal.</b> <span class="muted">Advantage Q̂ memorises training states and ranks held-out states at chance. Mitigation: leverage test at M=8, low-dimensional noise features, more mixed states, recurring cohort, λ calibration that can fall back to ρ<sub>0</sub> so ASBS never hurts native. Gate at 12:30; below 0.55 we switch to Scenario B claims.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>Evaluation window is 4.5 h for 1,440 episodes plus 30 online units.</b> <span class="muted">About 3.1 h at measured throughput. Slack before 22:00 is about 4 h.</span></div></div>
-    <div class="risk"><span class="sev t-risk">Medium</span><div><b>RoboDojo bring-up may fail.</b> <span class="muted">Needs Isaac Sim 5.1 on an RT-core GPU (5090/4090) installed off the root disk. Go/no-go at 13:00; if it fails, the table says “not run” rather than a number.</span></div></div>
+    <div class="risk"><span class="sev t-risk">Medium</span><div><b>RoboDojo is blocked (10:25 check by gpumgr).</b> <span class="muted">Both the 5090 host cards are busy with another user's training, all cluster B A100s have processes, there is no RoboDojo checkout or pi05_base_aloha cache, and Isaac Sim 5.1 needs about 300 GiB. It needs a free RTX card and a large disk from you.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>Source archive leaked internal paths and host names.</b> <span class="muted">W4's packager fails closed on paths, hosts, draft banners, TBD and projected values.</span></div></div>
     <div class="risk"><span class="sev t-ok">Low</span><div><b>Disk space.</b> <span class="muted">Cleaned intermediate checkpoints; shared disk is being watched.</span></div></div>
   </div>
