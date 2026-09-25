@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 13:40 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 14:20 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -392,10 +392,11 @@ a{color:var(--eval)}
     <div class="tbl-wrap" style="margin-top:10px"><table>
       <thead><tr><th>Experiment</th><th>Status</th><th>Owner</th><th>ETA (UTC)</th></tr></thead>
       <tbody>
-        <tr><td>LIBERO-PRO goal_task · native, no-feedback</td><td><span class="tag t-ok">done 130/130</span></td><td>B</td><td class="mono">13:29</td></tr>
-        <tr><td>LIBERO-PRO goal_task · memory replay (recurring)</td><td><span class="tag t-run">running</span></td><td>B</td><td class="mono">14:00</td></tr>
-        <tr><td>λ calibration, 216 training-context episodes</td><td><span class="tag t-run">next</span></td><td>B</td><td class="mono">14:15</td></tr>
-        <tr><td>goal_task · ASBS (v5.2a), weighted fitting, rerank (160 + 40 units)</td><td><span class="tag t-wait">after calibration</span></td><td>B</td><td class="mono">15:00–15:30</td></tr>
+        <tr><td>LIBERO-PRO goal_task · native, no-feedback</td><td><span class="tag t-ok">native 18.75% (15/80)</span></td><td>B · CC</td><td class="mono">13:29</td></tr>
+        <tr><td>LIBERO-PRO spatial_task · native (weight-free)</td><td><span class="tag t-run">85/141</span></td><td>B</td><td class="mono">≈14:40</td></tr>
+        <tr><td>LIBERO-PRO goal_task · memory replay (recurring)</td><td><span class="tag t-ok">15 pairs: +2.9 pp, n.s.</span></td><td>B · CC</td><td class="mono">13:48</td></tr>
+        <tr><td>λ calibration, 312 training-context episodes (six λ)</td><td><span class="tag t-run">93/312</span></td><td>B</td><td class="mono">≈14:50</td></tr>
+        <tr><td>goal_task · ASBS (v5.2a), weighted fitting, rerank</td><td><span class="tag t-wait">after calibration</span></td><td>B</td><td class="mono">≈16:00</td></tr>
         <tr><td>spatial_task, spatial_swap · all core arms (40 + 40 units)</td><td><span class="tag t-wait">queued</span></td><td>B</td><td class="mono">≈17:30</td></tr>
         <tr><td>Online simulator rerank (10 reference units, capped at 4 workers)</td><td><span class="tag t-wait">background</span></td><td>B</td><td class="mono">≈19:00</td></tr>
         <tr><td>Paired statistics per arm (CI, McNemar, Holm)</td><td><span class="tag t-run">auto on completion</span></td><td>CC</td><td class="mono">rolling</td></tr>
@@ -469,7 +470,7 @@ a{color:var(--eval)}
       <div class="label" style="color:var(--asbs)">Where our advantage comes from (CC, 11:10, training data only)</div>
       <p style="margin-top:6px;font-size:14px">Two fixes, registered as v5.2a before evaluation. (1) λ matched to best-of-8's KL (1.204 nats): the exact tilt then lifts E[Â] by 0.146, above rerank's 0.133, as the Gibbs principle predicts. (2) ASBS was under-trained: at the registered 200 updates it realised only 24% of the exact tilt; 16,000 updates (about 2 min per λ) realise 70%, and at the 2×KL point ASBS matches rerank's E[Â]. Forecast: <b>goal_task +11.4 pp [2.5, 20.9] at zero critic calls</b>, versus rerank's +10.3 with 8 calls. Caveats: the rerank baseline is optimistic, and the conversion assumes success rises linearly with Â.</p>
     </div>
-  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>13:40: first real evaluation data is in.</b> goal_task native 120/120 and no-feedback 10/10 are complete; memory replay is running. The learned arms (ASBS, weighted fitting, rerank) start after the 216-episode λ calibration on the v5.2a weights (16k ASBS updates; KL temperatures recomputed on the final critic: 0.068 and 0.047). RoboDojo is installed on the 4090 with all 54 tasks runnable; assets are downloading. goal_task core results are expected around 15:00–15:30 UTC.</p>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>14:20: first measured numbers, no positive result yet.</b> goal_task native on the held-out evaluation starts is <b>18.75% (15/80)</b>, well below the 37.3% seen on training starts: tasks 0, 1, 3 and 5 are at 0–12.5% and only task 8 is at 69%, so there is less room to improve than forecast. Memory replay on the recurring cohort is +2.9 pp [0, 8.6] (15 pairs, 1 vs 0 discordant, McNemar p = 1.0), not significant. ASBS, weighted fitting and rerank have not run yet: λ calibration is at 93/312 episodes, and spatial_task native runs in parallel (85/141). goal_task ASBS results are expected around 16:00 UTC.</p>
   </div>
 </section>
 
