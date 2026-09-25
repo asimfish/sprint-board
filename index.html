@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 16:20 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 17:10 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -396,7 +396,7 @@ a{color:var(--eval)}
         <tr><td>Native, all suites (held-out 80 each)</td><td><span class="tag t-ok">goal 18.8 · task 22.0 · swap 42.0 %</span></td><td>B · CC</td><td class="mono">15:04</td></tr>
         <tr><td>Memory replay (recurring), all three suites</td><td><span class="tag t-ok">swap +40 pp (10) · task +4.2 · goal +2.9</span></td><td>B · CC</td><td class="mono">15:04</td></tr>
         <tr><td>λ calibration, 312 training-context episodes (six λ)</td><td><span class="tag t-ok">frozen: ASBS 0.068, WF 0.1</span></td><td>B</td><td class="mono">14:55</td></tr>
-        <tr><td>goal_task · ASBS (v5.2a), weighted fitting, rerank (80 + 40 units)</td><td><span class="tag t-run">55 / 50 / 52 of 80</span></td><td>B</td><td class="mono">≈16:45</td></tr>
+        <tr><td>goal_task · ASBS (v5.2a), weighted fitting, rerank</td><td><span class="tag t-risk">done: ASBS ≈ native (held-out)</span></td><td>B · CC</td><td class="mono">16:28 · stats pending</td></tr>
         <tr><td>spatial_task, spatial_swap · all core arms (40 + 40 units)</td><td><span class="tag t-wait">queued</span></td><td>B</td><td class="mono">≈17:30</td></tr>
         <tr><td>Online simulator rerank (10 reference units, capped at 4 workers)</td><td><span class="tag t-wait">background</span></td><td>B</td><td class="mono">≈19:00</td></tr>
         <tr><td>Paired statistics per arm (CI, McNemar, Holm)</td><td><span class="tag t-run">auto on completion</span></td><td>CC</td><td class="mono">rolling</td></tr>
@@ -471,7 +471,7 @@ a{color:var(--eval)}
       <div class="label" style="color:var(--asbs)">Where our advantage comes from (CC, 11:10, training data only)</div>
       <p style="margin-top:6px;font-size:14px">Two fixes, registered as v5.2a before evaluation. (1) λ matched to best-of-8's KL (1.204 nats): the exact tilt then lifts E[Â] by 0.146, above rerank's 0.133, as the Gibbs principle predicts. (2) ASBS was under-trained: at the registered 200 updates it realised only 24% of the exact tilt; 16,000 updates (about 2 min per λ) realise 70%, and at the 2×KL point ASBS matches rerank's E[Â]. Forecast: <b>goal_task +11.4 pp [2.5, 20.9] at zero critic calls</b>, versus rerank's +10.3 with 8 calls. Caveats: the rerank baseline is optimistic, and the conversion assumes success rises linearly with Â.</p>
     </div>
-  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>16:20: the learned arms are running on goal_task.</b> Held-out: ASBS 55/80, weighted fitting 50/80, rerank 52/80; recurring 39/38/37 of 40. The goal_task comparison should land around 16:45 UTC, then spatial_task and spatial_swap (native for swap is done). Allocation is final at 80/80/80, the originally registered one. <b>LIBERO-10 transfer</b> (60 valid pairs on mostly saturated tasks): native 55 successes, ASBS 56; 4 rescued, 3 broken, so no harm and no gain. Memory replay remains the only positive direction so far (6 improved vs 1 worse across suites). Disk on cluster B is low again (17 GiB); A is cleaning our own files only. A synthetic dimension sweep (W3) now tests the two theory predictions directly.</p>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>17:10: goal_task learned arms are done. The held-out result does not support an ASBS gain.</b> Supervisor's unpaired read-only tally, pending CC's official paired statistics: held-out (160 units incl. the 80 extra) native 28/160 (17.5%), ASBS 30/160 (18.8%), weighted fitting 30/160 (18.8%), rerank 25/160 (15.6%). ASBS is ahead only on task 3 (8/32 vs 4/32). Recurring cohort (40 units): native 6/40 (15%), ASBS 8/39 (20.5%), weighted 10/38 (26.3%), <b>rerank 13/37 (35.1%)</b>, and memory replay was positive on spatial_swap. What the evidence supports so far: the theory-level predictions, consolidation by selection on recurring states (direction positive, significance pending), and no harm on LIBERO-10. It does not support ASBS beating native on novel states.</p>
   </div>
 </section>
 
