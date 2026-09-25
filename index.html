@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 10:00 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 10:10 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -230,7 +230,7 @@ a{color:var(--eval)}
       <ul class="status-list">
         <li><span class="mark m-ok"></span><span><b>Collection v5</b> — 236/240 states, 39 mixed (16.5%)</span></li>
         <li><span class="mark m-run"></span><span><b>Collection v5.1</b> — extra depth and width on cluster A, cutoff 12:30 UTC</span></li>
-        <li><span class="mark m-risk"></span><span><b>Value model</b> — candidate choice matters (p = 1e-4, stable at 301 states), but cross-state prediction stays weak (0.54). v5.2 sent 09:28; v5.3 “feedback memory” for recurring states by 10:45</span></li>
+        <li><span class="mark m-risk"></span><span><b>Value model</b> — candidate choice matters (p = 1e-4), cross-state prediction weak (0.54). v5.2 registered. v5.3 cancelled (violates Prop. 1 bound); memory-replay reference arm added instead</span></li>
         <li><span class="mark m-wait"></span><span><b>Evaluation</b> — 240 held-out + 120 recurring paired units, 13:30–18:00 UTC</span></li>
         <li><span class="mark m-ok"></span><span><b>Synthetic fidelity (E3)</b> — ASBS TV 0.082 with 0 online calls, 3 seeds</span></li>
         <li><span class="mark m-run"></span><span><b>Paper</b> — round-4 merge and expected-values preview in progress</span></li>
@@ -247,7 +247,7 @@ a{color:var(--eval)}
       <div class="step done"><div class="node"></div><div class="when">01:00</div><div class="what">v5 collection starts, 32 procs</div></div>
       <div class="step done"><div class="node"></div><div class="when">06:00</div><div class="what">Trial fit: within-state AUC 0.44</div></div>
       <div class="step done"><div class="node"></div><div class="when">06:40</div><div class="what">v5.1 prereg + extra collection</div></div>
-      <div class="step now"><div class="node"></div><div class="when">10:00</div><div class="what">v5.2 registered; v5.3 memory by 10:45</div></div>
+      <div class="step now"><div class="node"></div><div class="when">10:10</div><div class="what">v5.2 registered; replay arm by 11:00</div></div>
       <div class="step"><div class="node"></div><div class="when">12:30</div><div class="what">Collection cutoff; A/B claim gate</div></div>
       <div class="step"><div class="node"></div><div class="when">13:30</div><div class="what">Final weights, 4 methods</div></div>
       <div class="step"><div class="node"></div><div class="when">13:30–18:00</div><div class="what">Paired evaluation, both cohorts</div></div>
@@ -484,7 +484,7 @@ a{color:var(--eval)}
         </ul>
       </div>
     </div>
-    <p class="muted" style="font-size:13.5px;margin-top:14px"><b>Honest read at 10:00:</b> two things are now clear from 301 training states. Candidate choice changes success (overdispersion 1.22, p = 1e-4; the best of 8 candidates is roughly 20 pp above the state mean), but which candidate is best does not transfer across states (φ AUC flat at 0.54). So held-out gains will likely be small (Scenario B there). The positive effect we can legitimately target is <b>feedback consolidation on recurring states</b>: v5.3 adds a feedback memory so ASBS can steer noise toward the good candidates it has seen, which reranking from ρ<sub>0</sub> cannot reach in 3,200 dimensions. Cluster A budget until 12:30 goes to re-scoring those candidates to M = 8 for reliable selection. Evaluation runs whatever the gate says; the gate only decides the claims.</p>
+    <p class="muted" style="font-size:13.5px;margin-top:14px"><b>Honest read at 10:10: no positive result yet, and none can exist before evaluation starts at 13:30.</b> Development data says: candidate choice changes success (p = 1e-4), but which candidate is best does not transfer across states (AUC 0.54, flat), so ASBS on held-out states will most likely be close to native. My proposed “feedback memory” for ASBS was wrong: CC showed that a KL-regularised tilt in 3,200 dimensions cannot concentrate on a stored candidate (Proposition 1 caps the tilt at about 10<sup>4.3</sup> against a prior mass of 10<sup>−35.7</sup>). The one positive effect measured so far is <b>memory replay</b> (selection from stored feedback), cross-fitted on training data: goal_task +13.7 pp (n = 21), spatial_swap 0.0 (n = 15), spatial_task +1.6 pp (n = 16). It enters as a registered reference arm. Most likely paper: the Scenario B analysis, with replay as the consolidation result.</p>
   </div>
 </section>
 
