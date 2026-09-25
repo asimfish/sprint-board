@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 13:05 UTC</span>
+      <span class="pill">Snapshot 25 Sep 2026 · 13:40 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -387,6 +387,26 @@ a{color:var(--eval)}
     </ul>
   </div>
 
+  <div class="panel" style="margin-top:16px;border-left:4px solid var(--sage)">
+    <h3>Experiment completeness checklist (13:40 UTC)</h3>
+    <div class="tbl-wrap" style="margin-top:10px"><table>
+      <thead><tr><th>Experiment</th><th>Status</th><th>Owner</th><th>ETA (UTC)</th></tr></thead>
+      <tbody>
+        <tr><td>LIBERO-PRO goal_task · native, no-feedback</td><td><span class="tag t-ok">done 130/130</span></td><td>B</td><td class="mono">13:29</td></tr>
+        <tr><td>LIBERO-PRO goal_task · memory replay (recurring)</td><td><span class="tag t-run">running</span></td><td>B</td><td class="mono">14:00</td></tr>
+        <tr><td>λ calibration, 216 training-context episodes</td><td><span class="tag t-run">next</span></td><td>B</td><td class="mono">14:15</td></tr>
+        <tr><td>goal_task · ASBS (v5.2a), weighted fitting, rerank (160 + 40 units)</td><td><span class="tag t-wait">after calibration</span></td><td>B</td><td class="mono">15:00–15:30</td></tr>
+        <tr><td>spatial_task, spatial_swap · all core arms (40 + 40 units)</td><td><span class="tag t-wait">queued</span></td><td>B</td><td class="mono">≈17:30</td></tr>
+        <tr><td>Online simulator rerank (10 reference units, capped at 4 workers)</td><td><span class="tag t-wait">background</span></td><td>B</td><td class="mono">≈19:00</td></tr>
+        <tr><td>Paired statistics per arm (CI, McNemar, Holm)</td><td><span class="tag t-run">auto on completion</span></td><td>CC</td><td class="mono">rolling</td></tr>
+        <tr><td>Theory validation: value–divergence frontier, Prop. 1, cost table</td><td><span class="tag t-ok">computed</span></td><td>CC · F</td><td class="mono">figure in v4</td></tr>
+        <tr><td>LIBERO-10 · native, chunk-0 leverage, ASBS transfer pairs</td><td><span class="tag t-run">running</span></td><td>A</td><td class="mono">17:30</td></tr>
+        <tr><td>RoboDojo · native (3–5 tasks × 10), noise leverage</td><td><span class="tag t-run">assets downloading</span></td><td>gpumgr</td><td class="mono">first ep 13:45 · 17:30</td></tr>
+        <tr><td>Synthetic fidelity (E3), AUC curve, overdispersion</td><td><span class="tag t-ok">done</span></td><td>CC</td><td class="mono">—</td></tr>
+        <tr><td>Reading version v4 with measured cells replacing forecasts</td><td><span class="tag t-run">rolling</span></td><td>W1</td><td class="mono">per result</td></tr>
+      </tbody></table></div>
+  </div>
+
   <h3 style="margin:22px 0 10px">Main evaluation design (PREREG v5 → v5.1)</h3>
   <div class="tbl-wrap">
     <table>
@@ -449,7 +469,7 @@ a{color:var(--eval)}
       <div class="label" style="color:var(--asbs)">Where our advantage comes from (CC, 11:10, training data only)</div>
       <p style="margin-top:6px;font-size:14px">Two fixes, registered as v5.2a before evaluation. (1) λ matched to best-of-8's KL (1.204 nats): the exact tilt then lifts E[Â] by 0.146, above rerank's 0.133, as the Gibbs principle predicts. (2) ASBS was under-trained: at the registered 200 updates it realised only 24% of the exact tilt; 16,000 updates (about 2 min per λ) realise 70%, and at the 2×KL point ASBS matches rerank's E[Â]. Forecast: <b>goal_task +11.4 pp [2.5, 20.9] at zero critic calls</b>, versus rerank's +10.3 with 8 calls. Caveats: the rerank baseline is optimistic, and the conversion assumes success rises linearly with Â.</p>
     </div>
-  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>13:05: formal evaluation has started.</b> At 12:57 UTC B launched goal_task native (120 episodes) and no-feedback on 32 workers across 16 accelerators. Production weights for the final 12:30 snapshot, including v5.2a (ASBS with 16k updates and KL-matched λ), were delivered at 12:49 with SHA verification; the gate is HOLD (calibration AUC 0.49), and the learned arms run anyway as decided. Next: 216-episode λ calibration, then ASBS, weighted fitting and rerank on goal_task. Core goal_task results are targeted at about 15:00 UTC. Development-critic caveats are unchanged.</p>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>13:40: first real evaluation data is in.</b> goal_task native 120/120 and no-feedback 10/10 are complete; memory replay is running. The learned arms (ASBS, weighted fitting, rerank) start after the 216-episode λ calibration on the v5.2a weights (16k ASBS updates; KL temperatures recomputed on the final critic: 0.068 and 0.047). RoboDojo is installed on the 4090 with all 54 tasks runnable; assets are downloading. goal_task core results are expected around 15:00–15:30 UTC.</p>
   </div>
 </section>
 
@@ -519,7 +539,7 @@ a{color:var(--eval)}
   <div class="panel">
     <div class="risk"><span class="sev t-bad">High</span><div><b>Candidate choice may carry little generalisable signal.</b> <span class="muted">Advantage Q̂ memorises training states and ranks held-out states at chance. Mitigation: leverage test at M=8, low-dimensional noise features, more mixed states, recurring cohort, λ calibration that can fall back to ρ<sub>0</sub> so ASBS never hurts native. Gate at 12:30; below 0.55 we switch to Scenario B claims.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>Evaluation window is 4.5 h for 1,440 episodes plus 30 online units.</b> <span class="muted">About 3.1 h at measured throughput. Slack before 22:00 is about 4 h.</span></div></div>
-    <div class="risk"><span class="sev t-risk">Medium</span><div><b>RoboDojo: environment installed on the 4090, first episode next.</b> <span class="muted">Isaac Sim 5.1.0, RoboDojo, XPolicyLab and PyTorch 2.7 are installed and Vulkan sees the RTX 4090. The large NVMe is mounted noexec, so the run uses /data (273 GiB free) with a hard floor of 100 GiB. First episode by 13:45, results by 17:30.</span></div></div>
+    <div class="risk"><span class="sev t-risk">Medium</span><div><b>RoboDojo: all 54 tasks verified runnable on the 4090.</b> <span class="muted">Assets are downloading from HuggingFace; /data keeps a floor of 100 GiB free. First episode about 13:45, results by 17:30.</span></div></div>
     <div class="risk"><span class="sev t-risk">Medium</span><div><b>Source archive leaked internal paths and host names.</b> <span class="muted">W4's packager fails closed on paths, hosts, draft banners, TBD and projected values.</span></div></div>
     <div class="risk"><span class="sev t-ok">Low</span><div><b>Disk space.</b> <span class="muted">Cleaned intermediate checkpoints; shared disk is being watched.</span></div></div>
   </div>
