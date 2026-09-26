@@ -201,13 +201,13 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 25 Sep 2026 · 22:00 UTC</span>
+      <span class="pill">Snapshot 26 Sep 2026 · 02:45 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
   </div>
   <div class="clocks" aria-label="Countdowns">
-    <div class="clock hot"><div class="label">Numbers freeze</div><div class="t" data-until="2026-09-26T01:00:00Z">7h 30m</div><div class="w">26 Sep 01:00 UTC (moved)</div></div>
+    <div class="clock hot"><div class="label">Numbers freeze</div><div class="t" data-until="2026-09-26T01:00:00Z">passed</div><div class="w">26 Sep 01:00 UTC (frozen)</div></div>
     <div class="clock"><div class="label">Final PDF</div><div class="t" data-until="2026-09-26T08:00:00Z">25h 20m</div><div class="w">26 Sep 08:00 UTC</div></div>
     <div class="clock"><div class="label">ICLR deadline</div><div class="t" data-until="2026-09-26T11:59:00Z">29h 19m</div><div class="w">26 Sep 11:59 UTC (AoE)</div></div>
   </div>
@@ -411,10 +411,11 @@ a{color:var(--eval)}
         <tr><td>spatial_task · learned arms</td><td><span class="tag t-ok">done</span></td><td>B</td><td class="mono">≈18:30</td></tr>
         <tr><td>Held-out main table, all suites (240 pairs)</td><td><span class="tag t-risk">ASBS +0.06 pp, p = 1.0</span></td><td>B · CC</td><td class="mono">done ≈20:00</td></tr>
         <tr><td>E6 consolidation confirmatory, primary (256 pairs × 3 arms)</td><td><span class="tag t-ok">replay +10.5 pp, p ≈ 0.005 · ASBS +0.4 pp</span></td><td>CC · B</td><td class="mono">21:51</td></tr>
-        <tr><td>E6 secondary population (166 pairs, native vs replay)</td><td><span class="tag t-run">loading</span></td><td>B</td><td class="mono">≈23:00</td></tr>
+        <tr><td>E6 secondary population (166 pairs, native vs replay)</td><td><span class="tag t-ok">+1.8 pp (7 vs 4)</span></td><td>B · CC</td><td class="mono">done</td></tr>
+        <tr><td>E7 independent replication on new recurring starts</td><td><span class="tag t-run">registering</span></td><td>B · CC</td><td class="mono">≈06:30</td></tr>
         <tr><td>Post-hoc temperature diagnostic, τ<sub>σ</sub> = 0.920 (scale-matched to weighted fitting)</td><td><span class="tag t-wait">after E6 secondary</span></td><td>CC · B</td><td class="mono">≈23:45</td></tr>
         <tr><td>spatial_task, spatial_swap · all core arms (40 + 40 units)</td><td><span class="tag t-wait">queued</span></td><td>B</td><td class="mono">≈17:30</td></tr>
-        <tr><td>Online simulator rerank (10 reference units, capped at 4 workers)</td><td><span class="tag t-wait">background</span></td><td>B</td><td class="mono">≈19:00</td></tr>
+        <tr><td>Online simulator rerank reference</td><td><span class="tag t-bad">stopped: 2/30 complete</span></td><td>B</td><td class="mono">cost-based stop</td></tr>
         <tr><td>Paired statistics per arm (CI, McNemar, Holm)</td><td><span class="tag t-run">auto on completion</span></td><td>CC</td><td class="mono">rolling</td></tr>
         <tr><td>Theory validation: value–divergence frontier, Prop. 1, cost table</td><td><span class="tag t-ok">computed</span></td><td>CC · F</td><td class="mono">figure in v4</td></tr>
         <tr><td>LIBERO-10 · ASBS transfer pairs</td><td><span class="tag t-ok">closed: 68 pairs, 64 vs 63</span></td><td>A</td><td class="mono">20:40</td></tr>
@@ -487,7 +488,7 @@ a{color:var(--eval)}
       <div class="label" style="color:var(--asbs)">Where our advantage comes from (CC, 11:10, training data only)</div>
       <p style="margin-top:6px;font-size:14px">Two fixes, registered as v5.2a before evaluation. (1) λ matched to best-of-8's KL (1.204 nats): the exact tilt then lifts E[Â] by 0.146, above rerank's 0.133, as the Gibbs principle predicts. (2) ASBS was under-trained: at the registered 200 updates it realised only 24% of the exact tilt; 16,000 updates (about 2 min per λ) realise 70%, and at the 2×KL point ASBS matches rerank's E[Â]. Forecast: <b>goal_task +11.4 pp [2.5, 20.9] at zero critic calls</b>, versus rerank's +10.3 with 8 calls. Caveats: the rerank baseline is optimistic, and the conversion assumes success rises linearly with Â.</p>
     </div>
-  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>22:00: E6 confirmatory result is positive for memory replay.</b> Pre-registered E6: 16 recurring mixed starts × 16 fresh seeds = 256 pairs per arm. Native 106/256 (41.4%), <b>memory replay 133/256 (52.0%, +10.5 pp)</b>, ASBS 107/256 (41.8%). Discordant pairs: replay vs native 57 vs 30 (exact McNemar p ≈ 0.005); replay vs ASBS 50 vs 24 (p ≈ 0.003); ASBS vs native 32 vs 31 (p = 1.0). With Holm over the three contrasts, both replay comparisons stay at p ≈ 0.01. The training-data forecast was +12.7 pp [1.9, 24.6]. These are the supervisor's count-level checks; CC's context-clustered bootstrap CIs are final. Scope: recurring starts with exact identity lookup, first segment only, 16 mixed states chosen on training data. Held-out main table: no learned method differs from native (ASBS +0.06 pp). Both halves of “Propose or Remember?” now have measured evidence.</p>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>02:45: numbers frozen at 01:00; final E6 statistics are in.</b> Replay − native +10.5 pp: the registered exact McNemar is significant (Holm p = 0.010), but the 14-context cluster-bootstrap CI is [0.0, 23.8], so its lower bound touches zero. 11 of 16 states are positive, 1 neutral, 4 negative. Replay − ASBS +10.2 pp [2.7, 20.1], Holm p = 0.010. ASBS − native +0.4 pp. The secondary population (non-mixed starts, 166 pairs) is +1.8 pp, as expected when most starts have no room. <b>Remaining problems and fixes:</b> (1) generalisation across physical contexts is borderline, so E7 launches now: an independent replication on new recurring starts, registered first and reported whatever its sign if done by 09:30; (2) the online System-2 reference finished only 2/30 units in 9 h and is stopped as incomplete; (3) RoboDojo has no episode yet, with a hard stop at 05:00; (4) the data disk is at 6.7 GiB again, so A moves our snapshots; (5) the supervisor's 22:20 check did not fire, leaving this page stale for four hours. The safe final PDF (8-page main text) is due at 08:00 UTC; the deadline is 11:59 UTC.</p>
   </div>
 </section>
 
