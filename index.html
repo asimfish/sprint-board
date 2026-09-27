@@ -201,14 +201,14 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 26 Sep 2026 · 06:45 UTC</span>
+      <span class="pill">Snapshot 27 Sep 2026 · 08:50 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
   </div>
   <div class="clocks" aria-label="Countdowns">
     <div class="clock hot"><div class="label">Numbers freeze</div><div class="t" data-until="2026-09-26T01:00:00Z">passed</div><div class="w">26 Sep 01:00 UTC (frozen)</div></div>
-    <div class="clock"><div class="label">Final PDF</div><div class="t" data-until="2026-09-26T08:00:00Z">25h 20m</div><div class="w">26 Sep 08:00 UTC</div></div>
+    <div class="clock"><div class="label">Final PDF</div><div class="t" data-until="2026-09-26T08:00:00Z">passed</div><div class="w">built 26 Sep 07:21 UTC</div></div>
     <div class="clock"><div class="label">ICLR deadline</div><div class="t" data-until="2026-09-26T11:59:00Z">29h 19m</div><div class="w">26 Sep 11:59 UTC (AoE)</div></div>
   </div>
 </header>
@@ -387,6 +387,21 @@ a{color:var(--eval)}
     </ul>
   </div>
 
+  <div class="panel" style="margin-top:16px;border-left:4px solid var(--eval)">
+    <h3>Post-submission phase (from 27 Sep)</h3>
+    <div class="tbl-wrap" style="margin-top:10px"><table>
+      <thead><tr><th>Experiment</th><th>Question</th><th>Owner</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><b>E7</b> replication</td><td>Does replay's gain hold on new physical contexts? (E6 cluster CI touched 0)</td><td>B · CC</td><td><span class="tag t-run">registering</span></td></tr>
+        <tr><td><b>R0</b> online upper bound</td><td>At held-out starts, how much does true simulator feedback help (best of 4, chunk 0)?</td><td>B</td><td><span class="tag t-wait">after E7</span></td></tr>
+        <tr><td>Temperature diagnostic</td><td>Is weighted fitting's spatial_swap gap just cooling (τ<sub>σ</sub> = 0.920)?</td><td>B</td><td><span class="tag t-wait">after R0</span></td></tr>
+        <tr><td>Propose diagnostics</td><td>Do action-space features or more mixed states lift within-state AUC toward 0.6?</td><td>CC</td><td><span class="tag t-run">offline, GPU 7</span></td></tr>
+        <tr><td><b>E8</b> large collection</td><td>Only if the diagnostics project that AUC 0.6 is reachable</td><td>B · A</td><td><span class="tag t-wait">gated</span></td></tr>
+        <tr><td>RoboDojo</td><td>Native baseline and noise leverage on a second benchmark</td><td>gpumgr</td><td><span class="tag t-run">diagnosing pipeline</span></td></tr>
+        <tr><td>Revision workspace</td><td>Freeze the submitted version; new results enter as appendices for rebuttal or the next version</td><td>W1 · F</td><td><span class="tag t-run">setting up</span></td></tr>
+      </tbody></table></div>
+  </div>
+
   <div class="panel" style="margin-top:16px;border-left:4px solid var(--asbs)">
     <h3>New plan after the goal_task result (17:30 UTC)</h3>
     <ul class="status-list" style="margin-top:10px">
@@ -488,7 +503,7 @@ a{color:var(--eval)}
       <div class="label" style="color:var(--asbs)">Where our advantage comes from (CC, 11:10, training data only)</div>
       <p style="margin-top:6px;font-size:14px">Two fixes, registered as v5.2a before evaluation. (1) λ matched to best-of-8's KL (1.204 nats): the exact tilt then lifts E[Â] by 0.146, above rerank's 0.133, as the Gibbs principle predicts. (2) ASBS was under-trained: at the registered 200 updates it realised only 24% of the exact tilt; 16,000 updates (about 2 min per λ) realise 70%, and at the 2×KL point ASBS matches rerank's E[Â]. Forecast: <b>goal_task +11.4 pp [2.5, 20.9] at zero critic calls</b>, versus rerank's +10.3 with 8 calls. Caveats: the rerank baseline is optimistic, and the conversion assumes success rises linearly with Â.</p>
     </div>
-  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>06:45: final stretch, with submission due by 11:59 UTC.</b> The experiments are final. Held-out main table: ASBS +0.06 pp, not significant. E6: replay +10.55 pp, cluster CI [0.00, 23.75], McNemar Holm p = 0.010. E6 secondary +1.81 pp, p = 0.55. E7 was <b>cancelled without running any episode</b>: it needed at least 3.5 h plus manuscript changes, which the deadline does not allow. RoboDojo passed its 05:00 cutoff with no episode and is reported as not run. The online reference stopped at 2/30 complete. The temperature diagnostic was registered but not run. The manuscript (7-page main text, 16 pages total) compiles cleanly; W1 is removing leftover TBD placeholders, restoring the agreed title, and aligning the CI conventions. W4 then runs the final compliance scan, and you receive the OpenReview form text. The data disk is at 2.5 GiB; A is completing verified deletions of our own copies. The supervisor's 02:59 check again failed to fire (a gap of about 4 h).</p>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>27 Sep 08:50: post-submission strengthening phase.</b> The final manuscript “Propose or Remember? When Outcome Feedback Can Be Consolidated into VLA Noise” was built at 07:21 UTC on 26 Sep, with its OpenReview form. Frozen evidence: held-out ASBS +0.06 pp (n.s.); E6 memory replay +10.55 pp (Holm p = 0.010, cluster CI [0, 23.8]); ASBS on recurring starts +0.4 pp. New experiments, each registered before running: <b>E7</b> replicates replay on fresh recurring starts (24 mixed starts × 16 seeds, 3 arms; E6+E7 pooled analysis pre-declared); <b>R0</b> is a cheap online-feedback upper bound on held-out starts; the <b>temperature diagnostic</b> runs; <b>Propose diagnostics</b> test whether action-space critics or more data lift within-state AUC toward 0.6, which gates a large collection run (E8); RoboDojo is brought up without deadline pressure. Agents were idle for about 24 h because guidance delivery silently failed; the platform now requires the mentor conversation id, and delivery is restored.</p>
   </div>
 </section>
 
