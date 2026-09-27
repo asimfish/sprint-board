@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 27 Sep 2026 · 09:10 UTC</span>
+      <span class="pill">Snapshot 27 Sep 2026 · 09:25 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -392,13 +392,14 @@ a{color:var(--eval)}
     <div class="tbl-wrap" style="margin-top:10px"><table>
       <thead><tr><th>Experiment</th><th>Question</th><th>Owner</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td><b>E7</b> replication</td><td>Does replay's gain hold on new physical contexts? (E6 cluster CI touched 0)</td><td>B · CC</td><td><span class="tag t-run">registering</span></td></tr>
-        <tr><td><b>R0</b> online upper bound</td><td>At held-out starts, how much does true simulator feedback help (best of 4, chunk 0)?</td><td>B</td><td><span class="tag t-wait">after E7</span></td></tr>
+        <tr><td><b>E7</b> replication</td><td>Does replay's gain hold on new physical contexts? (E6 cluster CI touched 0)</td><td>B · CC</td><td><span class="tag t-run">registered 09:17 · single-start canary on a fresh runner</span></td></tr>
+        <tr><td><b>R0</b> online upper bound</td><td>At held-out starts, how much does true simulator feedback help (best of 4, chunk 0)?</td><td>B</td><td><span class="tag t-wait">registered (60 units) · after E7</span></td></tr>
         <tr><td>Temperature diagnostic</td><td>Is weighted fitting's spatial_swap gap just cooling (τ<sub>σ</sub> = 0.920)?</td><td>B</td><td><span class="tag t-wait">after R0</span></td></tr>
         <tr><td>Propose diagnostics v2</td><td>Within-state AUC, nested CV: noise features 0.526, first-chunk actions 0.536, actions × state 0.518; the ceiling with 2-rollout labels is about 0.74. The curves are flat: reaching 0.6 would take ~760 to ~13,900 mixed states</td><td>CC</td><td><span class="tag t-risk">no E8 on these features</span></td></tr>
         <tr><td>Propose pilots v3</td><td>(A) privileged object-relative action features: does any ranking signal exist? (B) deployable critic on spatial visual tokens plus actions</td><td>CC</td><td><span class="tag t-run">running</span></td></tr>
         <tr><td><b>E8</b> large collection</td><td>Only if the diagnostics project that AUC 0.6 is reachable</td><td>B · A</td><td><span class="tag t-wait">gated</span></td></tr>
         <tr><td>RoboDojo</td><td>Native baseline and noise leverage on a second benchmark</td><td>gpumgr</td><td><span class="tag t-bad">agent not consuming messages since 25 Sep 19:02</span></td></tr>
+        <tr><td>Cluster B root disk</td><td>3.0 GiB free (95%): about 34 GiB is platform agent-session data under ~/.whalent-agent. The project launcher refuses new jobs below 5 GiB; figure rendering got a scoped 2 GiB exception because it writes only to the data disk</td><td>user</td><td><span class="tag t-risk">needs user cleanup</span></td></tr>
         <tr><td>Revision workspace</td><td>Submitted version frozen read-only; source zip rebuilt from the final sources and scanned clean (0 findings)</td><td>W1 · F</td><td><span class="tag t-ok">ready</span></td></tr>
       </tbody></table></div>
   </div>
