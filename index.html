@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 28 Sep 2026 · 02:25 UTC</span>
+      <span class="pill">Snapshot 28 Sep 2026 · 03:35 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -392,7 +392,7 @@ a{color:var(--eval)}
     <div class="tbl-wrap" style="margin-top:10px"><table>
       <thead><tr><th>Experiment</th><th>Question</th><th>Owner</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td><b>E7</b> replication</td><td>Does replay's gain hold on new physical contexts? (E6 cluster CI touched 0)</td><td>CC · supervisor</td><td><span class="tag t-run">Screening wave 1 at 02:15: 37 of 59 starts closed, all complete, 19 mixed, 0 censored (counts only; no candidate means are looked at). Screening should end around 04:00. M8 rescoring starts as soon as the first 24 mixed starts in manifest order are known. The fast launcher is reviewed for M8, evaluation and E9. Expected order: M8 (about 3 h), E7 evaluation (about 5 h including start-up), E9, then R0</span></td></tr>
+        <tr><td><b>E7</b> replication</td><td>Does replay's gain hold on new physical contexts? (E6 cluster CI touched 0)</td><td>CC · supervisor</td><td><span class="tag t-run">Screening finished: 59 of 59 starts complete, 29 mixed, 0 censored; the first 24 mixed starts in frozen order are reached at start 45, so no second wave is needed. M8 rescoring (24 starts × top-4 candidates × 6 more continuations = 576 branches) has been running since 03:03 on all 16 accelerators and should finish around 04:50. Then the replay table, the evaluation release (reviewed first) and the evaluation itself: native vs replay vs ASBS, 24 starts × 16 seeds</span></td></tr>
         <tr><td><b>R0</b> online upper bound</td><td>At held-out starts, how much does true simulator feedback help (best of 4, chunk 0)?</td><td>B</td><td><span class="tag t-wait">manifest and draft validated (60 units) · waits for the E7 release</span></td></tr>
         <tr><td>Temperature diagnostic</td><td>Is weighted fitting's spatial_swap gap just cooling (τ<sub>σ</sub> = 0.920)?</td><td>B</td><td><span class="tag t-wait">after R0</span></td></tr>
         <tr><td>Propose diagnostics v2</td><td>Within-state AUC, nested CV: noise features 0.526, first-chunk actions 0.536, actions × state 0.518; the ceiling with 2-rollout labels is about 0.74. The curves are flat: reaching 0.6 would take ~760 to ~13,900 mixed states</td><td>CC</td><td><span class="tag t-risk">no E8 on these features</span></td></tr>
@@ -507,7 +507,7 @@ a{color:var(--eval)}
       <div class="label" style="color:var(--asbs)">Where our advantage comes from (CC, 11:10, training data only)</div>
       <p style="margin-top:6px;font-size:14px">Two fixes, registered as v5.2a before evaluation. (1) λ matched to best-of-8's KL (1.204 nats): the exact tilt then lifts E[Â] by 0.146, above rerank's 0.133, as the Gibbs principle predicts. (2) ASBS was under-trained: at the registered 200 updates it realised only 24% of the exact tilt; 16,000 updates (about 2 min per λ) realise 70%, and at the 2×KL point ASBS matches rerank's E[Â]. Forecast: <b>goal_task +11.4 pp [2.5, 20.9] at zero critic calls</b>, versus rerank's +10.3 with 8 calls. Caveats: the rerank baseline is optimistic, and the conversion assumes success rises linearly with Â.</p>
     </div>
-  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>28 Sep 02:25: E7 screening is two-thirds done.</b> 37 of 59 starts have closed with 19 mixed, so a second screening wave is unlikely to be needed. Every release for M8, evaluation and E9 is reviewed. E7's final numbers should arrive around midday UTC on 28 Sep if nothing fails. The Codex agents remain stopped by the provider usage limit. Frozen evidence is unchanged: held-out ASBS +0.06 pp; E6 replay +10.55 pp (Holm p = 0.010, cluster CI [0, 23.8]). No new result yet.</p>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>28 Sep 03:35: E7 screening done, M8 rescoring running.</b> 29 of 59 new starts are mixed, enough for the registered 24. M8 should end around 04:50 UTC and the evaluation should start about two hours later, after its release is reviewed. E7's final numbers are expected in the early afternoon UTC. The Codex agents remain stopped by the provider usage limit. Frozen evidence is unchanged: held-out ASBS +0.06 pp; E6 replay +10.55 pp (Holm p = 0.010, cluster CI [0, 23.8]). No new result yet.</p>
   </div>
 </section>
 
