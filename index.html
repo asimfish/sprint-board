@@ -201,7 +201,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 29 Sep 2026 · 12:30 UTC</span>
+      <span class="pill">Snapshot 29 Sep 2026 · 12:55 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -392,7 +392,7 @@ a{color:var(--eval)}
     <div class="tbl-wrap" style="margin-top:10px"><table>
       <thead><tr><th>Experiment</th><th>Question</th><th>Owner</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td><b>E7</b> replication</td><td>Does replay's gain hold on new physical contexts? (E6 cluster CI touched 0)</td><td>supervisor (CC offline)</td><td><span class="tag t-run">Evaluation launched at 12:02 UTC after an independent review (ACCEPT_WITH_CONDITIONS, conditions met): 24 starts × 16 seeds × 3 arms = 1152 episodes on 32 workers. 28 of 32 workers were loaded at 12:25. The replay table follows the registered rule (first 24 mixed starts, E6 EB rule recomputed 24/24), and the key audit shows 0 collisions. The operational deadline moved to 3 Oct by a pre-evaluation runtime amendment</span></td></tr>
+        <tr><td><b>E7</b> replication</td><td>Does replay's gain hold on new physical contexts? (E6 cluster CI touched 0)</td><td>supervisor (CC offline)</td><td><span class="tag t-run">Evaluation running: all 32 workers passed the start barrier at about 12:35 UTC, and 198 of 1152 episodes had finished at 12:50 (counts only). Expected to finish around 14:05 UTC; then the frozen analysis (E7 alone, and E6+E7 combined) runs exactly as registered. The replay table used the registered rule, and the key audit showed 0 collisions</span></td></tr>
         <tr><td><b>R0</b> online upper bound</td><td>At held-out starts, how much does true simulator feedback help (best of 4, chunk 0)?</td><td>CC · supervisor</td><td><span class="tag t-wait">Code reviewed independently (ACCEPT_WITH_CONDITIONS): the procedure, the leakage checks and the seeds pass. Before its canary it needs a deadline-only successor, a key-audit report, a stricter canary gate and a truncation guard. Planned for when CC returns on 1 Oct</span></td></tr>
         <tr><td>Temperature diagnostic</td><td>Is weighted fitting's spatial_swap gap just cooling (τ<sub>σ</sub> = 0.920)?</td><td>B</td><td><span class="tag t-wait">after R0</span></td></tr>
         <tr><td>Propose diagnostics v2</td><td>Within-state AUC, nested CV: noise features 0.526, first-chunk actions 0.536, actions × state 0.518; the ceiling with 2-rollout labels is about 0.74. The curves are flat: reaching 0.6 would take ~760 to ~13,900 mixed states</td><td>CC</td><td><span class="tag t-risk">no E8 on these features</span></td></tr>
