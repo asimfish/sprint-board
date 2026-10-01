@@ -192,6 +192,42 @@ td .num{font-weight:500}
 .title-opt.pick{border-color:var(--asbs);box-shadow:inset 3px 0 0 var(--asbs)}
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
 a{color:var(--eval)}
+
+/* Results at a glance (forest plot). Tracker tokens only, no new colours; every class is prefixed fp-. */
+.fp-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:16px;align-items:start}
+@media (max-width:860px){.fp-grid{grid-template-columns:minmax(0,1fr)}}
+.fp-fig,.fp-side{min-width:0}
+.fp-plot{max-width:440px}
+@media (hover:hover){.fp-row:hover .fp-band{stroke:var(--ink-3)}}
+.fp-legend{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:12.5px;color:var(--ink-2)}
+.fp-legend li{display:flex;align-items:center;gap:7px}
+.fp-dot{flex:none;display:inline-block;box-sizing:border-box;width:10px;height:10px;border-radius:50%}
+.fp-on{background:var(--asbs)}
+.fp-off{background:var(--surface);border:2px solid var(--ink-2)}
+.fp-e9{margin-top:14px;padding-top:14px;border-top:1px solid var(--line-soft)}
+.fp-e9 p{margin-top:4px;font-size:13px;color:var(--ink-2)}
+.fp-e9 ul{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.fp-e9 li{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;column-gap:6px;font-size:12.5px}
+.fp-e9 .fp-k{color:var(--ink-2)}
+.fp-e9 b{font-weight:600}
+.fp-meter{grid-column:1/-1;display:block;height:6px;margin:5px 0 4px;border-radius:3px;background:var(--line);overflow:hidden}
+.fp-meter span{display:block;height:100%;border-radius:3px;background:var(--ink-3)}
+.fp-e9 .fp-ci{grid-column:1/-1;font-size:12px}
+.fp-tbl .fp-grp{white-space:normal}
+.fp-tbl td b{font-weight:600}
+.fp-d{display:block;font-size:12px;color:var(--ink-3)}
+.fp-eff{white-space:nowrap}
+.fp-est{display:inline-block;min-width:5ch;text-align:right}
+.fp-ci{white-space:nowrap;color:var(--ink-2);text-decoration:none}
+.fp-read{display:flex;align-items:flex-start;gap:7px}
+.fp-read .fp-dot{margin-top:.42em}
+.fp-note{margin-top:12px;font-size:13px}
+@media (max-width:520px){
+  .panel.fp-fig{padding:16px 10px}
+  .fp-tbl th,.fp-tbl td{padding:8px}
+  .fp-tbl thead th:first-child{width:42%}
+  .fp-tbl .fp-wrap,.fp-eff{white-space:normal}
+}
 </style>
 
 </head><body>
@@ -201,7 +237,7 @@ a{color:var(--eval)}
   <div>
     <div class="kicker">
       <span class="pill"><span class="dot"></span>ICLR 2027 · main track</span>
-      <span class="pill">Snapshot 1 Oct 2026 · 06:15 UTC</span>
+      <span class="pill">Snapshot 1 Oct 2026 · 13:25 UTC</span>
     </div>
     <h1>ASBS submission tracker</h1>
     <p class="sub">Learning where the frozen π<sub>0.5</sub> should sample its action noise, from the same continuation feedback that a System-2 reranker would otherwise pay for at every deployment step. This page shows where the experiments, paper and figures stand.</p>
@@ -214,7 +250,7 @@ a{color:var(--eval)}
 </header>
 
 <nav class="toc" aria-label="Sections">
-  <a href="#overview">Overview</a><a href="#timeline">Timeline</a><a href="#experiments">Experiments</a><a href="#projected">Expected results</a><a href="#paper">Paper &amp; figures</a><a href="#team">Team</a><a href="#risks">Risks</a><a href="#title">Title</a>
+  <a href="#overview">Overview</a><a href="#results">Results</a><a href="#timeline">Timeline</a><a href="#experiments">Experiments</a><a href="#projected">Expected results</a><a href="#paper">Paper &amp; figures</a><a href="#team">Team</a><a href="#risks">Risks</a><a href="#title">Title</a>
 </nav>
 
 <section id="overview" style="padding-top:18px">
@@ -236,6 +272,195 @@ a{color:var(--eval)}
         <li><span class="mark m-run"></span><span><b>Paper</b> — round-4 merge and expected-values preview in progress</span></li>
         <li><span class="mark m-ok"></span><span><b>Figures</b> — V26 teaser, method, diagnostics delivered</span></li>
       </ul>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="sec-head"><div class="label">Final, pre-registered analyses</div><h2>Results at a glance</h2></div>
+  <div class="fp-grid">
+    <div class="panel fp-fig">
+      <h3>Difference in success rate against the native policy</h3>
+      <p class="cap">Percentage points, with 95% cluster-bootstrap intervals. One track per result on a shared scale; a dot without a line has no interval shown.</p>
+      <ul class="fp-legend" aria-label="Key">
+        <li><span class="fp-dot fp-on" aria-hidden="true"></span>registered test, 95% interval excludes 0</li>
+        <li><span class="fp-dot fp-off" aria-hidden="true"></span>interval includes 0, not shown, or not tested</li>
+      </ul>
+<svg class="chart fp-plot" viewBox="0 0 366 617" role="img" aria-label="Forest plot. Difference in success rate against the native policy, in percentage points, with 95% interval. Remember: replay the stored noise at the same start: E6 +10.6 (0.0 to 23.8); E7 +8.6 (1.6 to 16.1); E6+E7 combined +9.4 (3.2 to 16.2); E10 · second benchmark +10.2 (−0.4 to 20.7). Carry to a different start: Learned proposal (ASBS), recurring starts +2.2, no interval shown; Learned proposal (ASBS), held-out starts +0.06, no interval shown; E11 · nearest-neighbour memory −0.9 (−4.4 to 2.5); E11 · random same-task memory −2.5 (−4.9 to −0.3). Feedback at the new start itself: R0 · online best-of-4 +6.7 (−5.2 to 18.5). The same numbers are in the table.">
+  <text style="fill:var(--ink-2)" x="1" y="15" font-size="11.5"><tspan style="font-family:var(--cond);fill:var(--ink)" font-weight="600" letter-spacing=".08em">REMEMBER:</tspan><tspan dx="7">replay the stored noise at the same start</tspan></text>
+  <g class="fp-row">
+    <title>E6, 16 starts × 16 seeds: +10.6 pp, 95% interval 0.0 to 23.8. Reading: interval touches 0.</title>
+    <rect x="0" y="22" width="366" height="52" fill="none" pointer-events="all"/>
+    <text style="fill:var(--ink)" x="1" y="35" font-size="12.5" font-weight="500">E6</text>
+    <text style="fill:var(--ink-2)" x="365" y="35" text-anchor="end" font-size="11.5"><tspan style="font-family:var(--mono);fill:var(--ink)" font-weight="600">+10.6</tspan><tspan style="font-family:var(--mono)"> [0.0, 23.8]</tspan></text>
+    <text style="fill:var(--ink-2)" x="1" y="49.5" font-size="11.5">16 starts × 16 seeds</text>
+    <rect style="fill:var(--sunk)" class="fp-band" x="1" y="56" width="364" height="14" rx="3"/>
+    <line style="stroke:var(--line)" x1="209" y1="56" x2="209" y2="70" stroke-width="1"/>
+    <line style="stroke:var(--line)" x1="313" y1="56" x2="313" y2="70" stroke-width="1"/>
+    <line style="stroke:var(--ink-3)" class="fp-zero" x1="105" y1="54" x2="105" y2="72" stroke-width="1.5"/>
+    <line style="stroke:var(--ink-2)" class="fp-int" x1="105" y1="63" x2="352.52" y2="63" stroke-width="2"/>
+    <circle style="fill:var(--sunk)" cx="215.24" cy="63" r="7"/>
+    <circle style="fill:var(--surface);stroke:var(--ink-2)" class="fp-pt" cx="215.24" cy="63" r="4" stroke-width="2"/>
+  </g>
+  <g class="fp-row">
+    <title>E7, 24 new starts × 16 seeds: +8.6 pp, 95% interval 1.6 to 16.1. Reading: significant.</title>
+    <rect x="0" y="76" width="366" height="52" fill="none" pointer-events="all"/>
+    <text style="fill:var(--ink)" x="1" y="89" font-size="12.5" font-weight="500">E7</text>
+    <text style="fill:var(--ink-2)" x="365" y="89" text-anchor="end" font-size="11.5"><tspan style="font-family:var(--mono);fill:var(--ink)" font-weight="600">+8.6</tspan><tspan style="font-family:var(--mono)"> [1.6, 16.1]</tspan></text>
+    <text style="fill:var(--ink-2)" x="1" y="103.5" font-size="11.5">24 new starts × 16 seeds</text>
+    <rect style="fill:var(--sunk)" class="fp-band" x="1" y="110" width="364" height="14" rx="3"/>
+    <line style="stroke:var(--line)" x1="209" y1="110" x2="209" y2="124" stroke-width="1"/>
+    <line style="stroke:var(--line)" x1="313" y1="110" x2="313" y2="124" stroke-width="1"/>
+    <line style="stroke:var(--ink-3)" class="fp-zero" x1="105" y1="108" x2="105" y2="126" stroke-width="1.5"/>
+    <line style="stroke:var(--asbs)" class="fp-int" x1="121.64" y1="117" x2="272.44" y2="117" stroke-width="2"/>
+    <circle style="fill:var(--sunk)" cx="194.44" cy="117" r="7"/>
+    <circle style="fill:var(--asbs)" class="fp-pt" cx="194.44" cy="117" r="5"/>
+  </g>
+  <g class="fp-row">
+    <title>E6+E7 combined, 640 pairs: +9.4 pp, 95% interval 3.2 to 16.2. Reading: significant.</title>
+    <rect x="0" y="130" width="366" height="52" fill="none" pointer-events="all"/>
+    <text style="fill:var(--ink)" x="1" y="143" font-size="12.5" font-weight="500">E6+E7 combined</text>
+    <text style="fill:var(--ink-2)" x="365" y="143" text-anchor="end" font-size="11.5"><tspan style="font-family:var(--mono);fill:var(--ink)" font-weight="600">+9.4</tspan><tspan style="font-family:var(--mono)"> [3.2, 16.2]</tspan></text>
+    <text style="fill:var(--ink-2)" x="1" y="157.5" font-size="11.5">640 pairs</text>
+    <rect style="fill:var(--sunk)" class="fp-band" x="1" y="164" width="364" height="14" rx="3"/>
+    <line style="stroke:var(--line)" x1="209" y1="164" x2="209" y2="178" stroke-width="1"/>
+    <line style="stroke:var(--line)" x1="313" y1="164" x2="313" y2="178" stroke-width="1"/>
+    <line style="stroke:var(--ink-3)" class="fp-zero" x1="105" y1="162" x2="105" y2="180" stroke-width="1.5"/>
+    <line style="stroke:var(--asbs)" class="fp-int" x1="138.28" y1="171" x2="273.48" y2="171" stroke-width="2"/>
+    <circle style="fill:var(--sunk)" cx="202.76" cy="171" r="7"/>
+    <circle style="fill:var(--asbs)" class="fp-pt" cx="202.76" cy="171" r="5"/>
+  </g>
+  <g class="fp-row">
+    <title>E10 · second benchmark, LIBERO-10, 16 starts × 16 seeds: +10.2 pp, 95% interval −0.4 to 20.7. Reading: test significant (p = 0.007), interval just includes 0.</title>
+    <rect x="0" y="184" width="366" height="52" fill="none" pointer-events="all"/>
+    <text style="fill:var(--ink)" x="1" y="197" font-size="12.5" font-weight="500">E10 · second benchmark</text>
+    <text style="fill:var(--ink-2)" x="365" y="197" text-anchor="end" font-size="11.5"><tspan style="font-family:var(--mono);fill:var(--ink)" font-weight="600">+10.2</tspan><tspan style="font-family:var(--mono)"> [−0.4, 20.7]</tspan></text>
+    <text style="fill:var(--ink-2)" x="1" y="211.5" font-size="11.5">LIBERO-10, 16 starts × 16 seeds</text>
+    <rect style="fill:var(--sunk)" class="fp-band" x="1" y="218" width="364" height="14" rx="3"/>
+    <line style="stroke:var(--line)" x1="209" y1="218" x2="209" y2="232" stroke-width="1"/>
+    <line style="stroke:var(--line)" x1="313" y1="218" x2="313" y2="232" stroke-width="1"/>
+    <line style="stroke:var(--ink-3)" class="fp-zero" x1="105" y1="216" x2="105" y2="234" stroke-width="1.5"/>
+    <line style="stroke:var(--ink-2)" class="fp-int" x1="100.84" y1="225" x2="320.28" y2="225" stroke-width="2"/>
+    <circle style="fill:var(--sunk)" cx="211.08" cy="225" r="7"/>
+    <circle style="fill:var(--surface);stroke:var(--ink-2)" class="fp-pt" cx="211.08" cy="225" r="4" stroke-width="2"/>
+  </g>
+  <line style="stroke:var(--line)" x1="1" y1="244" x2="365" y2="244" stroke-width="1"/>
+  <text style="fill:var(--ink-2)" x="1" y="265" font-size="11.5"><tspan style="font-family:var(--cond);fill:var(--ink)" font-weight="600" letter-spacing=".08em">CARRY</tspan><tspan dx="7">to a different start</tspan></text>
+  <g class="fp-row">
+    <title>Learned proposal (ASBS), recurring starts, E6+E7: +2.2 pp, interval not shown. Reading: not significant.</title>
+    <rect x="0" y="272" width="366" height="52" fill="none" pointer-events="all"/>
+    <text style="fill:var(--ink)" x="1" y="285" font-size="12.5" font-weight="500">Learned proposal (ASBS), recurring starts</text>
+    <text style="fill:var(--ink-2)" x="365" y="285" text-anchor="end" font-size="11.5"><tspan style="font-family:var(--mono);fill:var(--ink)" font-weight="600">+2.2</tspan><tspan style="font-family:var(--mono)"> n.s.</tspan></text>
+    <text style="fill:var(--ink-2)" x="1" y="299.5" font-size="11.5">E6+E7</text>
+    <rect style="fill:var(--sunk)" class="fp-band" x="1" y="306" width="364" height="14" rx="3"/>
+    <line style="stroke:var(--line)" x1="209" y1="306" x2="209" y2="320" stroke-width="1"/>
+    <line style="stroke:var(--line)" x1="313" y1="306" x2="313" y2="320" stroke-width="1"/>
+    <line style="stroke:var(--ink-3)" class="fp-zero" x1="105" y1="304" x2="105" y2="322" stroke-width="1.5"/>
+    <circle style="fill:var(--sunk)" cx="127.88" cy="313" r="7"/>
+    <circle style="fill:var(--surface);stroke:var(--ink-2)" class="fp-pt" cx="127.88" cy="313" r="4" stroke-width="2"/>
+  </g>
+  <g class="fp-row">
+    <title>Learned proposal (ASBS), held-out starts, 240 pairs: +0.06 pp, interval not shown. Reading: not significant.</title>
+    <rect x="0" y="326" width="366" height="52" fill="none" pointer-events="all"/>
+    <text style="fill:var(--ink)" x="1" y="339" font-size="12.5" font-weight="500">Learned proposal (ASBS), held-out starts</text>
+    <text style="fill:var(--ink-2)" x="365" y="339" text-anchor="end" font-size="11.5"><tspan style="font-family:var(--mono);fill:var(--ink)" font-weight="600">+0.06</tspan><tspan style="font-family:var(--mono)"> n.s.</tspan></text>
+    <text style="fill:var(--ink-2)" x="1" y="353.5" font-size="11.5">240 pairs</text>
+    <rect style="fill:var(--sunk)" class="fp-band" x="1" y="360" width="364" height="14" rx="3"/>
+    <line style="stroke:var(--line)" x1="209" y1="360" x2="209" y2="374" stroke-width="1"/>
+    <line style="stroke:var(--line)" x1="313" y1="360" x2="313" y2="374" stroke-width="1"/>
+    <line style="stroke:var(--ink-3)" class="fp-zero" x1="105" y1="358" x2="105" y2="376" stroke-width="1.5"/>
+    <circle style="fill:var(--sunk)" cx="105.62" cy="367" r="7"/>
+    <circle style="fill:var(--surface);stroke:var(--ink-2)" class="fp-pt" cx="105.62" cy="367" r="4" stroke-width="2"/>
+  </g>
+  <g class="fp-row">
+    <title>E11 · nearest-neighbour memory, held-out starts, 96 starts × 16 seeds: −0.9 pp, 95% interval −4.4 to 2.5. Reading: no transfer.</title>
+    <rect x="0" y="380" width="366" height="52" fill="none" pointer-events="all"/>
+    <text style="fill:var(--ink)" x="1" y="393" font-size="12.5" font-weight="500">E11 · nearest-neighbour memory</text>
+    <text style="fill:var(--ink-2)" x="365" y="393" text-anchor="end" font-size="11.5"><tspan style="font-family:var(--mono);fill:var(--ink)" font-weight="600">−0.9</tspan><tspan style="font-family:var(--mono)"> [−4.4, 2.5]</tspan></text>
+    <text style="fill:var(--ink-2)" x="1" y="407.5" font-size="11.5">held-out starts, 96 starts × 16 seeds</text>
+    <rect style="fill:var(--sunk)" class="fp-band" x="1" y="414" width="364" height="14" rx="3"/>
+    <line style="stroke:var(--line)" x1="209" y1="414" x2="209" y2="428" stroke-width="1"/>
+    <line style="stroke:var(--line)" x1="313" y1="414" x2="313" y2="428" stroke-width="1"/>
+    <line style="stroke:var(--ink-3)" class="fp-zero" x1="105" y1="412" x2="105" y2="430" stroke-width="1.5"/>
+    <line style="stroke:var(--ink-2)" class="fp-int" x1="59.24" y1="421" x2="131" y2="421" stroke-width="2"/>
+    <circle style="fill:var(--sunk)" cx="95.64" cy="421" r="7"/>
+    <circle style="fill:var(--surface);stroke:var(--ink-2)" class="fp-pt" cx="95.64" cy="421" r="4" stroke-width="2"/>
+  </g>
+  <g class="fp-row">
+    <title>E11 · random same-task memory, secondary, not tested; 8 clusters: −2.5 pp, 95% interval −4.9 to −0.3. Reading: descriptive.</title>
+    <rect x="0" y="434" width="366" height="52" fill="none" pointer-events="all"/>
+    <text style="fill:var(--ink)" x="1" y="447" font-size="12.5" font-weight="500">E11 · random same-task memory</text>
+    <text style="fill:var(--ink-2)" x="365" y="447" text-anchor="end" font-size="11.5"><tspan style="font-family:var(--mono);fill:var(--ink)" font-weight="600">−2.5</tspan><tspan style="font-family:var(--mono)"> [−4.9, −0.3]</tspan></text>
+    <text style="fill:var(--ink-2)" x="1" y="461.5" font-size="11.5">secondary, not tested; 8 clusters</text>
+    <rect style="fill:var(--sunk)" class="fp-band" x="1" y="468" width="364" height="14" rx="3"/>
+    <line style="stroke:var(--line)" x1="209" y1="468" x2="209" y2="482" stroke-width="1"/>
+    <line style="stroke:var(--line)" x1="313" y1="468" x2="313" y2="482" stroke-width="1"/>
+    <line style="stroke:var(--ink-3)" class="fp-zero" x1="105" y1="466" x2="105" y2="484" stroke-width="1.5"/>
+    <line style="stroke:var(--ink-2)" class="fp-int" x1="54.04" y1="475" x2="101.88" y2="475" stroke-width="2"/>
+    <circle style="fill:var(--sunk)" cx="79" cy="475" r="7"/>
+    <circle style="fill:var(--surface);stroke:var(--ink-2)" class="fp-pt" cx="79" cy="475" r="4" stroke-width="2"/>
+  </g>
+  <line style="stroke:var(--line)" x1="1" y1="494" x2="365" y2="494" stroke-width="1"/>
+  <text style="fill:var(--ink-2)" x="1" y="515" font-size="11.5"><tspan style="font-family:var(--cond);fill:var(--ink)" font-weight="600" letter-spacing=".08em">FEEDBACK</tspan><tspan dx="7">at the new start itself</tspan></text>
+  <g class="fp-row">
+    <title>R0 · online best-of-4, 60 pairs: +6.7 pp, 95% interval −5.2 to 18.5. Reading: not significant (low power).</title>
+    <rect x="0" y="522" width="366" height="52" fill="none" pointer-events="all"/>
+    <text style="fill:var(--ink)" x="1" y="535" font-size="12.5" font-weight="500">R0 · online best-of-4</text>
+    <text style="fill:var(--ink-2)" x="365" y="535" text-anchor="end" font-size="11.5"><tspan style="font-family:var(--mono);fill:var(--ink)" font-weight="600">+6.7</tspan><tspan style="font-family:var(--mono)"> [−5.2, 18.5]</tspan></text>
+    <text style="fill:var(--ink-2)" x="1" y="549.5" font-size="11.5">60 pairs</text>
+    <rect style="fill:var(--sunk)" class="fp-band" x="1" y="556" width="364" height="14" rx="3"/>
+    <line style="stroke:var(--line)" x1="209" y1="556" x2="209" y2="570" stroke-width="1"/>
+    <line style="stroke:var(--line)" x1="313" y1="556" x2="313" y2="570" stroke-width="1"/>
+    <line style="stroke:var(--ink-3)" class="fp-zero" x1="105" y1="554" x2="105" y2="572" stroke-width="1.5"/>
+    <line style="stroke:var(--ink-2)" class="fp-int" x1="50.92" y1="563" x2="297.4" y2="563" stroke-width="2"/>
+    <circle style="fill:var(--sunk)" cx="174.68" cy="563" r="7"/>
+    <circle style="fill:var(--surface);stroke:var(--ink-2)" class="fp-pt" cx="174.68" cy="563" r="4" stroke-width="2"/>
+  </g>
+  <line style="stroke:var(--line)" x1="1" y1="579" x2="365" y2="579" stroke-width="1"/>
+  <line style="stroke:var(--line)" x1="1" y1="579" x2="1" y2="583" stroke-width="1"/>
+  <text style="fill:var(--ink-2)" x="1" y="595.5" font-size="11.5">−10</text>
+  <line style="stroke:var(--ink-3)" x1="105" y1="579" x2="105" y2="583" stroke-width="1.5"/>
+  <text style="fill:var(--ink)" x="105" y="595.5" text-anchor="middle" font-size="11.5" font-weight="600">0</text>
+  <line style="stroke:var(--line)" x1="209" y1="579" x2="209" y2="583" stroke-width="1"/>
+  <text style="fill:var(--ink-2)" x="209" y="595.5" text-anchor="middle" font-size="11.5">+10</text>
+  <line style="stroke:var(--line)" x1="313" y1="579" x2="313" y2="583" stroke-width="1"/>
+  <text style="fill:var(--ink-2)" x="313" y="595.5" text-anchor="middle" font-size="11.5">+20</text>
+  <text style="fill:var(--ink-2)" x="97" y="610.5" text-anchor="end" font-size="11">← lower success</text>
+  <text style="fill:var(--ink-2)" x="113" y="610.5" font-size="11">higher success than native, pp →</text>
+</svg>
+      <div class="fp-e9">
+        <div class="label">E9 · on its own scale</div>
+        <p>The stored noise perturbed by σ. Gain retained, as a share of the replay gain (1.0 = all of it); not on the axis above.</p>
+        <ul>
+          <li><span class="fp-k">σ = 0.1</span><b class="num">1.0</b><span class="fp-meter" aria-hidden="true"><span style="width:100%"></span></span><span class="num fp-ci">[0.43, 1.69]</span></li>
+          <li><span class="fp-k">σ = 0.3</span><b class="num">1.0</b><span class="fp-meter" aria-hidden="true"><span style="width:100%"></span></span><span class="num fp-ci">[0.50, 1.94]</span></li>
+          <li><span class="fp-k">σ = 1.0</span><b class="num">0.15</b><span class="fp-meter" aria-hidden="true"><span style="width:15%"></span></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fp-side">
+      <div class="tbl-wrap"><table class="fp-tbl" aria-label="Results at a glance: effect, interval and reading for each result">
+      <thead><tr><th scope="col">Result</th><th scope="col" class="fp-wrap">Effect, pp [95% CI]</th><th scope="col">Reading</th></tr></thead>
+      <tbody>
+        <tr><th colspan="3" scope="rowgroup" class="fp-grp">Remember: replay the stored noise at the same start</th></tr>
+        <tr><td><b>E6</b><span class="fp-d">16 starts × 16 seeds</span></td><td class="fp-eff"><span class="num fp-est">+10.6</span> <span class="num fp-ci">[0.0, 23.8]</span></td><td><span class="fp-read"><span class="fp-dot fp-off" aria-hidden="true"></span>interval touches 0</span></td></tr>
+        <tr><td><b>E7</b><span class="fp-d">24 new starts × 16 seeds</span></td><td class="fp-eff"><span class="num fp-est">+8.6</span> <span class="num fp-ci">[1.6, 16.1]</span></td><td><span class="fp-read"><span class="fp-dot fp-on" aria-hidden="true"></span>significant</span></td></tr>
+        <tr><td><b>E6+E7 combined</b><span class="fp-d">640 pairs</span></td><td class="fp-eff"><span class="num fp-est">+9.4</span> <span class="num fp-ci">[3.2, 16.2]</span></td><td><span class="fp-read"><span class="fp-dot fp-on" aria-hidden="true"></span>significant</span></td></tr>
+        <tr><td><b>E10 · second benchmark</b><span class="fp-d">LIBERO-10, 16 starts × 16 seeds</span></td><td class="fp-eff"><span class="num fp-est">+10.2</span> <span class="num fp-ci">[−0.4, 20.7]</span></td><td><span class="fp-read"><span class="fp-dot fp-off" aria-hidden="true"></span>test significant (p = 0.007), interval just includes 0</span></td></tr>
+      </tbody>
+      <tbody>
+        <tr><th colspan="3" scope="rowgroup" class="fp-grp">Carry to a different start</th></tr>
+        <tr><td><b>Learned proposal (ASBS), recurring starts</b><span class="fp-d">E6+E7</span></td><td class="fp-eff"><span class="num fp-est">+2.2</span> <abbr class="fp-ci" title="not significant; interval not shown">n.s.</abbr></td><td><span class="fp-read"><span class="fp-dot fp-off" aria-hidden="true"></span>not significant</span></td></tr>
+        <tr><td><b>Learned proposal (ASBS), held-out starts</b><span class="fp-d">240 pairs</span></td><td class="fp-eff"><span class="num fp-est">+0.06</span> <abbr class="fp-ci" title="not significant; interval not shown">n.s.</abbr></td><td><span class="fp-read"><span class="fp-dot fp-off" aria-hidden="true"></span>not significant</span></td></tr>
+        <tr><td><b>E11 · nearest-neighbour memory</b><span class="fp-d">held-out starts, 96 starts × 16 seeds</span></td><td class="fp-eff"><span class="num fp-est">−0.9</span> <span class="num fp-ci">[−4.4, 2.5]</span></td><td><span class="fp-read"><span class="fp-dot fp-off" aria-hidden="true"></span>no transfer</span></td></tr>
+        <tr><td><b>E11 · random same-task memory</b><span class="fp-d">secondary, not tested; 8 clusters</span></td><td class="fp-eff"><span class="num fp-est">−2.5</span> <span class="num fp-ci">[−4.9, −0.3]</span></td><td><span class="fp-read"><span class="fp-dot fp-off" aria-hidden="true"></span>descriptive, not tested</span></td></tr>
+      </tbody>
+      <tbody>
+        <tr><th colspan="3" scope="rowgroup" class="fp-grp">Feedback at the new start itself</th></tr>
+        <tr><td><b>R0 · online best-of-4</b><span class="fp-d">60 pairs</span></td><td class="fp-eff"><span class="num fp-est">+6.7</span> <span class="num fp-ci">[−5.2, 18.5]</span></td><td><span class="fp-read"><span class="fp-dot fp-off" aria-hidden="true"></span>not significant (low power)</span></td></tr>
+      </tbody>
+      </table></div>
+      <p class="muted fp-note">Effects are differences in success rate against the native policy, in percentage points; their intervals are 95% cluster-bootstrap intervals. Every analysis was pre-registered and frozen before its outcomes were read. Null results are shown with the same prominence as the others. n.s.: not significant, interval not shown.</p>
     </div>
   </div>
 </section>
@@ -399,7 +624,7 @@ a{color:var(--eval)}
         <tr><td>Propose pilots v3</td><td>Within-state AUC on 61 mixed states: privileged object-relative features 0.463, visual spatial tokens + actions 0.495 / 0.427, actions only 0.530 (ceiling 0.737). At chunk 0 there is almost no learnable ranking signal, even with privileged information</td><td>CC</td><td><span class="tag t-bad">negative, E8 not justified</span></td></tr>
         <tr><td><b>E9</b> neighbourhood width</td><td>Why does replay work while proposals cannot? Perturb the best stored noise z* by σ ∈ {0.03, 0.1, 0.3, 1.0} at E6's 16 starts: if success falls back to native at small σ, good segments are needles that no continuous proposal can hold</td><td>supervisor (CC offline)</td><td><span class="tag t-bad">Complete (1536 episodes). Registered reading: WIDE, not needles. Success rate: native 0.340, replay 0.473, σ 0.03 0.434, σ 0.1 0.473, σ 0.3 0.473, σ 1.0 0.359. Retention R(0.1) = 1.0 [0.43, 1.69], R(0.3) = 1.0 [0.50, 1.94], R(1.0) = 0.15. Replay vs native 58 vs 24 discordant, p = 0.0002 (a fresh-seed replication on the E6 states). σ 0.1 and 0.3 are indistinguishable from replay pair by pair (28/28, 31/31); σ 1.0 loses the gain. The needle explanation is not supported; the good region around z* is state-specific but about 0.3 wide</span></td></tr>
         <tr><td><b>E10</b> second-benchmark replication</td><td>Memory replay on LIBERO-10 on cluster C. Registration frozen: ordered pool, stop at 16 mixed starts</td><td>supervisor (A offline)</td><td><span class="tag t-risk">Complete (1 Oct 04:29 UTC): 25 states screened, 16 mixed states evaluated, none censored. Memory replay 177/256 (69.1%), native 151/256 (59.0%): <b>+10.2 pp</b>. The registered exact McNemar test gives p = 0.007 (57 against 31 discordant pairs); the state-level bootstrap interval is [−0.4, +20.7] and just includes 0. Frozen reading: not established, test and interval disagree, the same pattern as E6. Limits: 14 of the 16 states come from one task; states differ (8 positive, 6 negative, 2 zero); the replay covers chunks 0 to 9 although the registration text says chunk 0 (disclosed). Analysis script frozen before any outcome was read</span></td></tr>
-        <tr><td><b>E11</b> retrieval memory</td><td>Does a stored winning noise transfer to <i>held-out</i> starts of the same task? Built on E7 (replay replicates) and E9 (the good region is wide). Arms: native, nearest-neighbour memory, random same-task memory; 96 held-out units × 16 seeds = 4608 episodes. Primary test: nearest-neighbour memory − native, cluster bootstrap over 31 clusters</td><td>supervisor</td><td><span class="tag t-bad">Complete (4608 of 4608 episodes, none censored; 30 Sep 20:00 to 1 Oct 00:32 UTC). Registered result: <b>no useful within-task transfer</b>. Success: native 313/1536 (20.4%), nearest-neighbour memory 299/1536 (19.5%), random same-task memory 274/1536 (17.8%). Primary H1, nearest-neighbour − native: −0.9 pp, 95% CI [−4.4, +2.5], p = 0.63; the upper bound is below the pre-declared +5 pp. Secondary contrasts were not tested (fixed sequence); descriptively, nearest − random is +1.6 pp [−1.5, +4.2] and random − native is −2.5 pp [−4.9, −0.3] (8 clusters, interval may be too narrow). No task shows a gain above +2.4 pp. The stored noise helps the start it was found on (E6, E7, E9) and does not carry over to a neighbouring start 2 to 5 cm away</span></td></tr><tr><td><b>E12</b> state-neighbourhood width</td><td>How exactly must a start recur for replay to keep working? Shift all movable objects of the 39 memory states together by 0, 0.5 or 2 cm and replay the stored noise. 27 seeds, 2 arms, 6318 episodes. Readings: gain still PRESENT at each shift, gain REDUCED against the unshifted start</td><td>supervisor</td><td><span class="tag t-wait">Ready, waiting for the host. Design reviewed independently (changed from 5 levels to 3 for power: about 0.76 to detect a fully retained gain at 0.5 cm). Protocol registered 05:02 UTC; analysis script frozen 05:29 UTC before any episode. Pre-launch review passed with conditions: all 117 shifted-state reset digests match on a worker-like process. Blocker: the compute host’s CPUs are saturated by another project’s jobs (load about 300 on 184 cores), and the protocol allows no second release. A waiter launches E12 once the load is gone and the timing preflight passes</span></td></tr><tr><td><b>E8</b> large collection</td><td>Only if the diagnostics project that AUC 0.6 is reachable</td><td>B · A</td><td><span class="tag t-wait">gated</span></td></tr>
+        <tr><td><b>E11</b> retrieval memory</td><td>Does a stored winning noise transfer to <i>held-out</i> starts of the same task? Built on E7 (replay replicates) and E9 (the good region is wide). Arms: native, nearest-neighbour memory, random same-task memory; 96 held-out units × 16 seeds = 4608 episodes. Primary test: nearest-neighbour memory − native, cluster bootstrap over 31 clusters</td><td>supervisor</td><td><span class="tag t-bad">Complete (4608 of 4608 episodes, none censored; 30 Sep 20:00 to 1 Oct 00:32 UTC). Registered result: <b>no useful within-task transfer</b>. Success: native 313/1536 (20.4%), nearest-neighbour memory 299/1536 (19.5%), random same-task memory 274/1536 (17.8%). Primary H1, nearest-neighbour − native: −0.9 pp, 95% CI [−4.4, +2.5], p = 0.63; the upper bound is below the pre-declared +5 pp. Secondary contrasts were not tested (fixed sequence); descriptively, nearest − random is +1.6 pp [−1.5, +4.2] and random − native is −2.5 pp [−4.9, −0.3] (8 clusters, interval may be too narrow). No task shows a gain above +2.4 pp. The stored noise helps the start it was found on (E6, E7, E9) and does not carry over to a neighbouring start 2 to 5 cm away</span></td></tr><tr><td><b>E12</b> state-neighbourhood width</td><td>How exactly must a start recur for replay to keep working? Shift all movable objects of the 39 memory states together by 0, 0.5 or 2 cm and replay the stored noise. 27 seeds, 2 arms, 6318 episodes. Readings: gain still PRESENT at each shift, gain REDUCED against the unshifted start</td><td>supervisor</td><td><span class="tag t-wait">Ready; held by CPU load on the compute host. Protocol registered 05:02 UTC, analysis frozen 05:29 UTC, reset digests 117/117 in a worker-like process. Another project’s batch saturates the host’s CPUs and will run for about a week. Two independent review addenda measured the pace under that load. Reviewer’s estimates, not results: run time about 10.3 h against the 11 h cap; all 27 seeds 72%; at least 24 of 27 seeds 90%; release lost 7% (3% on an idle host). The owner was asked to pause part of the other batch. Without an answer E12 launches from 15:00 UTC under the reviewer’s load conditions: digest preflight, pace benchmark, memory and disk-latency guards, shader disk cache off (digests unchanged)</span></td></tr><tr><td><b>E13</b> full-noise memory under shift</td><td>Store the whole noise sequence of one recorded success, not only its first 10 chunks. At the exact start this replays the recorded success, which proves nothing; the question is whether it still succeeds when the start is shifted by 0.5 or 2 cm. Arms: native, first-10-chunk replay, full replay; 39 states × 2 shifts × 26 directions, plus exact-start determinism cells; 6318 episodes</td><td>supervisor</td><td><span class="tag t-wait">In preparation. Feasible: all 39 memory states have a recorded success whose noise regenerates exactly (2534 recorded chunk hashes match). Independent design review: accept with changes; the test that answers E13’s own question is full replay against first-10-chunk replay. Runtime built and CPU-tested with default parameters (18 fixture tests, 273 real reset gates). Still to do: rebuild to the reviewed specification, registration, analysis freeze, implementation review. Runs after E12 on the same accelerators</span></td></tr><tr><td><b>E8</b> large collection</td><td>Only if the diagnostics project that AUC 0.6 is reachable</td><td>B · A</td><td><span class="tag t-wait">gated</span></td></tr>
         <tr><td>RoboDojo</td><td>Native baseline and noise leverage on a second benchmark</td><td>gpumgr</td><td><span class="tag t-bad">agent not consuming messages since 25 Sep 19:02</span></td></tr>
         <tr><td>Cluster B root disk</td><td>With your authorisation, 7.6 GiB of session data from agents inactive for 5 days was moved to the data disk, with symlinks left in place (reversible). Root free space went from 3.0 to 9.6 GiB, above the 5 GiB launcher guard</td><td>supervisor</td><td><span class="tag t-ok">resolved</span></td></tr>
         <tr><td>Revision workspace</td><td>Submitted version frozen read-only; source zip rebuilt and scanned clean (0 findings). New teaser and method figures rendered and visually reviewed, in revision/figures/f14_core</td><td>W1 · F</td><td><span class="tag t-ok">ready</span></td></tr>
@@ -507,6 +732,7 @@ a{color:var(--eval)}
       <div class="label" style="color:var(--asbs)">Where our advantage comes from (CC, 11:10, training data only)</div>
       <p style="margin-top:6px;font-size:14px">Two fixes, registered as v5.2a before evaluation. (1) λ matched to best-of-8's KL (1.204 nats): the exact tilt then lifts E[Â] by 0.146, above rerank's 0.133, as the Gibbs principle predicts. (2) ASBS was under-trained: at the registered 200 updates it realised only 24% of the exact tilt; 16,000 updates (about 2 min per λ) realise 70%, and at the 2×KL point ASBS matches rerank's E[Â]. Forecast: <b>goal_task +11.4 pp [2.5, 20.9] at zero critic calls</b>, versus rerank's +10.3 with 8 calls. Caveats: the rerank baseline is optimistic, and the conversion assumes success rises linearly with Â.</p>
     </div>
+  <p class="muted" style="font-size:13.5px;margin-top:14px"><b>1 Oct 13:25: next two experiments ready or in build; the compute host is the bottleneck.</b> All registered results so far are in “Results at a glance” above. E12 (how far a start may shift before replay stops helping) has been ready since 05:29 UTC. It has not started because another project’s CPU batch saturates the host and, on current evidence, will do so for about a week; episodes render on the CPU, so idle accelerators alone are not enough. After a second independent review, E12 launches from 15:00 UTC under measured load conditions unless the owner pauses part of that batch first. E13 (replaying the whole noise sequence of a recorded success under the same shifts) is designed, reviewed and built in a first version; it follows E12.</p>
   <p class="muted" style="font-size:13.5px;margin-top:14px"><b>1 Oct 06:15: three experiments finished overnight.</b> E11 (retrieval to held-out starts): no transfer, −0.9 pp [−4.4, +2.5]. R0 (online feedback at held-out starts): +6.7 pp [−5.2, +18.5], not significant with 60 pairs. E10 (replay on a second benchmark): +10.2 pp, McNemar p = 0.007, state-level interval [−0.4, +20.7]. Replay on recurring starts now shows the same size of gain in four evaluations (E6 +10.6, E7 +8.6, E9 +13.3 on the E6 states, E10 +10.2 pp); two of them have state-level intervals that touch 0. Nothing so far carries the gain to a different start. E12 measures how far a start may shift before the gain is lost; it is registered and waits for free CPUs on the compute host.</p>
   <p class="muted" style="font-size:13.5px;margin-top:14px"><b>1 Oct 02:25: E11 is a clean null; R0 canary running.</b> Retrieval memory does not transfer: on 96 held-out starts, replaying the nearest stored winner changes success by −0.9 pp [−4.4, +2.5] (registered analysis, frozen before any episode, all 4608 episodes complete). Together with E7 (replay +8.6 pp on recurring starts, replicated) and E9 (the good region is wide in noise space), the picture is: outcome feedback can be consolidated for a start that recurs, and the consolidated noise is specific to that start. Neither a learned proposal (ASBS) nor nearest-neighbour retrieval carries it to new starts. R0 now measures how much feedback at the held-out start itself can gain, the upper bound for any such method.</p>
   <p class="muted" style="font-size:13.5px;margin-top:14px"><b>30 Sep 21:10: E11 is running on all 16 accelerators.</b> The retrieval-memory test went from design to launch in one afternoon: runtime variant (held-out reset, verified stored noise), frozen cohort and retrieval tables, key audit, registration, two independent reviews, a frozen analysis script, and an integrity window that could only stop the run for reset or identity faults, never for outcomes. It passed. R0 follows on the same accelerators when E11 ends. E10 moves to 4 workers on its GPU after a reviewed driver change. The other cluster C GPUs and all of cluster B are held by other users.</p>
