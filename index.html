@@ -102,7 +102,7 @@
   <div class="eyebrow">ASBS 项目总览</div>
   <h1>冻结的 VLA，能不能把“这次成没成”的经验留到下一次？</h1>
   <p class="sub">论文题目：<i>Propose or Remember? When Outcome Feedback Can Be Consolidated into VLA Noise</i>。这一页说明我们要回答什么问题、方案怎么设计、已经知道了什么、现在在做哪些实验、接下来要你决定什么。</p>
-  <div class="meta">更新于 2026-10-10 04:30 UTC · 由 Claude（监督）维护 · 每到一个里程碑先更新本页</div>
+  <div class="meta">更新于 2026-10-10 04:22 UTC · 由 Claude（监督）维护 · 每到一个里程碑先更新本页</div>
   <nav>
     <a href="#goal">目的</a><a href="#method">方案设计</a><a href="#evidence">已有证据</a><a href="#refine">方案怎么改进</a><a href="#now">现在的实验</a><a href="#decide">决定与计划</a><a href="#log">更新记录</a>
   </nav>
@@ -111,7 +111,7 @@
 <div class="now">
   <h3>现在在哪（一分钟版）</h3>
   <ul>
-    <li><b>10 月 10 日：你已确认继续。E15 正在登记，随后启动主实验（8 张 PRO 6000，一次只跑一个任务）；同时清理共享服务器的磁盘。</b></li>
+    <li><b>10 月 10 日 04:20Z：E15 已登记，主实验第一次任务已提交（8 张 PRO 6000，一次只跑一个任务）。共享服务器的磁盘已清出 11 GB。</b></li>
     <li><b>已经站住的结论：</b>把“赢过的噪声”记下来，在<b>完全相同的起点</b>上回放，成功率比原生策略高 9 到 11 个百分点，独立复现了多次。</li>
     <li><b>还没有证据的：</b>ASBS 提议器优于原生策略；回放对稍有变化的起点也有效。</li>
     <li><b>所以“方法全面优于 baseline”现在不成立。</b>下一步按实验反馈改方案，见<a href="#refine">方案怎么改进</a>。</li>
@@ -367,10 +367,10 @@
     <table>
       <thead><tr><th>实验线</th><th>想回答的问题</th><th>状态</th><th>下一步</th></tr></thead>
       <tbody>
-        <tr><td><b>E15 大规模复现</b><br><span class="meta">Claude 负责 · PRO 6000</span></td><td>路线 B 的 +9 到 +11 pp，放到很多任务上还成立吗？目标是一个不贴着 0 的区间。</td><td><span class="tag t-warn">登记中</span><br>准备工作和 pilot 已完成，登记文本已按终审意见改好。</td><td>登记完成后启动主实验，分几次跑完，每次最长约 2.9 小时。</td></tr>
-        <tr><td><b>E14 评分器再测</b><br><span class="meta">CC 搭建 · 集群 A 的加速卡</span></td><td>评分器在“任务刚开始的起点”上能不能分出好坏噪声？这是路线 A 最后一个已知的机会。</td><td><span class="tag t-warn">待启动</span><br>工具和三轮评审已就绪。CC 联系不上，由我接手放置和启动。</td><td>E15 主实验跑起来后启动。用集群 A 的 16 张加速卡，约 11 小时，和 E15 不抢卡。</td></tr>
+        <tr><td><b>E15 大规模复现</b><br><span class="meta">Claude 负责 · PRO 6000</span></td><td>路线 B 的 +9 到 +11 pp，放到很多任务上还成立吗？目标是一个不贴着 0 的区间。</td><td><span class="tag t-warn">主实验运行中</span><br>04:18Z 登记完成并通过校验；04:20Z 提交第一次任务。</td><td>每次任务最长约 2.9 小时，结束后看过回执再提下一次，直到跑完；然后导出并运行一次冻结的分析。</td></tr>
+        <tr><td><b>E14 评分器再测</b><br><span class="meta">CC 搭建 · 集群 A 的加速卡</span></td><td>评分器在“任务刚开始的起点”上能不能分出好坏噪声？这是路线 A 最后一个已知的机会。</td><td><span class="tag t-warn">待启动</span><br>工具和三轮评审已就绪。CC 联系不上，由我接手放置和启动。</td><td>确认 E15 第一次任务正常后启动。用集群 A 的 16 张加速卡，约 11 小时，和 E15 不抢卡。</td></tr>
         <tr><td><b>E16 记忆的有效半径</b><br><span class="meta">拟新增 · 集群 A 的加速卡</span></td><td>起点偏多少毫米以内，回放仍然有效？决定“带门控的记忆”怎么判定同一个起点。</td><td><span class="tag t-mute">设计中</span><br>沿用 E12、E13 的流程，只换更细的平移量。</td><td>等 E14 用完加速卡后接着跑。</td></tr>
-        <tr><td><b>状态条件评分器</b><br><span class="meta">Codex agent 负责</span></td><td>换一个真正看状态的评分器 Q(h, z)，先验证同一状态下候选噪声是否真有好坏之分。这是改进路线 A 的方向。</td><td><span class="tag t-bad">阻塞</span><br>它的机器磁盘满了，10 月 3 日后没有新结果。</td><td>我来清理磁盘，之后由它继续。</td></tr>
+        <tr><td><b>状态条件评分器</b><br><span class="meta">Codex agent 负责</span></td><td>换一个真正看状态的评分器 Q(h, z)，先验证同一状态下候选噪声是否真有好坏之分。这是改进路线 A 的方向。</td><td><span class="tag t-warn">部分解阻</span><br>根盘已腾到 6.9 GB，够它用；数据盘现在 7.7 GB，它需要 23 GB。</td><td>数据盘再腾空间要动旧数据，等你定（见“决定与计划”）。</td></tr>
         <tr><td><b>已停止的</b></td><td>E8 大规模采集；RoboDojo 基准；LIBERO-10 能力保持。</td><td><span class="tag t-mute">停止</span><br>E8 因评分器分不出好坏而取消；另两项没有产出完整结果。</td><td>不计划重启。</td></tr>
       </tbody>
     </table>
@@ -383,21 +383,21 @@
     <li class="done"><span class="dot"></span><div><b>在 PRO 6000 上跑通</b> <span class="s">· 完成</span><br>8 张卡、64 个并行环境，重复运行结果逐位一致。</div></li>
     <li class="done"><span class="dot"></span><div><b>起点池</b> <span class="s">· 完成</span><br>200 个任务单元里 181 个可用；以前实验用过的起点全部排除。</div></li>
     <li class="done"><span class="dot"></span><div><b>Pilot</b> <span class="s">· 完成，25 分钟</span><br>每个任务单元取 4 个起点，各跑 2 次原生策略，挑出“时成时败”的任务，因为只有这类任务才分得出回放有没有用。181 个里 41 个合格。</div></li>
-    <li class="wait"><span class="dot"></span><div><b>登记</b> <span class="s">· 进行中</span><br>把设计、代码、分析脚本和 pilot 结果一起锁死。登记文本已按终审意见改好并核对。</div></li>
-    <li class=""><span class="dot"></span><div><b>主实验</b> <span class="s">· 登记后启动</span><br>从 41 个合格任务里筛起点，目标 128 个；每个起点跑 16 对“回放对原生”。<span class="proj">推算</span> 4 到 8 小时，约 30 到 60 卡时；一次只跑一个 8 卡任务，跑完一次再提下一次。</div></li>
+    <li class="done"><span class="dot"></span><div><b>登记</b> <span class="s">· 完成，10 月 10 日 04:18Z</span><br>把设计、代码、分析脚本和 pilot 结果一起锁死。登记文本按终审意见改好，登记后校验通过。从这一刻起设计、代码和分析都不能再改。</div></li>
+    <li class="wait"><span class="dot"></span><div><b>主实验</b> <span class="s">· 运行中，04:20Z 提交第一次任务</span><br>从 41 个合格任务里筛起点，目标 128 个；每个起点跑 16 对“回放对原生”。<span class="proj">推算</span> 4 到 8 小时，约 30 到 60 卡时；一次只跑一个 8 卡任务，跑完一次再提下一次。</div></li>
     <li><span class="dot"></span><div><b>分析</b> <span class="s">· 未开始</span><br>冻结的分析脚本只运行一次，得到最终结果。</div></li>
   </ol>
   <p><b>主实验的风险：</b>41 个合格任务、每个最多取 6 个起点，候选最多 246 个。至少要有 80 个通过筛选，结果才算确证性的；不够的话只能按探索性结果报告。</p>
-  <p><b>用卡记录：</b>10 月 9 日约 22 卡时，全部在 PRO 6000 上；同时在跑的任务最多 1 个，只有一次需要两个容器的文件系统测试例外。</p>
+  <p><b>用卡记录：</b>10 月 9 日约 22 卡时，全部在 PRO 6000 上；同时在跑的任务最多 1 个，只有一次需要两个容器的文件系统测试例外。10 月 10 日：登记用 1 张卡约 2 分钟；主实验用 8 张卡，进行中。</p>
 </section>
 
 <section id="decide">
   <div class="sec-head"><div class="eyebrow">06 · 决定与计划</div><h2>你定了什么，我接下来按什么顺序做</h2></div>
   <div class="ask">
     <div><b>你的决定（10 月 10 日）</b><span>实验继续推进；可用的机器都可以用，也可以提交训练任务，但不能浪费：每个任务要把卡用满，不多提。实验过程中要根据反馈继续完善方案。共享服务器的磁盘和环境问题由我清理。</span></div>
-    <div><b>本阶段计划</b><span><ol class="plain"><li>登记 E15 并启动主实验：8 张 PRO 6000，每次任务最长约 2.9 小时，跑完一次再提下一次。</li><li>清理共享服务器的磁盘。</li><li>启动 E14：用集群 A 的 16 张加速卡，约 11 小时。</li><li>设计 E16，等 E14 用完加速卡后接着跑。</li><li>E14 出结果后，按“方案怎么改进”里写的两种结局调整方案。</li></ol></span></div>
+    <div><b>本阶段计划</b><span><ol class="plain"><li><b>已完成：</b>登记 E15。<b>进行中：</b>主实验，8 张 PRO 6000，每次任务最长约 2.9 小时，跑完一次再提下一次。</li><li><b>已完成：</b>清理共享服务器的磁盘，只删了可重新下载的缓存和临时文件，共 11 GB，删除清单已存档。</li><li>启动 E14：用集群 A 的 16 张加速卡，约 11 小时。</li><li>设计 E16，等 E14 用完加速卡后接着跑。</li><li>E14 出结果后，按“方案怎么改进”里写的两种结局调整方案。</li></ol></span></div>
     <div><b>用卡原则</b><span>同一时间我们在排队或运行的任务最多 2 个；不让任务在容器里空等；一个任务结束、结果看过，再提下一个。每次启动前在这里写明用多少卡、多久、为了回答什么。</span></div>
-    <div><b>仍需你定的</b><span>暂时没有。E14 原本要等 CC 修一处工具问题；CC 联系不上，我改为把这处问题连同处理办法事先登记，然后自己启动。如果你更希望由 CC 来做，告诉我。</span></div>
+    <div><b>仍需你定的</b><span>数据盘还想再腾空间的话，最大的一块是 7 月旧阶段的 rollout 数据，81 GB。它是数据，我没有动；删掉或迁走需要你点头。另外，E14 原本要等 CC 修一处工具问题；CC 联系不上，我改为把这处问题连同处理办法事先登记，然后自己启动。如果你更希望由 CC 来做，告诉我。</span></div>
   </div>
 </section>
 
@@ -409,7 +409,8 @@
     <li>推算的数字单独标“推算”，不和实测结果混在一起。</li>
   </ul>
   <ul class="log">
-    <li><time>10-10 04:30Z</time>你确认继续推进。页面增加“方案怎么改进”，并部署到 GitHub 页面。E15 开始登记。</li>
+    <li><time>10-10 04:22Z</time>E15 登记完成并通过校验，主实验第一次任务已提交。共享服务器磁盘清出 11 GB：根盘可用 1.8 → 6.9 GB，数据盘 1.8 → 7.7 GB。</li>
+    <li><time>10-10 04:06Z</time>你确认继续推进。页面增加“方案怎么改进”，并部署到 GitHub 页面。</li>
     <li><time>10-09 16:20Z</time>本页改写为中文总览。</li>
     <li><time>10-09</time>E15：代码评审通过；PRO 6000 上 8 卡跑通；起点池冻结为 181 个任务单元；pilot 完成，41 个任务单元合格。</li>
     <li><time>10-02</time>E13 完成：起点平移后，回放整段噪声也没有显示收益。E12 完成：精确起点 +11.0 pp，平移 0.5 cm 后 +0.8 pp。</li>
