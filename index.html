@@ -93,6 +93,13 @@
   .log time { font-family: var(--mono); color: var(--ink-3); margin-right: 10px; font-size: 13px; }
   a { color: var(--series); }
   #tip { position: fixed; z-index: 5; max-width: 300px; background: var(--ink); color: var(--bg); font-size: 13px; line-height: 1.5; padding: 7px 10px; border-radius: 6px; pointer-events: none; }
+  .plan blockquote { margin: 0; padding: 12px 18px; border-left: 4px solid var(--series); background: var(--series-soft); border-radius: 0 6px 6px 0; font-size: 16.5px; line-height: 1.7; max-width: 46em; }
+  .plan pre { margin: 0; background: var(--sunk); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; font-family: var(--mono); font-size: 13.5px; line-height: 1.65; overflow-x: auto; color: var(--ink); }
+  .plan h3 { margin-top: 6px; }
+  .layers { display: grid; gap: 8px; max-width: 52em; }
+  .layer { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--series); border-radius: 6px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px; }
+  .layer span { color: var(--ink-2); font-size: 14.5px; }
+  .divider { border-top: 2px dashed var(--ink-3); padding-top: 14px; color: var(--ink-2); }
 </style>
 
 </head><body>
@@ -101,27 +108,210 @@
 <header>
   <div class="eyebrow">ASBS 项目总览</div>
   <h1>冻结的 VLA，能不能把“这次成没成”的经验留到下一次？</h1>
-  <p class="sub">论文题目：<i>Propose or Remember? When Outcome Feedback Can Be Consolidated into VLA Noise</i>。这一页先讲研究本身：研究的对象是什么、最初的想法走到了哪一步、别人做了什么；然后才是证据、实验和计划。</p>
-  <div class="meta">更新于 2026-10-11 12:23 UTC · 由 Claude（监督）维护 · 每到一个里程碑先更新本页</div>
+  <p class="sub">论文题目：<i>Propose or Remember? When Outcome Feedback Can Be Consolidated into VLA Noise</i>。这一页前半是方案（先回答问题，再讲调研、证据、主问题、方法图、要补的实验、证据边界），后半是详细材料。</p>
+  <div class="meta">更新于 2026-10-11 13:07 UTC · 由 Claude（监督）维护 · 每到一个里程碑先更新本页</div>
   <nav>
-    <a href="#goal">噪声 z</a><a href="#method">最初的想法</a><a href="#related">别人做了什么</a><a href="#evidence">证据</a><a href="#refine">下一步</a><a href="#now">实验</a><a href="#decide">决定与计划</a><a href="#log">更新记录</a>
+    <a href="#p0">0 先回答</a><a href="#p1">1 调研</a><a href="#p2">2 证据</a><a href="#p3">3 部件</a><a href="#p4">4 主问题</a><a href="#p5">5 方法图</a><a href="#p6">6 要补的实验</a><a href="#p7">7 证据边界</a><a href="#p8">8 定位</a><a href="#goal">详细：噪声 z</a><a href="#related">文献表</a><a href="#evidence">证据图</a><a href="#refine">①② 的数字</a><a href="#now">实验台账</a><a href="#log">更新记录</a>
   </nav>
 </header>
 
 <div class="now">
-  <h3>现在在哪（一分钟版）</h3>
+  <h3>现在在哪</h3>
   <ul>
-    <li><b>10 月 11 日：① 每个任务挑一个固定的 z，在没见过的起点上比原生策略高 10.1 pp（探索性）。新发现（不占卡的预检）：同一个任务里，哪个 z 好可以从 z 本身预测出来，好的 z 主要是给被执行的动作加了一个固定的小推力。据此做的对照实验 E18-G 正在跑（学出这个方向，直接采样新的 z，和随机的 z 比；两个 4 卡任务，12:10Z 提交，预计 13:20Z 到 13:40Z 结束）。② 动手之前排不出哪个 z 好，走完 50 步才有弱信号。</b></li>
-    <li><b>研究的东西：</b>冻结的 VLA 每次出动作前要抽一个随机噪声 z。同一个场景，z 不同，动作指令略有不同（<span class="proj">推算</span> 每步差 1 到 2 毫米），任务有时成、有时败。我们问：成败的经验能不能存进“z 怎么选”里。详见<a href="#goal">噪声 z</a>。</li>
-    <li><b>最初的想法：</b>部署时多试几个 z、挑最好的（慢，System 2）有用但贵；想用 ASBS 学一个噪声提议器，把这个能力一次蒸馏给快的策略（System 1）。<b>结果：没有显示收益</b>（+0.06 pp）。原因找到了：不执行就没有任何信号能分出好 z 和坏 z（排序准确度 0.51 到 0.53）。这是在最苛刻的设定下测的，不等于此路不通。详见<a href="#method">最初的想法</a>。</li>
-    <li><b>站住的结论：</b>把赢过的 z 记下来，在完全相同的起点上回放，成功率从 57.6% 到 76.7%（+19.1 pp，区间 15.1 到 23.4，126 个起点）。但起点偏 5 毫米就没有了；在确定性的仿真里，这很接近“背答案”，能容忍多大偏差还没量。</li>
-    <li><b>新结果（10 月 11 日，探索性）：在“任务”这一层，慢功夫能变成快办法。</b>每个任务用 8 个起点、24 个候选，挑出一个固定的 z，以后每次决策都用它。在 16 个没见过的起点上，成功率 65.4%，原生策略 55.3%，高 10.1 个百分点（区间 4.4 到 16.0，17 个任务）。随便取一个固定的 z 则是 49.6%，所以起作用的是“挑”，不是“固定”。这还不是登记过的结论，需要正式复现。</li>
-    <li><b>文献告诉我们的（10 月 10 日调研）：</b>有人用“每个任务一个固定 z”做成了跨起点的提升（Golden Ticket），有人在 z 的空间里在线学习做成了（DSRL）；和最初想法最像的 SVA 蒸馏的是“挑选器”而不是“提议器”。所以几句话要改口，下一步的实验也要调整。详见<a href="#related">别人做了什么</a>和<a href="#refine">下一步</a>。</li>
+    <li><b>10 月 11 日：① 任务级固定噪声有效果（新起点上 +10.1 pp，探索性）；② 评分器排序没有效果，原因查明。① 的延伸实验 E18-G（学出“好 z 的方向”后直接采样）正在跑，预计 13:30Z 左右结束。</b></li>
+    <li>这一页分两部分：前面是<b>方案</b>（0 到 8 节，10 月 11 日按你的要求重新整理），后面是<b>详细材料</b>（每个实验的数字、台账、更新记录）。</li>
   </ul>
 </div>
 
+<section id="p0" class="plan">
+  <div class="sec-head"><div class="eyebrow">方案 0 · 先回答</div><h2>两条路线有没有得到不错的效果</h2></div>
+  <p><b>① 有效果，② 没有。</b>① 目前是探索性结果，还要一次预先登记的复现才能写成结论；② 是一个原因清楚的负结果，它解释了最初“按状态蒸馏”为什么走不通。</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>路线</th><th>问的是什么</th><th>结果</th><th>证据级别</th><th>判断</th></tr></thead>
+      <tbody>
+        <tr><td><b>① 任务级固定噪声</b><br><span class="meta">E18</span></td><td>给每个任务找一个固定的 z，在没参与挑选的新起点上还有效吗？</td><td>挑出的 z <b>65.4%</b>，原生策略 55.3%，<b>+10.1 pp</b>（区间 4.4 到 16.0；17 个任务 × 16 个新起点）。随便取的固定 z 是 49.6%，所以起作用的是“挑”。候选从 1 个加到 24 个，提升从 −3.6 涨到 +7.5 pp，还没到头。</td><td><span class="tag t-warn">探索性</span><br>方案写在数字之前，分析只跑一次，但没有登记和独立复核</td><td><span class="tag t-good">有效果</span><br>第一个“换了起点也更好”的结果</td></tr>
+        <tr><td><b>①′ 学出来的方向</b><br><span class="meta">E18-G，① 的延伸</span></td><td>不再搜索：从 24 个 z 的成败里学出“好 z 的方向”，新采的 z 朝它偏移，成功率会随偏移量上升吗？</td><td>正在跑：两个 4 卡任务，4,352 次执行，约 10 卡时，预计 13:30Z 左右结束。</td><td><span class="tag t-warn">探索性</span><br>读法在提交前写进了分析脚本</td><td><span class="tag t-mute">待定</span></td></tr>
+        <tr><td><b>② 评分器的排序信号</b><br><span class="meta">E19，接 E17</span></td><td>动手之前，能不能判断同一个状态下哪个 z 好？</td><td>排序准确度 0.50 到 0.55（瞎猜 0.5；成败标签自己的上限 0.63）。换干净的标签、换策略内部状态做特征，都一样。只有把开头 50 步执行完，才有 0.56 到 0.60 的弱信号。</td><td>E17 已登记（0.51）；E19 探索性</td><td><span class="tag t-bad">没有可用效果</span><br>但查明了原因：成败是开头一段动作累积出来的，动手前读不出来</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="p1" class="plan">
+  <div class="sec-head"><div class="eyebrow">方案 1 · 调研</div><h2>三条调研线真正强调的核心，以及对我们的含义</h2></div>
+
+  <h3>1.1 Agentic robot：瓶颈在验证，反馈最终要写回策略</h3>
+  <p>你的 <a href="https://github.com/asimfish/awesome_agentic_robot">awesome_agentic_robot</a> 的主线是：被优化的对象从动作上移到整个系统。和我们直接相关的是其中三个判断：</p>
+  <ul class="plain">
+    <li><b>验证器是新的瓶颈。</b>能不能自我改进，取决于能不能可靠判断“这一步成没成”。</li>
+    <li><b>“冻结 VLA + 外围学习”是默认范式，但有天花板。</b>真实反馈最终要写回权重或策略状态（LWD、Q-Planning）。</li>
+    <li><b>记忆可靠与否，取决于状态更新的纪律，不取决于容量</b>（AGM：只有物理证据才推进进度）。</li>
+  </ul>
+  <p><b>对我们的含义：</b></p>
+  <ul class="plain">
+    <li>我们研究的正是“反馈写到哪里”这条轴上一个还没人量过的位置：不写在外围代码里，也不改权重，而是写进策略自己的随机输入 z。每个任务只有 320 个数，是最便宜的写回方式。</li>
+    <li>我们所有的正结果都用仿真器给的真实成败当验证器。按这条调研，这只是上限。必须补“换成有误判的验证器还剩多少”（见方案 6 的实验一）。</li>
+    <li>我们的记忆要有写入纪律：只有验证为成功的 z 才写入，起点重现才回放。E11 把一个起点上赢的 z 搬到另一个起点，结果是 −0.9 pp，这就是没有纪律的后果。</li>
+  </ul>
+
+  <h3>1.2 ICL：要区分“认出任务”和“学会任务”，要报告改进曲线</h3>
+  <p>你的 <a href="https://github.com/asimfish/awesome_ICL">awesome_ICL</a> 和 Robotensor 的<a href="https://www.robotensor.ai/blog/what-in-context-robot-learning-asks">文章</a>强调：</p>
+  <ul class="plain">
+    <li><b>认出任务</b>（调用已有技能）不会随经验增多而变好；<b>学会任务</b>（从交互后果里得到新东西）才会。</li>
+    <li>真正的适应需要多个回合、看到自己的动作和结果、后面的回合比前面好。单次成功率说明不了。</li>
+    <li>Zeva 把上下文从“别人的演示”扩到“自己的交互后果”，报告的是多次尝试内的累计成功率。</li>
+  </ul>
+  <p><b>对我们的含义：</b></p>
+  <ul class="plain">
+    <li>我们的设定是这个问题的极简版本：权重冻结，唯一能被经验更新的状态是 z。所以结果应该按同一套口径报告：第 1、2、4、8 次尝试的成功率，改进的斜率，清空记忆后是否回落，换起点、换任务后还剩多少。</li>
+    <li>已有数字可以直接这样重排（方案 2 的第二张表）。E18 的“候选数对提升”曲线就是任务级的改进斜率。</li>
+    <li><b>边界：</b>Robotensor 的定义排除任何测试时优化。我们在 z 上做搜索，属于测试时优化，所以不自称 ICL。我们借的是它的评测口径，把“z 里的适应”当作和“上下文里的适应”“快权重”并列的另一种状态载体。</li>
+    <li>它还区分<b>状态空间泛化</b>（换位置、换起点）和<b>任务空间泛化</b>（换任务）。我们现在的全部证据都属于前一种；后一种是空白。</li>
+  </ul>
+
+  <h3>1.3 噪声接口本身：别人已经证明它可用，我们要回答的是“在哪一层可用”</h3>
+  <ul class="plain">
+    <li><a href="https://arxiv.org/abs/2603.15757">Golden Ticket</a>：每个任务固定一个搜出来的 z，策略冻结，多数任务变好。只做搜索，没有预算曲线，没有学习。</li>
+    <li><a href="https://arxiv.org/abs/2506.15799">DSRL</a> 及后续：在 z 的空间里做强化学习，学一个看状态出 z 的小策略，在线、多轮。</li>
+    <li>PSS：少数几个噪声方向承载了大部分动作响应。GoldenStart、PDP：学噪声的先验或参数，但都要训练策略本身（只读了摘要）。</li>
+  </ul>
+  <p><b>对我们的含义：</b>不能再说“好噪声不能迁移”或“通过噪声蒸馏不行”。我们的增量是四件事：分层回答反馈能在哪一层固化；给出预算曲线和“挑出来的赢家会被高估多少”；给出机制解释（好的 z 是一个固定方向的小推力）；把搜索变成不用搜索的提议。完整的文献表在<a href="#related">详细材料 03</a>。</p>
+</section>
+
+<section id="p2" class="plan">
+  <div class="sec-head"><div class="eyebrow">方案 2 · 证据</div><h2>证据合起来说明了什么：反馈能固化到哪一层</h2></div>
+  <p>把所有实验按“反馈写成什么、换了什么之后还有效”排成一个阶梯：</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>层</th><th>反馈写成什么</th><th>换了什么还有效</th><th>证据</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td><b>L1 实例记忆</b></td><td>某个起点上成功过的 z 序列，原样回放</td><td>只有同一个起点；偏 5 毫米就没有了</td><td>E15：57.6% → 76.7%，+19.1 pp（区间 15.1 到 23.4，126 个起点）。E12、E13：偏 5 毫米和 2 厘米没有看出收益。</td><td><span class="tag t-good">已登记，成立</span></td></tr>
+        <tr><td><b>L2 任务级固定 z</b><br><span class="meta">靠搜索</span></td><td>每个任务一个 z，24 个里挑</td><td>同一任务的新起点</td><td>E18：+10.1 pp（区间 4.4 到 16.0）。</td><td><span class="tag t-warn">探索性，待复现</span></td></tr>
+        <tr><td><b>L3 任务级提议</b><br><span class="meta">靠学习，不搜索</span></td><td>每个任务一个“好 z 的方向”，新的 z 朝它偏移</td><td>同一任务的新起点、新的 z</td><td>预检：同一任务里 z 的好坏可预测（排序相关 0.29，p = 0.0005）。对照实验 E18-G 正在跑。</td><td><span class="tag t-warn">预检成立，实验在跑</span></td></tr>
+        <tr><td><b>L4 按状态的评分器和提议器</b><br><span class="meta">最初的 ASBS 设想</span></td><td>看状态给 z 打分的 Q̂(h, z)，再训练提议器</td><td>没见过的场景</td><td>ASBS 提议器 +0.06 pp（区间 −7.2 到 +7.6）。评分器排序 0.51（E17），换标签换特征仍是 0.50 到 0.55（E19）。</td><td><span class="tag t-bad">没看出效果，原因查明</span></td></tr>
+        <tr><td><b>L5 跨任务提议</b></td><td>看任务出 z 的分布</td><td>没搜索过的任务</td><td>预检：不同任务之间找不到共同的好方向（p 0.25、0.13）。</td><td><span class="tag t-mute">未做，长线</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>按 ICL 的口径重排已有数字（同一个起点上的多次尝试）</h3>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>量</th><th>数值</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>第 1 次尝试成功率</td><td>57.6%</td><td>原生策略。126 个起点是筛出来的“有时成、有时败”的起点，不是全部起点。</td></tr>
+        <tr><td>2、4、8 次尝试内至少成功一次</td><td>72.9%、84.1%、91.6%</td><td>前提：每次都能回到同一个起点，并且有不出错的验证器。这是“重试”的上限。</td></tr>
+        <tr><td>成功过一次之后，再来一次的成功率</td><td>76.7%</td><td>回放记下的 z（只回放开头 10 次决策）。回放 1、5、10 次决策：+5.9、+10.8、+19.1 pp。</td></tr>
+        <tr><td>清空记忆后</td><td>回到 57.6%</td><td>记忆在 z 的缓存里，不在权重里，清空即回落。</td></tr>
+        <tr><td>任务级：用掉的执行次数对新起点上的提升</td><td>候选 1、3、6、12、24 个：−3.6、+1.5、+4.4、+6.4、+7.5 pp</td><td>每个候选在 4 个起点上各试一次，事后分析。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>三条机制上的认识</h3>
+  <ul class="plain">
+    <li><b>“好的 z”有两种。</b>一种是碰巧好：只对这一个起点有效，偏几毫米就失效，只能记。另一种是系统性纠偏：对这个任务的各个起点都有帮助，可以搜，也可以学。L1 是前一种，L2 和 L3 是后一种。</li>
+    <li><b>成败是开头一段动作累积出来的。</b>回放 1、5、10 次决策的 z，收益一路变大；评分器只看执行过的动作，前 1、2、5、10 次决策的排序准确度从 0.52 涨到 0.57。所以在动手之前，单个状态上没有东西可读，按状态的评分器没有老师信号。</li>
+    <li><b>任务级的好 z 是一个方向固定的小推力。</b>能预测 z 好坏的，只有 z 里对应“被执行的前 5 步、平移分量”的平均值；没被执行的后 5 步没有信号。每个任务需要的方向不同。<span class="meta">后半句是事后分析。</span></li>
+  </ul>
+</section>
+
+<section id="p3" class="plan">
+  <div class="sec-head"><div class="eyebrow">方案 3 · 重新定义</div><h2>方法里每个部件的准确角色</h2></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>部件</th><th>不应只是</th><th>更准确的角色</th></tr></thead>
+      <tbody>
+        <tr><td><b>噪声 z</b></td><td>采样用的随机数</td><td>冻结策略里唯一可写的状态，是反馈的落点</td></tr>
+        <tr><td><b>System 2</b>（采多个 z 再挑）</td><td>推理时多花算力换成功率</td><td>产生“z 加成败”经验的引擎；它离不开验证器</td></tr>
+        <tr><td><b>验证器</b>（成败信号）</td><td>仿真器给的一个标志</td><td>经验的准入门：验证为成功的才写入。它的误判率决定所有收益的上限</td></tr>
+        <tr><td><b>记忆</b>（Remember）</td><td>缓存一个 z</td><td>带门控的实例级适应：起点重现才回放，有效半径要量出来</td></tr>
+        <tr><td><b>任务级固定 z</b></td><td>复现 Golden Ticket</td><td>任务级适应的搜索形式，带预算曲线和对“赢家被高估”的校正</td></tr>
+        <tr><td><b>提议器</b>（Propose，ASBS）</td><td>一个看状态出 z 的网络</td><td>把搜索摊销成一个分布：先在任务级学方向，再谈跨任务</td></tr>
+        <tr><td><b>评分器 Q̂(h, z)</b></td><td>提议器的老师</td><td>目前是负结果。它告诉我们老师信号必须是“对多个起点取平均的成败”，不能是单个状态的</td></tr>
+        <tr><td><b>评测</b></td><td>一个成功率</td><td>尝试次数对成功率的曲线，加上三个泛化层级：同起点、新起点、新任务</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="p4" class="plan">
+  <div class="sec-head"><div class="eyebrow">方案 4 · 主问题</div><h2>论文要回答的一句话</h2></div>
+  <blockquote><b>冻结的 VLA 拿到执行成败的反馈之后，这些反馈能在哪个粒度上固化进它的采样噪声？什么时候该记，什么时候该搜，什么时候能学成提议？</b><br><span class="meta">When a frozen VLA receives outcome feedback, at which granularity can it be consolidated into the sampling noise, and when should it be remembered, searched, or proposed?</span></blockquote>
+  <p>它包含三个可以分别检验的机制，正好对应题目里的 Remember 和 Propose：</p>
+  <ol class="plain">
+    <li><b>留存：</b>成功的经验能不能原样留下来再用（L1）。已成立。</li>
+    <li><b>任务内泛化：</b>经验能不能用到同一任务的新起点（L2）。探索性成立。</li>
+    <li><b>摊销：</b>能不能不再搜索，直接从学到的分布里出好 z（L3）；再往上是跨任务（L5）。这是最初“System 2 蒸馏到 System 1”的想法现在的形式。</li>
+  </ol>
+  <p>负结果（L4）在这个问题里有位置：它划出了“学不到”的那一层，并给出了原因。</p>
+</section>
+
+<section id="p5" class="plan">
+  <div class="sec-head"><div class="eyebrow">方案 5 · 方法图</div><h2>三层，两个循环</h2></div>
+  <div class="layers">
+    <div class="layer"><b>第一层 · 冻结的策略和它的噪声接口</b><span>π0.5 的权重不动。每次决策读入一个 z（10 步 × 32 维），输出一段动作。z 是唯一可以从外面写进去的东西。</span></div>
+    <div class="layer"><b>第二层 · 经验引擎</b><span>采样 z → 执行 → 验证成败 → 记录“任务、起点、z、成败”。验证器在这一层，它决定什么经验可以往下走。</span></div>
+    <div class="layer"><b>第三层 · 固化</b><span>实例记忆（L1）→ 任务级固定 z（L2，搜索）→ 任务级提议（L3，学习）→ 跨任务提议（L5，未做）。越往后，用起来越省，要的经验越多。</span></div>
+  </div>
+  <p><b>局部循环</b>（同一个起点，几次尝试之内）：</p>
+  <pre>采样 z → 执行 → 验证
+   成功 → 把 z 写入这个起点的记忆
+   起点重现 → 回放记忆里的 z；没有记忆或起点不同 → 不干预</pre>
+  <p><b>全局循环</b>（同一个任务，跨很多回合）：</p>
+  <pre>在几个起点上各试 K 个固定的 z → 成败表
+   → 挑最好的（L2），或者拟合“好 z 的方向”（L3）
+   → 新回合直接用挑出的 z，或从偏移后的分布里采样
+   → 新回合的成败继续更新这个方向</pre>
+  <p>两个循环的时间尺度不同：局部循环解决“这个起点再来一次”，全局循环解决“这个任务以后都做得更好”。</p>
+</section>
+
+<section id="p6" class="plan">
+  <div class="sec-head"><div class="eyebrow">方案 6 · 要补的实验</div><h2>最需要补的四个实验</h2></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>实验</th><th>比较什么</th><th>要证明什么</th><th>代价和状态</th></tr></thead>
+      <tbody>
+        <tr><td><b>一 · 验证器消融</b></td><td>真实成败；按给定误判率翻转的成败；学出来的成功检测器</td><td>L1 和 L2 的收益里有多少依赖“验证不出错”。这是 agentic 调研里排第一的问题。</td><td>第一步用已有数据模拟误判率，不占卡。检测器需要重新渲染画面，之后再定。<span class="tag t-mute">未开始</span></td></tr>
+        <tr><td><b>二 · 正式复现和预算曲线</b></td><td>在另一批任务上，预先登记，重做 L2；候选数 24 对 96</td><td>+10 pp 不是这 17 个任务的偶然；提升随预算涨到哪。</td><td>复现约 1.5 卡时 × 入选任务数，另加筛选约 1 卡时；加大候选约 22 卡时。<span class="tag t-mute">设计已写好</span></td></tr>
+        <tr><td><b>三 · 搜索对提议</b></td><td>同样的执行次数下：随机的 z；24 选 1；学出方向直接采样；学出方向后再挑；多轮更新</td><td>提议的收益来自“学到了方向”，不是多试了几次。这是 System 2 → System 1 的直接检验。</td><td>第一步就是 E18-G（4 个剂量）。<span class="tag t-warn">在跑</span> 约 10 卡时。后面几项未设计。</td></tr>
+        <tr><td><b>四 · 泛化层级和机制对照</b></td><td>同起点、偏 0.1 到 2 毫米、新起点、新任务；回放噪声对回放动作；噪声里的推力对直接给动作加偏置</td><td>每一层的边界在哪；好 z 的作用是不是就等于一个动作偏置。</td><td>偏移半径的设计已写好（E16-Z，一次 8 卡约 2 小时，暂停中）；其余未设计。</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><b>对照基线</b>（每个正式实验都带）：原生策略；随便取的固定 z；有完美验证器的多次重试（上限）。DSRL 式的在线噪声策略是最强的外部对照，还没有跑。</p>
+  <p><b>建议的顺序：</b>三（E18-G 的结果）→ 二（正式复现，把三里有效的做法一起登记）→ 一（先做不占卡的部分）→ 四。</p>
+</section>
+
+<section id="p7" class="plan">
+  <div class="sec-head"><div class="eyebrow">方案 7 · 证据边界</div><h2>哪些能说，哪些不能说</h2></div>
+  <ul class="plain">
+    <li><b>已登记、可以写成结论：</b>L1 的 +19.1 pp（E15）；偏移 5 毫米以上没有看出收益（E12、E13）；评分器排序没有看出来（E17）；ASBS 提议器没有看出收益。</li>
+    <li><b>探索性、只能写成“初步结果”：</b>E18、E19、“z 的好坏可预测”和 E18-G。它们的方案都写在数字之前，但没有登记，测试起点被多次读过。</li>
+    <li><b>范围：</b>一个策略（π0.5），一个基准（LIBERO 的扰动变体），只有仿真。验证器是仿真器的真实成败。</li>
+    <li><b>不能说的话：</b>“好噪声不能迁移”（只能说一个起点上的赢家不能）；“通过噪声蒸馏不行”；“评分器排不出好坏”（要加上：在单个状态里、动手之前、用我们试过的特征）；“第一个给冻结 VLA 做成功记忆”。</li>
+    <li><b>不同工作的成功率不能直接比大小</b>，任务集和判定口径都不同。上面引用别人的数字只用来说明“有人做成了”。</li>
+    <li><b>调研来源的可靠程度：</b>两个调研仓库和 Robotensor 的文章是用网页摘要工具读的，其中引用的具体数字要回原文核对后才能进论文。Golden Ticket 读了全文；GoldenStart 和 PDP 只读了摘要。</li>
+  </ul>
+</section>
+
+<section id="p8" class="plan">
+  <div class="sec-head"><div class="eyebrow">方案 8 · 定位</div><h2>题目、一句话定位、需要你定的</h2></div>
+  <p><b>题目：</b>现在的题目和主问题是对得上的，建议保留：<i>Propose or Remember? When Outcome Feedback Can Be Consolidated into VLA Noise</i>。</p>
+  <p><b>一句话定位：</b>噪声是冻结 VLA 上最便宜的反馈写入位置。实例层面记得住，任务层面搜得到，单个状态上读不出；能不能学成提议，取决于 E18-G 和它的正式复现。</p>
+  <p><b>需要你定的：</b></p>
+  <ol class="plain">
+    <li>方案 6 的顺序（三 → 二 → 一 → 四）是否同意。</li>
+    <li>论文是否按 L1 到 L5 这个阶梯来组织，把 L4 的负结果作为其中一层。</li>
+    <li>集群 B 数据盘上 7 月旧阶段的 rollout 数据（81 GB），删掉或迁走需要你点头。</li>
+  </ol>
+</section>
+
+<div class="divider"><b>以下是详细材料</b>：每个概念的展开、完整文献表、每个实验的数字、实验台账和更新记录。</div>
+
 <section id="goal">
-  <div class="sec-head"><div class="eyebrow">01 · 研究对象</div><h2>噪声 z 是什么，它到底控制什么</h2></div>
+  <div class="sec-head"><div class="eyebrow">详细材料 01 · 研究对象</div><h2>噪声 z 是什么，它到底控制什么</h2></div>
   <p>我们研究的是一个训练好、不再改动的 VLA 策略（π0.5）。它的动作头是“流匹配”模型：每次决策先从标准正态分布里抽一个随机向量 z（10 步 × 32 维），再把 z 一步步“去噪”成一段动作（10 步，每步 7 个数：三个平移、三个转动、一个夹爪）。<b>观测不变时，动作完全由 z 决定；z 是这个策略唯一的随机来源。</b>可以把它理解成图像生成模型里的“随机种子”：同一句提示词，种子不同，图不同；这里是同一个场景，z 不同，机器人走的轨迹略有不同，任务有时成、有时败。</p>
   <p>每次执行完我们都知道成败。整个项目问的是：<b>成败的经验，能不能存进“z 怎么选”里</b>，让同一个冻结策略下次做得更好，既不重新训练 VLA，也不用每次都在线反复试。</p>
 
@@ -148,7 +338,7 @@
 </section>
 
 <section id="method">
-  <div class="sec-head"><div class="eyebrow">02 · 最初的想法</div><h2>用 ASBS 把 System 2 蒸馏进 System 1，以及它走到了哪一步</h2></div>
+  <div class="sec-head"><div class="eyebrow">详细材料 02 · 最初的想法</div><h2>用 ASBS 把 System 2 蒸馏进 System 1，以及它走到了哪一步</h2></div>
   <p><b>System 2（慢）：</b>部署时在每个决策点多抽几个候选 z，用仿真或推理模型逐个评估“照这个 z 走下去，任务成功的可能有多大”，执行最好的那个。它有用，但每一步都要付出这份代价。</p>
   <p><b>想法：</b>既然评估反馈已经收集到了，就用它训练一个评分器 Q̂(h, z)，再让一个轻量的噪声提议器学会“往高分的地方抽 z”。提议器用条件 ASBS（Adjoint Schrödinger Bridge Sampler）离线拟合。部署时既不需要仿真，也不需要评分器，只抽一次：慢功夫被蒸馏进了快策略（System 1）。这是下图的路线 A（提议）。</p>
   <p><b>对照的做法：</b>不学任何东西，只把赢过的 z 存下来，同一个起点再出现时回放。这是路线 B（记忆）。两条路线改的都只是“z 从哪来”，VLA 本身不动。</p>
@@ -271,7 +461,7 @@
 </section>
 
 <section id="related">
-  <div class="sec-head"><div class="eyebrow">03 · 别人做了什么</div><h2>最新的相关工作，以及它们对我们意味着什么</h2></div>
+  <div class="sec-head"><div class="eyebrow">详细材料 03 · 别人做了什么</div><h2>最新的相关工作，以及它们对我们意味着什么</h2></div>
   <p>10 月 10 日分三路做了调研：噪声本身；System 2 与蒸馏；上下文学习（ICL）、记忆和智能体式机器人。共核对 120 多篇，下面只列和我们最相关的。每篇都在 arXiv 页面上核对过题目、作者和编号。<b>局限：</b>平台的文献库这次不可用，所以只做了网页核对；标“正文”的数字是从论文正文读出来的，写进论文之前还要对一遍原文。</p>
 
   <h3>一、有人研究过 z 吗</h3>
@@ -342,7 +532,7 @@
 </section>
 
 <section id="evidence">
-  <div class="sec-head"><div class="eyebrow">04 · 已有证据</div><h2>已经做完的实验说明了什么</h2></div>
+  <div class="sec-head"><div class="eyebrow">详细材料 04 · 已有证据</div><h2>已经做完的实验说明了什么</h2></div>
   <figure>
     <div class="scroll">
 <svg class="forest" viewBox="0 0 760 718" role="img" aria-label="各实验相对原生策略的成功率差（百分点）与 95% 区间：同一起点回放约 +9 到 +11；起点平移或换起点后接近 0；ASBS 提议器接近 0。">
@@ -516,7 +706,7 @@
 </section>
 
 <section id="refine">
-  <div class="sec-head"><div class="eyebrow">05 · 下一步</div><h2>实验反馈和文献调研之后，方案怎么调整</h2></div>
+  <div class="sec-head"><div class="eyebrow">详细材料 05 · 下一步</div><h2>实验反馈和文献调研之后，方案怎么调整</h2></div>
   <h3>调研之后的下一步候选</h3>
   <p><b>10 月 11 日你定了：① 和 ② 都继续探索。</b>两个都先做小规模的探索，结果标明“探索性”；看到苗头再做正式的、预先登记的实验。③ 和 ④ 暂不做。</p>
   <div class="tbl">
@@ -555,7 +745,7 @@
 </section>
 
 <section id="now">
-  <div class="sec-head"><div class="eyebrow">06 · 现在的实验</div><h2>每条实验线在做什么、卡在哪</h2></div>
+  <div class="sec-head"><div class="eyebrow">详细材料 06 · 现在的实验</div><h2>每条实验线在做什么、卡在哪</h2></div>
   <div class="tbl">
     <table>
       <thead><tr><th>实验线</th><th>想回答的问题</th><th>状态</th><th>下一步</th></tr></thead>
@@ -586,23 +776,24 @@
 </section>
 
 <section id="decide">
-  <div class="sec-head"><div class="eyebrow">07 · 决定与计划</div><h2>你定了什么，我接下来按什么顺序做</h2></div>
+  <div class="sec-head"><div class="eyebrow">详细材料 07 · 决定与计划</div><h2>你定了什么，我接下来按什么顺序做</h2></div>
   <div class="ask">
     <div><b>你的决定（10 月 10 日）</b><span>实验继续推进；可用的机器都可以用，也可以提交训练任务，但不能浪费：每个任务要把卡用满，不多提。实验过程中要根据反馈继续完善方案。共享服务器的磁盘和环境问题由我清理。</span></div>
-    <div><b>本阶段计划</b><span><ol class="plain"><li><b>已完成（10 月 11 日，探索性）：</b>① 任务级固定噪声：没见过的起点上 +10.1 pp；候选越多提升越大（−3.6 → +7.5 pp）；同一任务内 z 的好坏可以预测。② 评分器：动手之前排不出来，走完 50 步才有弱信号。</li><li><b>正在跑：E18-G</b>，学出来的 z 对随机的 z（见“下一步”①）。读法已经写死在分析脚本里：主要看成功率随剂量的斜率。</li><li><b>之后（设计已写好，等你定顺序）：</b>A 把候选从 24 个加到 96 个，看提升能涨到哪（约 22 卡时）；B 在另一批任务上做预先登记的正式复现；C 让提议器跨任务（看任务出 z），这才是完整的 System 1，需要更多搜索过的任务。</li><li>暂不做：③ 记忆的有效半径（设计已写好），④ 用成功检测器重试。</li></ol></span></div>
+    <div><b>本阶段计划</b><span>顺序见<a href="#p6">方案 6</a>：三（E18-G，正在跑）→ 二（正式复现）→ 一（验证器消融，先做不占卡的部分）→ 四（泛化层级和机制对照）。暂不做：用成功检测器重试的完整版，等实验一的结果再定。</span></div>
     <div><b>用卡原则</b><span>同一时间我们在排队或运行的任务最多 2 个；不让任务在容器里空等；一个任务结束、结果看过，再提下一个。每次启动前在这里写明用多少卡、多久、为了回答什么。</span></div>
-    <div><b>仍需你定的</b><span>1. ① 的结果是探索性的。E18-G 之后，是先做预先登记的正式复现（B，需要换一批任务，因为现有任务的起点基本用完了），还是先加大搜索预算看上限（A）？我的建议：E18-G 有剂量效应就直接把它并进 B 一起登记；没有就先做 A。2. 论文主线：现在有了“记忆”（同一起点 +19 pp）和“任务级固定噪声”（没见过的起点 +10 pp，待复现）两个正结果，加上“按状态的评分器/提议器不行、且查明了原因”。是否按这三块来写？3. 集群 B 数据盘上 7 月旧阶段的 rollout 数据（81 GB），删掉或迁走需要你点头。</span></div>
+    <div><b>仍需你定的</b><span>见<a href="#p8">方案 8</a>：1. 方案 6 的顺序是否同意。2. 论文是否按 L1 到 L5 的阶梯组织。3. 集群 B 上 7 月的旧 rollout 数据（81 GB）删或迁需要你点头。</span></div>
   </div>
 </section>
 
 <section id="log">
-  <div class="sec-head"><div class="eyebrow">08 · 维护约定与更新记录</div><h2>这一页怎么保持最新</h2></div>
+  <div class="sec-head"><div class="eyebrow">详细材料 08 · 维护约定与更新记录</div><h2>这一页怎么保持最新</h2></div>
   <ul class="plain">
     <li>每开始一个新阶段、每到一个里程碑，先更新这一页，再在对话里汇报。</li>
     <li>花费较大的实验启动前，先在这里写明目的、成本和预期。</li>
     <li>推算的数字单独标“推算”，不和实测结果混在一起。</li>
   </ul>
   <ul class="log">
+    <li><time>10-11 13:07Z</time>按你的意见重写方案：页面前半改成 0 到 8 节的一份完整方案（先回答、调研的含义、证据阶梯、部件角色、主问题、方法图、要补的四个实验、证据边界、定位），旧内容降为详细材料。读了 awesome_agentic_robot、awesome_ICL 两个仓库和 Robotensor 的文章（经网页摘要工具）。</li>
     <li><time>10-11 12:23Z</time>E18-G 提交：两个 4 卡任务（asbs-z10-r26g1、r26g2，12:10Z 和 12:12Z），共 4,352 次执行加 32 次检查执行；开跑前的噪声核对和 E15 复现检查全部通过。同时在跑的只有这两个任务。</li>
     <li><time>10-11 11:34Z</time>① 预检（不占卡）：同一任务内 z 的好坏可预测（排序相关 0.29，p = 0.0005），信号在被执行的 5 步动作的平移分量上；跨任务没有共同方向。写定 E18-G 的计划和分析脚本（学出来的方向 × 4 个剂量），尚未提交任务。补查文献：GoldenStart、Parameterized Diffusion Policies（只读了摘要）。</li>
     <li><time>10-11 10:48Z</time>① 事后分析：候选数从 1 加到 24，新起点上的提升从 −3.6 一路涨到 +7.5 pp（用一半起点挑、另一半读），还没有饱和。</li>
