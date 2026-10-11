@@ -109,7 +109,7 @@
   <div class="eyebrow">ASBS 项目总览</div>
   <h1>冻结的 VLA，能不能把“这次成没成”的经验留到下一次？</h1>
   <p class="sub">论文题目：<i>Propose or Remember? When Outcome Feedback Can Be Consolidated into VLA Noise</i>。这一页前半是方案（先回答问题，再讲调研、证据、主问题、方法图、要补的实验、证据边界），后半是详细材料。</p>
-  <div class="meta">更新于 2026-10-11 16:13 UTC · 由 Claude（监督）维护 · 每到一个里程碑先更新本页</div>
+  <div class="meta">更新于 2026-10-11 17:24 UTC · 由 Claude（监督）维护 · 每到一个里程碑先更新本页</div>
   <nav>
     <a href="#p0">0 先回答</a><a href="#p1">1 调研</a><a href="#p2">2 证据</a><a href="#p3">3 部件</a><a href="#p4">4 主问题</a><a href="#p5">5 方法图</a><a href="#p6">6 要补的实验</a><a href="#p7">7 证据边界</a><a href="#p8">8 定位</a><a href="#goal">详细：噪声 z</a><a href="#related">文献表</a><a href="#evidence">证据图</a><a href="#refine">①② 的数字</a><a href="#now">实验台账</a><a href="#log">更新记录</a>
   </nav>
@@ -118,7 +118,7 @@
 <div class="now">
   <h3>现在在哪</h3>
   <ul>
-    <li><b>10 月 11 日：最初的想法在任务级第一次成立（探索性）。用 24 个 z 的成败学出一个方向，部署时照常采样、只把噪声的均值朝它挪 2 个标准差，新起点上成功率从 55.5% 到 67.6%（+12.0 pp，区间 6.9 到 17.5），不需要搜索。① 的固定 z 是 +10.1 pp；② 评分器排序没有效果。按你的意见各条路都上实验：E18-I 在跑（提议需要多少经验、验证器出错会怎样），E20（没用过的起点上的登记确认）已评审、等卡，验证器出错的不占卡分析已完成。</b></li>
+    <li><b>10 月 11 日：学出来的噪声偏移不搜索就比原生策略高 12 pp（E18-H，探索性）。对照实验 E18-I 提醒：其中约一半可能来自“推一下”本身（随机方向的推力也高 6.4 pp），学到的方向再多 8.5 pp。预先登记的确认实验 E20 已加上对照臂，评审两轮，登记后提交。② 评分器排序换成非线性的也没有效果。</b></li>
     <li>这一页分两部分：前面是<b>方案</b>（0 到 8 节，10 月 11 日按你的要求重新整理），后面是<b>详细材料</b>（每个实验的数字、台账、更新记录）。</li>
   </ul>
 </div>
@@ -132,8 +132,8 @@
       <tbody>
         <tr><td><b>① 任务级固定噪声</b><br><span class="meta">E18</span></td><td>给每个任务找一个固定的 z，在没参与挑选的新起点上还有效吗？</td><td>挑出的 z <b>65.4%</b>，原生策略 55.3%，<b>+10.1 pp</b>（区间 4.4 到 16.0；17 个任务 × 16 个新起点）。随便取的固定 z 是 49.6%，所以起作用的是“挑”。候选从 1 个加到 24 个，提升从 −3.6 涨到 +7.5 pp，还没到头。</td><td><span class="tag t-warn">探索性</span><br>方案写在数字之前，分析只跑一次，但没有登记和独立复核</td><td><span class="tag t-good">有效果</span><br>第一个“换了起点也更好”的结果</td></tr>
         <tr><td><b>①′ 学出来的方向</b><br><span class="meta">E18-G，① 的延伸</span></td><td>不再搜索：从 24 个 z 的成败里学出“好 z 的方向”，新采的 z 朝它偏移，成功率会随偏移量上升吗？</td><td>会。偏移 −2、0、+2、+4 个标准差：<b>35.1%、48.2%、60.4%、60.6%</b>。斜率 +4.4 pp/标准差（区间 2.5 到 6.4），17 个任务里 16 个为正。+2 比不偏移高 12.2 pp（区间 7.8 到 16.5），反方向 −2 则低 13.1 pp。<br>但对原生策略（55.3%）只高 5.1 pp（区间 −1.6 到 +12.1，含 0），比“24 选 1”（65.4%）低 5.1 pp。原因之一：把 z 固定住本身有代价，不偏移的固定 z 比原生策略低 7.2 pp（区间 −12.4 到 −1.8）。</td><td><span class="tag t-warn">探索性</span><br>读法在提交前写进分析脚本，只跑一次；4,352 次执行全部完成</td><td><span class="tag t-warn">一半成立</span><br>方向学得到；不搜索直接用，还没看出超过原生策略</td></tr>
-        <tr><td><b>①″ 学出的偏移加在新采样的噪声上</b><br><span class="meta">E18-H，提议器的 System 1 形式</span></td><td>部署时照常每次新采样，不搜索、不存 z，只把噪声分布的均值朝学到的方向挪。这样比原生策略好吗？</td><td><b>好。</b>原生 55.5%，偏移 +2 个标准差 <b>67.6%</b>，+4 是 68.9%。+2 对原生 <b>+12.0 pp</b>（区间 6.9 到 17.5；17 个任务里 14 个变好、3 个变差）。和“24 选 1”的固定 z（65.4%）相当：+2.1 pp（区间 −1.8 到 +5.9）。这次重跑的原生策略和 E18 的原生只差 0.2 pp，两次测量对得上。</td><td><span class="tag t-warn">探索性</span><br>读法在提交前写定，只跑一次；3,264 次执行全部完成。同一批测试起点已被读过四次</td><td><span class="tag t-good">有效果</span><br>最初“把搜索蒸馏成提议”的想法，在任务级第一次成立；待登记确认</td></tr>
-        <tr><td><b>② 评分器的排序信号</b><br><span class="meta">E19，接 E17</span></td><td>动手之前，能不能判断同一个状态下哪个 z 好？</td><td>排序准确度 0.50 到 0.55（瞎猜 0.5；成败标签自己的上限 0.63）。换干净的标签、换策略内部状态做特征，都一样。只有把开头 50 步执行完，才有 0.56 到 0.60 的弱信号。</td><td>E17 已登记（0.51）；E19 探索性</td><td><span class="tag t-bad">没有可用效果</span><br>但查明了原因：成败是开头一段动作累积出来的，动手前读不出来</td></tr>
+        <tr><td><b>①″ 学出的偏移加在新采样的噪声上</b><br><span class="meta">E18-H，提议器的 System 1 形式</span></td><td>部署时照常每次新采样，不搜索、不存 z，只把噪声分布的均值朝学到的方向挪。这样比原生策略好吗？</td><td><b>好。</b>原生 55.5%，偏移 +2 个标准差 <b>67.6%</b>，+4 是 68.9%。+2 对原生 <b>+12.0 pp</b>（区间 6.9 到 17.5；17 个任务里 14 个变好、3 个变差）。和“24 选 1”的固定 z（65.4%）相当：+2.1 pp（区间 −1.8 到 +5.9）。这次重跑的原生策略和 E18 的原生只差 0.2 pp，两次测量对得上。<br><b>但这 12 pp 不全是“学到的方向”的功劳</b>（对照实验 E18-I）：同样大小、方向随机的推力，也比原生高 +6.4 pp（区间 0.9 到 11.9）；学到的方向比随机方向再高 8.5 pp（区间 2.4 到 14.7）。</td><td><span class="tag t-warn">探索性</span><br>读法在提交前写定，只跑一次；3,264 次执行全部完成。同一批测试起点已被读过四次</td><td><span class="tag t-good">有效果</span><br>最初“把搜索蒸馏成提议”的想法，在任务级第一次成立；其中多少来自学到的方向、多少来自“推”本身，由 E20 的对照臂确认</td></tr>
+        <tr><td><b>② 评分器的排序信号</b><br><span class="meta">E19，接 E17</span></td><td>动手之前，能不能判断同一个状态下哪个 z 好？</td><td>排序准确度 0.50 到 0.55（瞎猜 0.5；成败标签自己的上限 0.63）。换干净的标签、换策略内部状态做特征，都一样；换成非线性的评分器（提升树）也一样，0.47 到 0.55。只有把开头 50 步执行完，才有 0.54 到 0.60 的弱信号。</td><td>E17 已登记（0.51）；E19 探索性</td><td><span class="tag t-bad">没有可用效果</span><br>但查明了原因：成败是开头一段动作累积出来的，动手前读不出来</td></tr>
       </tbody>
     </table>
   </div>
@@ -189,7 +189,7 @@
       <tbody>
         <tr><td><b>L1 实例记忆</b></td><td>某个起点上成功过的 z 序列，原样回放</td><td>只有同一个起点；偏 5 毫米就没有了</td><td>E15：57.6% → 76.7%，+19.1 pp（区间 15.1 到 23.4，126 个起点）。E12、E13：偏 5 毫米和 2 厘米没有看出收益。</td><td><span class="tag t-good">已登记，成立</span></td></tr>
         <tr><td><b>L2 任务级固定 z</b><br><span class="meta">靠搜索</span></td><td>每个任务一个 z，24 个里挑</td><td>同一任务的新起点</td><td>E18：+10.1 pp（区间 4.4 到 16.0）。</td><td><span class="tag t-warn">探索性，待复现</span></td></tr>
-        <tr><td><b>L3 任务级提议</b><br><span class="meta">靠学习，不搜索</span></td><td>每个任务一个“好 z 的方向”，新的 z 朝它偏移</td><td>同一任务的新起点、新的 z</td><td>预检：同一任务里 z 的好坏可预测（排序相关 0.29，p = 0.0005）。E18-G：朝学到的方向偏移 +2 个标准差，比不偏移高 12.2 pp（区间 7.8 到 16.5），剂量效应清楚；对原生策略 +5.1 pp（区间 −1.6 到 +12.1）。 <b>E18-H：把同一个偏移加在每次新采样的噪声上，对原生策略 +12.0 pp（区间 6.9 到 17.5）。</b></td><td><span class="tag t-warn">探索性成立，待登记确认</span></td></tr>
+        <tr><td><b>L3 任务级提议</b><br><span class="meta">靠学习，不搜索</span></td><td>每个任务一个“好 z 的方向”，新的 z 朝它偏移</td><td>同一任务的新起点、新的 z</td><td>预检：同一任务里 z 的好坏可预测（排序相关 0.29，p = 0.0005）。E18-G：朝学到的方向偏移 +2 个标准差，比不偏移高 12.2 pp（区间 7.8 到 16.5），剂量效应清楚；对原生策略 +5.1 pp（区间 −1.6 到 +12.1）。 <b>E18-H：把同一个偏移加在每次新采样的噪声上，对原生策略 +12.0 pp（区间 6.9 到 17.5）。</b> E18-I：方向随机的同样大小的推力对原生 +6.4 pp（区间 0.9 到 11.9）；学到的方向比它再高 8.5 pp（区间 2.4 到 14.7）。</td><td><span class="tag t-warn">探索性成立；方向的贡献待确认</span></td></tr>
         <tr><td><b>L4 按状态的评分器和提议器</b><br><span class="meta">最初的 ASBS 设想</span></td><td>看状态给 z 打分的 Q̂(h, z)，再训练提议器</td><td>没见过的场景</td><td>ASBS 提议器 +0.06 pp（区间 −7.2 到 +7.6）。评分器排序 0.51（E17），换标签换特征仍是 0.50 到 0.55（E19）。</td><td><span class="tag t-bad">没看出效果，原因查明</span></td></tr>
         <tr><td><b>L5 跨任务提议</b></td><td>看任务出 z 的分布</td><td>没搜索过的任务</td><td>预检：不同任务之间找不到共同的好方向（p 0.25、0.13）。</td><td><span class="tag t-mute">未做，长线</span></td></tr>
       </tbody>
@@ -275,10 +275,10 @@
     <table>
       <thead><tr><th>实验</th><th>比较什么</th><th>要证明什么</th><th>代价和状态</th></tr></thead>
       <tbody>
-        <tr><td><b>一 · 验证器消融</b></td><td>真实成败；按给定误判率翻转的成败；学出来的成功检测器</td><td>L1 和 L2 的收益里有多少依赖“验证不出错”。这是 agentic 调研里排第一的问题。</td><td><span class="tag t-good">不占卡的部分完成</span> 用已有数据模拟验证器出错（探索性，方案写在算数之前）。误判率 10%、20%、30% 时：实例记忆（每个候选只看一次）的收益剩 76%、55%、36%（不出错时 +5.4 pp）；任务级挑选的收益剩 68%、41%、10%（不出错时 +7.5 pp）。<b>把失败报成成功，比把成功报成失败，代价大得多</b>：只有 30% 的前一种错误，收益剩约一半；只有 30% 的后一种，还剩 80% 到 90%。所以验证器宁可保守。提议器（L3）在误判下的表现由 E18-I 的两个臂直接测（在跑）。学出来的检测器还没做。</td></tr>
-        <tr><td><b>二 · 正式复现和预算曲线</b></td><td>在另一批任务上，预先登记，重做 L2；候选数 24 对 96</td><td>+10 pp 不是这 17 个任务的偶然；提升随预算涨到哪。</td><td><span class="tag t-warn">准备中</span> <b>E20：预先登记的确认。</b>在 16 个任务、151 个从没被任何实验用过的起点上，测“学出的偏移”和“挑出的固定 z”对原生策略。登记文本经过一次独立评审，按评审意见改了三处：分析脚本要核对每条记录确实跑在计划的起点上、来自登记的那次运行；数据不全就不分析；结论区间改成按场景族的 t 区间（更保守）。2,567 次执行，两个 4 卡任务，等 E18-I 跑完后提交。换一批任务的复现、把候选加到 96 个，排在它后面。</td></tr>
-        <tr><td><b>三 · 搜索对提议</b></td><td>同样的执行次数下：随机的 z；24 选 1；学出方向直接采样；学出方向后再挑；多轮更新</td><td>提议的收益来自“学到了方向”，不是多试了几次。这是 System 2 → System 1 的直接检验。</td><td>第一步就是 E18-G（4 个剂量）。<span class="tag t-good">前两步完成</span> E18-G：方向成立。E18-H：偏移加在新采样的噪声上，对原生策略 +12.0 pp（区间 6.9 到 17.5），和“24 选 1”相当。<b>E18-I（在跑）</b>：只用 6 个、12 个候选学方向（对比 24 个）；把成败标签按 15%、30% 的比例弄错再学方向；一个随机方向的推力作对照。5 个臂 × 2 次重复，2,720 次执行，两个 4 卡任务 16:05Z 前后提交，预计 17:00Z 前后结束。</td></tr>
-        <tr><td><b>四 · 泛化层级和机制对照</b></td><td>同起点、偏 0.1 到 2 毫米、新起点、新任务；回放噪声对回放动作；噪声里的推力对直接给动作加偏置</td><td>每一层的边界在哪；好 z 的作用是不是就等于一个动作偏置。</td><td><span class="tag t-mute">排队</span> 偏移半径（E16-Z）的设计已写好，需要先给运行工具加“挪动起点”的功能，排在 E20 之后。“随机方向的推力”这个对照已放进 E18-I。回放动作对回放噪声、动作偏置对噪声推力还没设计。</td></tr>
+        <tr><td><b>一 · 验证器消融</b></td><td>真实成败；按给定误判率翻转的成败；学出来的成功检测器</td><td>L1 和 L2 的收益里有多少依赖“验证不出错”。这是 agentic 调研里排第一的问题。</td><td><span class="tag t-good">不占卡的部分完成</span> 用已有数据模拟验证器出错（探索性，方案写在算数之前）。误判率 10%、20%、30% 时：实例记忆（每个候选只看一次）的收益剩 76%、55%、36%（不出错时 +5.4 pp）；任务级挑选的收益剩 68%、41%、10%（不出错时 +7.5 pp）。<b>把失败报成成功，比把成功报成失败，代价大得多</b>：只有 30% 的前一种错误，收益剩约一半；只有 30% 的后一种，还剩 80% 到 90%。所以验证器宁可保守。<b>提议器（L3）在误判下（E18-I，实际执行）：</b>把 15% 的成败标签弄错再学方向，对原生 +10.7 pp（区间 4.4 到 17.1），保住约七成；弄错 30%：+4.4 pp（区间 −2.6 到 +11.4），和随机方向（+6.4 pp）没有区别。学出来的检测器还没做。</td></tr>
+        <tr><td><b>二 · 正式复现和预算曲线</b></td><td>在另一批任务上，预先登记，重做 L2；候选数 24 对 96</td><td>+10 pp 不是这 17 个任务的偶然；提升随预算涨到哪。</td><td><span class="tag t-warn">准备中</span> <b>E20：预先登记的确认。</b>在 16 个任务、151 个从没被任何实验用过的起点上，测“学出的偏移”和“挑出的固定 z”对原生策略。登记文本经过一次独立评审，按评审意见改了三处：分析脚本要核对每条记录确实跑在计划的起点上、来自登记的那次运行；数据不全就不分析；结论区间改成按场景族的 t 区间（更保守）。<b>看到 E18-I 的对照结果后，登记前加了一个对照臂</b>：同样大小、但与学到的方向正交的推力；并加了第三个假设“学到的方向比正交的推力好”。这一改动又做了一次独立评审（无必须改，4 处应该改，全部采纳）。现在是 4 个臂、3,775 次执行、两个 4 卡任务，登记后提交。换一批任务的复现、把候选加到 96 个，排在它后面。</td></tr>
+        <tr><td><b>三 · 搜索对提议</b></td><td>同样的执行次数下：随机的 z；24 选 1；学出方向直接采样；学出方向后再挑；多轮更新</td><td>提议的收益来自“学到了方向”，不是多试了几次。这是 System 2 → System 1 的直接检验。</td><td>第一步就是 E18-G（4 个剂量）。<span class="tag t-good">三步完成</span> E18-G：方向成立。E18-H：偏移加在新采样的噪声上，对原生 +12.0 pp。<b>E18-I（提议需要多少经验）：</b>只用 6 个候选学方向：+5.7 pp（区间 −1.5 到 +13.1）；12 个：+11.0 pp（区间 3.1 到 19.5）；24 个：+14.9 pp（区间 9.4 到 20.8）。作为参照，搜索在同样候选数下（另一种测法，事后分析）是 +4.4、+6.4、+7.5 pp。<b>对照：</b>方向随机的推力是 +6.4 pp（区间 0.9 到 11.9），所以 6 个候选学出的方向和随机方向没有区别，12 个以上才显出“学到了东西”。<b>还没做：</b>学出方向后再挑、多轮更新。</td></tr>
+        <tr><td><b>四 · 泛化层级和机制对照</b></td><td>同起点、偏 0.1 到 2 毫米、新起点、新任务；回放噪声对回放动作；噪声里的推力对直接给动作加偏置</td><td>每一层的边界在哪；好 z 的作用是不是就等于一个动作偏置。</td><td><span class="tag t-mute">排队</span> 偏移半径（E16-Z）的设计已写好，需要先给运行工具加“挪动起点”的功能，排在 E20 之后。“随机方向的推力”这个对照已做（E18-I）：它自己就比原生高 6.4 pp，原因还不清楚，E20 的正交对照臂会再测一次。回放动作对回放噪声、动作偏置对噪声推力还没设计。</td></tr>
       </tbody>
     </table>
   </div>
@@ -301,7 +301,7 @@
 <section id="p8" class="plan">
   <div class="sec-head"><div class="eyebrow">方案 8 · 定位</div><h2>题目、一句话定位、需要你定的</h2></div>
   <p><b>题目：</b>现在的题目和主问题是对得上的，建议保留：<i>Propose or Remember? When Outcome Feedback Can Be Consolidated into VLA Noise</i>。</p>
-  <p><b>一句话定位：</b>噪声是冻结 VLA 上最便宜的反馈写入位置。实例层面记得住，任务层面搜得到，单个状态上读不出；任务层面还能学成提议：把噪声的均值朝学到的方向挪一点，不搜索就比原生策略高约 12 pp（E18-H，探索性，待登记确认）。</p>
+  <p><b>一句话定位：</b>噪声是冻结 VLA 上最便宜的反馈写入位置。实例层面记得住，任务层面搜得到，单个状态上读不出；任务层面还能学成提议：把噪声的均值朝学到的方向挪一点，不搜索就比原生策略高约 12 pp（E18-H，探索性）；其中有多少是“学到的方向”的功劳，要等登记实验 E20 的对照臂。</p>
   <p><b>需要你定的：</b></p>
   <ol class="plain">
     <li>方案 6 的顺序（三 → 二 → 一 → 四）是否同意。</li>
@@ -537,16 +537,16 @@
   <div class="sec-head"><div class="eyebrow">详细材料 04 · 已有证据</div><h2>已经做完的实验说明了什么</h2></div>
   <figure>
     <div class="scroll">
-<svg class="forest" viewBox="0 0 760 808" role="img" aria-label="各实验相对原生策略的成功率差（百分点）与 95% 区间：同一起点回放约 +9 到 +11；起点平移或换起点后接近 0；ASBS 提议器接近 0。">
-<line x1="276.0" y1="8" x2="276.0" y2="774" style="stroke:var(--line)" stroke-width="1"/>
-<text x="276.0" y="790" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">−10</text>
-<line x1="365.7" y1="8" x2="365.7" y2="774" style="stroke:var(--line)" stroke-width="1.5"/>
-<text x="365.7" y="790" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">0</text>
-<line x1="455.4" y1="8" x2="455.4" y2="774" style="stroke:var(--line)" stroke-width="1"/>
-<text x="455.4" y="790" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+10</text>
-<line x1="545.1" y1="8" x2="545.1" y2="774" style="stroke:var(--line)" stroke-width="1"/>
-<text x="545.1" y="790" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+20</text>
-<text x="433.0" y="805" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">成功率差（百分点），相对原生策略</text>
+<svg class="forest" viewBox="0 0 760 868" role="img" aria-label="各实验相对原生策略的成功率差（百分点）与 95% 区间：同一起点回放约 +9 到 +11；起点平移或换起点后接近 0；ASBS 提议器接近 0。">
+<line x1="276.0" y1="8" x2="276.0" y2="834" style="stroke:var(--line)" stroke-width="1"/>
+<text x="276.0" y="850" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">−10</text>
+<line x1="365.7" y1="8" x2="365.7" y2="834" style="stroke:var(--line)" stroke-width="1.5"/>
+<text x="365.7" y="850" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">0</text>
+<line x1="455.4" y1="8" x2="455.4" y2="834" style="stroke:var(--line)" stroke-width="1"/>
+<text x="455.4" y="850" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+10</text>
+<line x1="545.1" y1="8" x2="545.1" y2="834" style="stroke:var(--line)" stroke-width="1"/>
+<text x="545.1" y="850" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+20</text>
+<text x="433.0" y="865" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">成功率差（百分点），相对原生策略</text>
 <rect x="0" y="8" width="760" height="34" style="fill:var(--surface)"/>
 <text x="0" y="30" font-size="12.5" font-weight="700" style="fill:var(--ink)">记住：同一个起点，回放存下来的噪声</text>
 <g class="fp-row" tabindex="0" role="img" aria-label="E6 · 16 个起点 × 16 种子：+10.6 个百分点，95% 区间 [0.0, +23.8]。区间下端正好是 0" data-tip="E6 · 16 个起点 × 16 种子：+10.6 个百分点，95% 区间 [0.0, +23.8]。区间下端正好是 0">
@@ -679,27 +679,41 @@
 <circle cx="473.7" cy="635.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
 <text x="760" y="639.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+12.0 <tspan style="fill:var(--ink-3)">[+6.9, +17.5]</tspan></text>
 </g>
-<rect x="0" y="650" width="760" height="34" style="fill:var(--surface)"/>
-<text x="0" y="672" font-size="12.5" font-weight="700" style="fill:var(--ink)">提议：学一个噪声提议器（ASBS），以及在线挑选的参考</text>
+<g class="fp-row" tabindex="0" role="img" aria-label="E18-I · 方向随机的同样大小的推力，对原生策略（对照）：+6.4 个百分点，95% 区间 [+0.9, +11.9]。探索性；区间不含 0" data-tip="E18-I · 方向随机的同样大小的推力，对原生策略（对照）：+6.4 个百分点，95% 区间 [+0.9, +11.9]。探索性；区间不含 0">
+<rect x="0" y="650" width="760" height="30" fill="transparent"/>
+<text x="10" y="669.0" font-size="12.5" style="fill:var(--ink-2)">E18-I · 方向随机的同样大小的推力，对原生策略（对照）</text>
+<line x1="374.0" y1="665.0" x2="472.9" y2="665.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="423.4" cy="665.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="669.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+6.4 <tspan style="fill:var(--ink-3)">[+0.9, +11.9]</tspan></text>
+</g>
+<g class="fp-row" tabindex="0" role="img" aria-label="E18-I · 学到的方向对随机方向（对照不是原生策略）：+8.5 个百分点，95% 区间 [+2.4, +14.7]。探索性；区间不含 0" data-tip="E18-I · 学到的方向对随机方向（对照不是原生策略）：+8.5 个百分点，95% 区间 [+2.4, +14.7]。探索性；区间不含 0">
+<rect x="0" y="680" width="760" height="30" fill="transparent"/>
+<text x="10" y="699.0" font-size="12.5" style="fill:var(--ink-2)">E18-I · 学到的方向对随机方向（对照不是原生策略）</text>
+<line x1="387.2" y1="695.0" x2="497.7" y2="695.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="441.6" cy="695.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="699.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+8.5 <tspan style="fill:var(--ink-3)">[+2.4, +14.7]</tspan></text>
+</g>
+<rect x="0" y="710" width="760" height="34" style="fill:var(--surface)"/>
+<text x="0" y="732" font-size="12.5" font-weight="700" style="fill:var(--ink)">提议：学一个噪声提议器（ASBS），以及在线挑选的参考</text>
 <g class="fp-row" tabindex="0" role="img" aria-label="ASBS · 留出测试 240 对：+0.06 个百分点，95% 区间 [−7.2, +7.6]。没有差别" data-tip="ASBS · 留出测试 240 对：+0.06 个百分点，95% 区间 [−7.2, +7.6]。没有差别">
-<rect x="0" y="684" width="760" height="30" fill="transparent"/>
-<text x="10" y="703.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · 留出测试 240 对</text>
-<line x1="301.4" y1="699.0" x2="433.5" y2="699.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="366.3" cy="699.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="703.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+0.06 <tspan style="fill:var(--ink-3)">[−7.2, +7.6]</tspan></text>
+<rect x="0" y="744" width="760" height="30" fill="transparent"/>
+<text x="10" y="763.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · 留出测试 240 对</text>
+<line x1="301.4" y1="759.0" x2="433.5" y2="759.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="366.3" cy="759.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="763.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+0.06 <tspan style="fill:var(--ink-3)">[−7.2, +7.6]</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="ASBS · E6+E7 重复起点：+2.2 个百分点，95% 区间 区间未记录。不显著（区间未记录）" data-tip="ASBS · E6+E7 重复起点：+2.2 个百分点，95% 区间 区间未记录。不显著（区间未记录）">
-<rect x="0" y="714" width="760" height="30" fill="transparent"/>
-<text x="10" y="733.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · E6+E7 重复起点</text>
-<circle cx="385.5" cy="729.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="733.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+2.2 <tspan style="fill:var(--ink-3)">不显著</tspan></text>
+<rect x="0" y="774" width="760" height="30" fill="transparent"/>
+<text x="10" y="793.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · E6+E7 重复起点</text>
+<circle cx="385.5" cy="789.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="793.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+2.2 <tspan style="fill:var(--ink-3)">不显著</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="R0 · 在线 4 选 1（上界参考）：+6.7 个百分点，95% 区间 [−5.2, +18.5]。60 对，功效低" data-tip="R0 · 在线 4 选 1（上界参考）：+6.7 个百分点，95% 区间 [−5.2, +18.5]。60 对，功效低">
-<rect x="0" y="744" width="760" height="30" fill="transparent"/>
-<text x="10" y="763.0" font-size="12.5" style="fill:var(--ink-2)">R0 · 在线 4 选 1（上界参考）</text>
-<line x1="319.3" y1="759.0" x2="531.3" y2="759.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="425.6" cy="759.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="763.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+6.7 <tspan style="fill:var(--ink-3)">[−5.2, +18.5]</tspan></text>
+<rect x="0" y="804" width="760" height="30" fill="transparent"/>
+<text x="10" y="823.0" font-size="12.5" style="fill:var(--ink-2)">R0 · 在线 4 选 1（上界参考）</text>
+<line x1="319.3" y1="819.0" x2="531.3" y2="819.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="425.6" cy="819.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="823.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+6.7 <tspan style="fill:var(--ink-3)">[−5.2, +18.5]</tspan></text>
 </g>
 </svg>
     </div>
@@ -795,7 +809,7 @@
     <li class="done"><span class="dot"></span><div><b>分析</b> <span class="s">· 完成，10 月 10 日 11:19Z</span><br>冻结的分析脚本只运行了一次。结论：确认有正向效果，+19.1 pp，区间 15.1 到 23.4；按任务、按场景分组算区间，结论不变（13.1 到 25.0）。</div></li>
   </ol>
   <p><b>主实验事先担心的风险没有发生：</b>登记要求至少 80 个起点、20 个任务、12 个场景通过筛选，结果才算确证性的。实际通过 126 个起点、32 个任务、23 个场景。</p>
-  <p><b>用卡记录：</b>全部在 PRO 6000 上，同时在跑的任务最多 2 个。10 月 9 日约 22 卡时；10 月 10 日是 E15 主实验（8 张卡）和 E17 的登记；10 月 11 日：E19 的前缀任务 2 张卡约 40 分钟，E18 约 25 卡时，E18-G 两个 4 卡任务（4,213 秒和 4,405 秒）约 9.6 卡时。E18-H 两个 4 卡任务（5,147 秒和 4,964 秒）约 11.2 卡时，其中约 1.6 卡时因节点被占用接近空转。</p>
+  <p><b>用卡记录：</b>全部在 PRO 6000 上，同时在跑的任务最多 2 个。10 月 9 日约 22 卡时；10 月 10 日是 E15 主实验（8 张卡）和 E17 的登记；10 月 11 日：E19 的前缀任务 2 张卡约 40 分钟，E18 约 25 卡时，E18-G 两个 4 卡任务（4,213 秒和 4,405 秒）约 9.6 卡时。E18-H 两个 4 卡任务（5,147 秒和 4,964 秒）约 11.2 卡时，其中约 1.6 卡时因节点被占用接近空转。E18-I 两个 4 卡任务各 3,044 秒，约 6.8 卡时，没有空转。</p>
 </section>
 
 <section id="decide">
@@ -816,6 +830,7 @@
     <li>推算的数字单独标“推算”，不和实测结果混在一起。</li>
   </ul>
   <ul class="log">
+    <li><time>10-11 17:24Z</time>E18-I 完成并分析（只跑一次，2,720 次执行）：原生 54.6%，24 个候选学的方向 69.5%，12 个 65.6%，6 个 60.3%，标签错 15% 时 65.3%，错 30% 时 59.0%，随机方向 61.0%。据此在登记前给 E20 加了正交方向的对照臂和第三个假设，并做了第二次独立评审。另：把 ② 的评分器换成提升树，动手之前仍排不出（0.47 到 0.55）。</li>
     <li><time>10-11 16:13Z</time>各条路上实验：E18-I 提交并在跑（2,720 次执行）；E20 的登记文本、定义和分析脚本写好，独立评审给出 2 个必须改、4 个应该改，全部采纳；验证器出错的不占卡分析完成（误判 20% 时两层收益都剩约一半，假成功比假失败贵得多）。更正：方案 2 里“成功过一次之后再来一次 76.7%”写错了，E15 回放的是试 40 次后挑出的赢家。</li>
     <li><time>10-11 15:39Z</time>E18-H 完成并分析（只跑一次）：原生 55.5%，偏移 +2 是 67.6%，+4 是 68.9%；+2 对原生 +12.0 pp（区间 6.9 到 17.5）。两个任务 15:28Z、15:29Z 结束。你的指示“几条路都需要实验来支撑”已记下，四个实验都推进。</li>
     <li><time>10-11 14:35Z</time>E18-H 提交：两个 4 卡任务（asbs-z10-r27h1、r27h2，14:01Z 和 14:03Z），3,264 次执行加 32 次检查执行；计划和分析脚本在提交前写定。前 20 分钟很慢，约 1.6 卡时接近空转，原因没查明；之后恢复到正常速度。</li>
