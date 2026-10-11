@@ -102,7 +102,7 @@
   <div class="eyebrow">ASBS 项目总览</div>
   <h1>冻结的 VLA，能不能把“这次成没成”的经验留到下一次？</h1>
   <p class="sub">论文题目：<i>Propose or Remember? When Outcome Feedback Can Be Consolidated into VLA Noise</i>。这一页先讲研究本身：研究的对象是什么、最初的想法走到了哪一步、别人做了什么；然后才是证据、实验和计划。</p>
-  <div class="meta">更新于 2026-10-11 08:03 UTC · 由 Claude（监督）维护 · 每到一个里程碑先更新本页</div>
+  <div class="meta">更新于 2026-10-11 10:44 UTC · 由 Claude（监督）维护 · 每到一个里程碑先更新本页</div>
   <nav>
     <a href="#goal">噪声 z</a><a href="#method">最初的想法</a><a href="#related">别人做了什么</a><a href="#evidence">证据</a><a href="#refine">下一步</a><a href="#now">实验</a><a href="#decide">决定与计划</a><a href="#log">更新记录</a>
   </nav>
@@ -111,10 +111,11 @@
 <div class="now">
   <h3>现在在哪（一分钟版）</h3>
   <ul>
-    <li><b>10 月 11 日：② 的结果：动手之前（第一段动作、策略内部状态）排不出哪个 z 好（0.50 到 0.55）；把开头 50 步的动作全部看完，才有一点弱信号（0.56 到 0.60）；成败标签自身是 0.63。① 的试跑有苗头但不均匀，36 个任务的正式比较正在跑（挑选阶段比推算慢，要分两次任务）。</b></li>
+    <li><b>10 月 11 日：两个探索都有结果。① 每个任务挑一个固定的 z，在没见过的起点上比原生策略高 10.1 pp（区间 4.4 到 16.0，探索性）。② 在单个状态里，动手之前排不出哪个 z 好；要把开头 50 步走完才有一点弱信号。</b></li>
     <li><b>研究的东西：</b>冻结的 VLA 每次出动作前要抽一个随机噪声 z。同一个场景，z 不同，动作指令略有不同（<span class="proj">推算</span> 每步差 1 到 2 毫米），任务有时成、有时败。我们问：成败的经验能不能存进“z 怎么选”里。详见<a href="#goal">噪声 z</a>。</li>
     <li><b>最初的想法：</b>部署时多试几个 z、挑最好的（慢，System 2）有用但贵；想用 ASBS 学一个噪声提议器，把这个能力一次蒸馏给快的策略（System 1）。<b>结果：没有显示收益</b>（+0.06 pp）。原因找到了：不执行就没有任何信号能分出好 z 和坏 z（排序准确度 0.51 到 0.53）。这是在最苛刻的设定下测的，不等于此路不通。详见<a href="#method">最初的想法</a>。</li>
     <li><b>站住的结论：</b>把赢过的 z 记下来，在完全相同的起点上回放，成功率从 57.6% 到 76.7%（+19.1 pp，区间 15.1 到 23.4，126 个起点）。但起点偏 5 毫米就没有了；在确定性的仿真里，这很接近“背答案”，能容忍多大偏差还没量。</li>
+    <li><b>新结果（10 月 11 日，探索性）：在“任务”这一层，慢功夫能变成快办法。</b>每个任务用 8 个起点、24 个候选，挑出一个固定的 z，以后每次决策都用它。在 16 个没见过的起点上，成功率 65.4%，原生策略 55.3%，高 10.1 个百分点（区间 4.4 到 16.0，17 个任务）。随便取一个固定的 z 则是 49.6%，所以起作用的是“挑”，不是“固定”。这还不是登记过的结论，需要正式复现。</li>
     <li><b>文献告诉我们的（10 月 10 日调研）：</b>有人用“每个任务一个固定 z”做成了跨起点的提升（Golden Ticket），有人在 z 的空间里在线学习做成了（DSRL）；和最初想法最像的 SVA 蒸馏的是“挑选器”而不是“提议器”。所以几句话要改口，下一步的实验也要调整。详见<a href="#related">别人做了什么</a>和<a href="#refine">下一步</a>。</li>
   </ul>
 </div>
@@ -242,6 +243,17 @@
   </div>
   <p><b>所以，“是因为不太 work 吗”：是的，在我们测的设定下没有 work，而且原因找到了。</b>不是 ASBS 这个采样器不行，而是中间那一环断了：没有任何信号能在不执行的情况下分出好 z 和坏 z，提议器没有东西可学。System 2 的能力来自“看到了后果”，而这一点恰恰蒸馏不进一个不看后果的评分器。</p>
 
+  <h3>10 月 11 日的两个探索性结果，把这件事说得更清楚了</h3>
+  <div class="two">
+    <div class="card a">
+      <h3>在“单个状态”这一层：动手之前看不出来</h3>
+      <p>把文献里说有用的条件都补上（更干净的标签、同任务内测试、策略内部的隐状态），评分器仍在 0.50 到 0.55。只有把开头 50 步执行过的动作全部看完，才有一点弱信号（0.56 到 0.60；成败标签自身是 0.63），而且是一步步长出来的。所以“看一眼候选就挑”的 System 2 没有东西可以蒸馏。</p>
+    </div>
+    <div class="card b">
+      <h3>在“任务”这一层：能走通</h3>
+      <p>慢功夫 = 每个任务花约 270 次执行，试 24 个固定的 z。快办法 = 挑出的那个 z，部署时不需要仿真、评分器或任何搜索。在没见过的起点上 +10.1 pp（区间 4.4 到 16.0）。这是最初想法的最简单形式：提议分布缩成了每个任务的一个点。下一步自然是让 ASBS 去学“好 z 的分布”，并看它能不能用到没搜索过的任务上。</p>
+    </div>
+  </div>
   <h3>是此路不通，还是我们测的条件太苛刻</h3>
   <p>对照 2025 到 2026 年发表的工作，更准确的说法是后者。已发表的成功案例几乎都满足下面几个条件，而我们的设定基本都不满足：</p>
   <div class="tbl">
@@ -332,16 +344,16 @@
   <div class="sec-head"><div class="eyebrow">04 · 已有证据</div><h2>已经做完的实验说明了什么</h2></div>
   <figure>
     <div class="scroll">
-<svg class="forest" viewBox="0 0 760 624" role="img" aria-label="各实验相对原生策略的成功率差（百分点）与 95% 区间：同一起点回放约 +9 到 +11；起点平移或换起点后接近 0；ASBS 提议器接近 0。">
-<line x1="276.0" y1="8" x2="276.0" y2="590" style="stroke:var(--line)" stroke-width="1"/>
-<text x="276.0" y="606" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">−10</text>
-<line x1="365.7" y1="8" x2="365.7" y2="590" style="stroke:var(--line)" stroke-width="1.5"/>
-<text x="365.7" y="606" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">0</text>
-<line x1="455.4" y1="8" x2="455.4" y2="590" style="stroke:var(--line)" stroke-width="1"/>
-<text x="455.4" y="606" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+10</text>
-<line x1="545.1" y1="8" x2="545.1" y2="590" style="stroke:var(--line)" stroke-width="1"/>
-<text x="545.1" y="606" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+20</text>
-<text x="433.0" y="621" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">成功率差（百分点），相对原生策略</text>
+<svg class="forest" viewBox="0 0 760 718" role="img" aria-label="各实验相对原生策略的成功率差（百分点）与 95% 区间：同一起点回放约 +9 到 +11；起点平移或换起点后接近 0；ASBS 提议器接近 0。">
+<line x1="276.0" y1="8" x2="276.0" y2="684" style="stroke:var(--line)" stroke-width="1"/>
+<text x="276.0" y="700" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">−10</text>
+<line x1="365.7" y1="8" x2="365.7" y2="684" style="stroke:var(--line)" stroke-width="1.5"/>
+<text x="365.7" y="700" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">0</text>
+<line x1="455.4" y1="8" x2="455.4" y2="684" style="stroke:var(--line)" stroke-width="1"/>
+<text x="455.4" y="700" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+10</text>
+<line x1="545.1" y1="8" x2="545.1" y2="684" style="stroke:var(--line)" stroke-width="1"/>
+<text x="545.1" y="700" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+20</text>
+<text x="433.0" y="715" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">成功率差（百分点），相对原生策略</text>
 <rect x="0" y="8" width="760" height="34" style="fill:var(--surface)"/>
 <text x="0" y="30" font-size="12.5" font-weight="700" style="fill:var(--ink)">记住：同一个起点，回放存下来的噪声</text>
 <g class="fp-row" tabindex="0" role="img" aria-label="E6 · 16 个起点 × 16 种子：+10.6 个百分点，95% 区间 [0.0, +23.8]。区间下端正好是 0" data-tip="E6 · 16 个起点 × 16 种子：+10.6 个百分点，95% 区间 [0.0, +23.8]。区间下端正好是 0">
@@ -438,31 +450,47 @@
 <text x="760" y="455.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">−0.9 <tspan style="fill:var(--ink-3)">[−4.3, +2.5]</tspan></text>
 </g>
 <rect x="0" y="466" width="760" height="34" style="fill:var(--surface)"/>
-<text x="0" y="488" font-size="12.5" font-weight="700" style="fill:var(--ink)">提议：学一个噪声提议器（ASBS），以及在线挑选的参考</text>
-<g class="fp-row" tabindex="0" role="img" aria-label="ASBS · 留出测试 240 对：+0.06 个百分点，95% 区间 [−7.2, +7.6]。没有差别" data-tip="ASBS · 留出测试 240 对：+0.06 个百分点，95% 区间 [−7.2, +7.6]。没有差别">
+<text x="0" y="488" font-size="12.5" font-weight="700" style="fill:var(--ink)">任务级固定噪声：每个任务挑一个 z，在没见过的起点上测（探索性）</text>
+<g class="fp-row" tabindex="0" role="img" aria-label="E18 · 每次决策都用同一个 z，17 个任务：+10.1 个百分点，95% 区间 [+4.4, +16.0]。探索性；区间不含 0" data-tip="E18 · 每次决策都用同一个 z，17 个任务：+10.1 个百分点，95% 区间 [+4.4, +16.0]。探索性；区间不含 0">
 <rect x="0" y="500" width="760" height="30" fill="transparent"/>
-<text x="10" y="519.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · 留出测试 240 对</text>
-<line x1="301.4" y1="515.0" x2="433.5" y2="515.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="366.3" cy="515.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="519.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+0.06 <tspan style="fill:var(--ink-3)">[−7.2, +7.6]</tspan></text>
+<text x="10" y="519.0" font-size="12.5" style="fill:var(--ink-2)">E18 · 每次决策都用同一个 z，17 个任务</text>
+<line x1="405.3" y1="515.0" x2="509.2" y2="515.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="456.4" cy="515.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="519.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+10.1 <tspan style="fill:var(--ink-3)">[+4.4, +16.0]</tspan></text>
+</g>
+<g class="fp-row" tabindex="0" role="img" aria-label="E18 · 只固定开头 10 次决策的 z：+3.9 个百分点，95% 区间 [−0.9, +9.4]。探索性；区间含 0" data-tip="E18 · 只固定开头 10 次决策的 z：+3.9 个百分点，95% 区间 [−0.9, +9.4]。探索性；区间含 0">
+<rect x="0" y="530" width="760" height="30" fill="transparent"/>
+<text x="10" y="549.0" font-size="12.5" style="fill:var(--ink-2)">E18 · 只固定开头 10 次决策的 z</text>
+<line x1="357.5" y1="545.0" x2="449.9" y2="545.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="400.3" cy="545.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="549.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+3.9 <tspan style="fill:var(--ink-3)">[−0.9, +9.4]</tspan></text>
+</g>
+<rect x="0" y="560" width="760" height="34" style="fill:var(--surface)"/>
+<text x="0" y="582" font-size="12.5" font-weight="700" style="fill:var(--ink)">提议：学一个噪声提议器（ASBS），以及在线挑选的参考</text>
+<g class="fp-row" tabindex="0" role="img" aria-label="ASBS · 留出测试 240 对：+0.06 个百分点，95% 区间 [−7.2, +7.6]。没有差别" data-tip="ASBS · 留出测试 240 对：+0.06 个百分点，95% 区间 [−7.2, +7.6]。没有差别">
+<rect x="0" y="594" width="760" height="30" fill="transparent"/>
+<text x="10" y="613.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · 留出测试 240 对</text>
+<line x1="301.4" y1="609.0" x2="433.5" y2="609.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="366.3" cy="609.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="613.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+0.06 <tspan style="fill:var(--ink-3)">[−7.2, +7.6]</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="ASBS · E6+E7 重复起点：+2.2 个百分点，95% 区间 区间未记录。不显著（区间未记录）" data-tip="ASBS · E6+E7 重复起点：+2.2 个百分点，95% 区间 区间未记录。不显著（区间未记录）">
-<rect x="0" y="530" width="760" height="30" fill="transparent"/>
-<text x="10" y="549.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · E6+E7 重复起点</text>
-<circle cx="385.5" cy="545.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="549.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+2.2 <tspan style="fill:var(--ink-3)">不显著</tspan></text>
+<rect x="0" y="624" width="760" height="30" fill="transparent"/>
+<text x="10" y="643.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · E6+E7 重复起点</text>
+<circle cx="385.5" cy="639.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="643.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+2.2 <tspan style="fill:var(--ink-3)">不显著</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="R0 · 在线 4 选 1（上界参考）：+6.7 个百分点，95% 区间 [−5.2, +18.5]。60 对，功效低" data-tip="R0 · 在线 4 选 1（上界参考）：+6.7 个百分点，95% 区间 [−5.2, +18.5]。60 对，功效低">
-<rect x="0" y="560" width="760" height="30" fill="transparent"/>
-<text x="10" y="579.0" font-size="12.5" style="fill:var(--ink-2)">R0 · 在线 4 选 1（上界参考）</text>
-<line x1="319.3" y1="575.0" x2="531.3" y2="575.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="425.6" cy="575.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="579.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+6.7 <tspan style="fill:var(--ink-3)">[−5.2, +18.5]</tspan></text>
+<rect x="0" y="654" width="760" height="30" fill="transparent"/>
+<text x="10" y="673.0" font-size="12.5" style="fill:var(--ink-2)">R0 · 在线 4 选 1（上界参考）</text>
+<line x1="319.3" y1="669.0" x2="531.3" y2="669.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="425.6" cy="669.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="673.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+6.7 <tspan style="fill:var(--ink-3)">[−5.2, +18.5]</tspan></text>
 </g>
 </svg>
     </div>
     <div class="legend"><span><i class="on"></i>登记的检验显著，区间不含 0</span><span><i></i>区间含 0，或没有做检验</span><span>横线是 95% 区间</span></div>
-    <figcaption>每一行是一个最终的、预先登记的结果：相对原生策略，成功率高了多少个百分点。上面一组全部为正，E15 是其中规模最大的（+19.1）；起点一变（中间一组）就回到 0 附近；ASBS 提议器（下面一组）也在 0 附近。ASBS 留出测试的区间取自 Codex agent 的核对报告。</figcaption>
+    <figcaption>每一行是一个最终的、预先登记的结果：相对原生策略，成功率高了多少个百分点。上面一组全部为正，E15 是其中规模最大的（+19.1）；空心点的第三组是 10 月 11 日的探索性结果，没有登记；起点一变（中间一组）就回到 0 附近；ASBS 提议器（下面一组）也在 0 附近。ASBS 留出测试的区间取自 Codex agent 的核对报告。</figcaption>
   </figure>
 
   <div class="tbl">
@@ -477,11 +505,13 @@
         <tr><td><b>留出测试、E6+E7</b></td><td>ASBS 提议器比原生策略好吗？</td><td><span class="tag t-bad">没有差别</span> 留出测试 +0.06 pp；重复起点上 +2.2 pp，不显著。</td></tr>
         <tr><td><b>评分器诊断</b></td><td>评分器能在同一状态里分出好坏噪声吗？</td><td><span class="tag t-bad">基本不能</span> 准确度约 0.53，试过的最好特征是 0.58，都不到预设的 0.60。这是路线 A 没效果的直接原因。</td></tr>
         <tr><td><b>E17</b><br><span class="meta">10 月 10 日</span></td><td>在任务开头，能不能事先看出 8 个候选噪声里哪个好？</td><td><span class="tag t-bad">看不出来</span> 只看“策略给出的第一段动作”的评分器，在没见过的场景上排序准确度 0.51（区间 0.43 到 0.58，置换检验 p = 0.39；预设门槛 0.60）。两个不用训练的打分是 0.49 和 0.48。区间上端 0.58 高于 0.55，所以只能说“没看出来”，不能说“肯定排不出来”。<br>同一批数据上，“记住一次成功”是有信息的：成功过一次的噪声再跑一次，比随机候选多成功 5.4 pp（区间 2.3 到 9.2，全部 306 个起点）。</td></tr>
+        <tr><td><b>E18</b><br><span class="meta">10 月 11 日 · 探索性</span></td><td>每个任务挑一个固定的 z，在没见过的起点上比原生策略好吗？</td><td><span class="tag t-warn">好，+10.1 pp（探索性）</span> 17 个任务、各 16 个没用过的起点：挑出的 z 65.4%，原生 55.3%，区间 4.4 到 16.0；12 个任务变好，4 个变差，1 个不变；三个任务集都是正的（+8 到 +12）。随便取的固定 z 是 49.6%（比原生低 5.7 pp，区间含 0）：起作用的是挑选。另一种做法（只固定开头 10 次决策的 z，候选只有 8 个）+3.9 pp，区间含 0。<br><b>要注意的范围：</b>方案在执行前写定、分析只跑一次，但用的是轻量工具，不是登记实验；36 个任务里只有 17 个进入比较，其余 18 个原生策略已接近 100%（或为 0），没有提升空间，1 个任务有一个起点没通过复位检查；挑选时的成功率是 81.6%，到新起点上是 65.4%，说明挑选有“赢家偏高”，真实水平以新起点为准。</td></tr>
+        <tr><td><b>E19</b><br><span class="meta">10 月 11 日 · 探索性</span></td><td>把条件放宽，评分器能排出好坏吗？往前看几步才看得出来？</td><td><span class="tag t-bad">动手之前不能</span> 第一段动作 0.50 到 0.52，策略内部状态 0.51 到 0.55，执行 10 次决策后到达的状态 0.48 到 0.55；只有开头 50 步执行过的全部动作有弱信号，0.56 到 0.60（成败标签自身 0.63）。</td></tr>
         <tr><td><b>R0</b></td><td>如果允许在线试 4 个噪声挑最好的，上限有多高？</td><td><span class="tag t-mute">+6.7 pp，不显著</span> 只有 60 对，说明不了问题。</td></tr>
       </tbody>
     </table>
   </div>
-  <p><b>一句话：</b>成败经验能固化成“记忆”，在一模一样的起点上效果明显（E15：+19 pp）；固化成“提议器”或“评分器”，三次检验（留出测试、评分器诊断、E17）都没有证据。</p>
+  <p><b>一句话：</b>成败经验能固化成“记忆”，在一模一样的起点上效果明显（E15：+19 pp）；固化成“按状态挑 z 的评分器或提议器”，几次检验都没有证据；固化成“每个任务一个固定的 z”，在没见过的起点上有 +10 pp 的探索性结果（E18），需要正式复现。</p>
 </section>
 
 <section id="refine">
@@ -492,7 +522,7 @@
     <table>
       <thead><tr><th>候选实验</th><th>回答什么</th><th>为什么值得</th><th>代价</th></tr></thead>
       <tbody>
-        <tr><td><b>① 任务级固定噪声</b><br><span class="meta">Golden Ticket 式对照，拟编号 E18</span></td><td>给每个任务找一个固定的 z，在没参与挑选的新起点上还有效吗？</td><td>这是离“换了起点也更好”最近的一步，也就是离你要的“全面优于 baseline”最近的一步。文献在别的策略上报告了提升；在 π0.5 和我们的任务上没人测过。也是审稿人必问的对照。</td><td>设计草稿已写好（只是设计，没有动卡）：36 个任务，每个任务试 32 个固定的 z，在 16 个起点上挑出最好的，再到另外 16 个从没用过的起点上和原生策略比；同时比一个“随便挑的固定 z”，看“固定”本身有没有作用。<span class="proj">推算</span> 约 1 万次执行，两次 8 卡任务（约 40 卡时），之前先用约 40 分钟试跑定参数。原论文每个任务搜了约 1,400 个，我们的预算小得多，这一点会写明。<br><b>试跑结果（探索性；4 个任务，1,040 次执行）：有苗头，但不是每个任务都有。固定的 z 之间有好坏之分（p = 0.0002），主要来自 1 个任务（用一半起点挑出的 z，在另一半起点上比原生高 23.6 pp）；“固定”本身平均比原生低 3.3 pp（不显著），有 1 个任务低了 15 pp。<br><b>正式比较（运行中，方案在任何执行之前写定）：</b>36 个任务，每个任务用 8 个起点挑，再到 16 个没用过的起点上和原生策略比。两种做法都比：每次决策都用同一个 z（论文的做法），和只固定开头 10 次决策的 z（E15 结果的任务级版本）。第一个任务（挑选，8 张卡，9,792 次执行，<span class="proj">推算</span> 2 小时多）已提交；跑完后按写定的规则选出每个任务的 z，再提交第二个任务（比较）。</b></td></tr>
+        <tr><td><b>① 任务级固定噪声</b><br><span class="meta">Golden Ticket 式对照，拟编号 E18</span></td><td>给每个任务找一个固定的 z，在没参与挑选的新起点上还有效吗？</td><td>这是离“换了起点也更好”最近的一步，也就是离你要的“全面优于 baseline”最近的一步。文献在别的策略上报告了提升；在 π0.5 和我们的任务上没人测过。也是审稿人必问的对照。</td><td>设计草稿已写好（只是设计，没有动卡）：36 个任务，每个任务试 32 个固定的 z，在 16 个起点上挑出最好的，再到另外 16 个从没用过的起点上和原生策略比；同时比一个“随便挑的固定 z”，看“固定”本身有没有作用。<span class="proj">推算</span> 约 1 万次执行，两次 8 卡任务（约 40 卡时），之前先用约 40 分钟试跑定参数。原论文每个任务搜了约 1,400 个，我们的预算小得多，这一点会写明。<br><b><b>结果（探索性；方案在执行前写定，分析只跑一次）：</b>挑出的固定 z 在没见过的起点上 65.4%，原生策略 55.3%，高 10.1 pp（区间 4.4 到 16.0；17 个任务 × 16 个起点）。随便取的固定 z 49.6%。只固定开头 10 次决策的做法 +3.9 pp（区间含 0）。<br>过程：试跑（4 个任务）看到苗头后，在 36 个任务上做了挑选（8 张卡 2.5 小时，9,816 次执行）和比较（4 张卡 1.25 小时，2,184 次执行）。18 个任务因为原生策略已接近 100% 或为 0 没有进入比较。挑选任务一次跑完，没有续跑；一共约 25 卡时。<br>下一步：做一次预先登记的正式复现；并看“搜索预算加大，提升还会不会涨”。</b></td></tr>
         <tr><td><b>② 排序信号复测</b><br><span class="meta">在发表工作成立的条件下再测一次</span></td><td>每个候选跑 8 次以上、在同一批任务内划分、用动作专家的内部状态做特征、只看关键状态：这时评分器能排出好坏吗？</td><td>直接回答“System 2 → System 1 还有没有东西可蒸馏”。能排，就换老师信号、改成在线迭代，重做 ASBS 提议器；还是排不出，就是一个更强、更一般的负结果。</td><td><span class="proj">推算</span> 一到两次 8 卡任务，加 CPU 分析。<br><b>两步都做完了（探索性；分析方案写在算数之前）。排序准确度，瞎猜是 0.5，预设的“有用”门槛是 0.60，成败标签自身能达到 0.63：<br>· 只看第一段动作，标签换成 6 次重跑的成败：0.50（换场景测）、0.52（同任务内测）。标签更干净没有用。<br>· 动手之前策略内部的隐状态（DiVeR 用的那种特征）：0.51 到 0.55。<br>· 执行 1、2、5、10 次决策后到达的状态（末端位置、夹爪、关节、被操作物体移动多少）：0.48 到 0.55。<br>· <b>50 步里执行过的全部动作：0.56 到 0.60</b>（四个数里三个 p ≤ 0.012；同任务内测是 0.60，换场景测是 0.56）。这是唯一出现信号的地方。<br><b>含义：</b>z 的“好坏”要等开头一整段动作都执行出来才开始看得出一点，而且只是弱信号；在动手之前（第一段动作、内部状态）完全看不出来。所以“动手前看一眼就挑”的评分器学不到东西，而“先（真实或想象地）走 50 步再判断”才有一点可能。一共比较了 28 个数、没有做多重校正，0.56 到 0.60 这个信号还需要单独复核。<br><b>信号是一步步长出来的</b>（看到上面结果之后补算的，事后分析）：只看前 1 次决策执行的动作是 0.50 到 0.53，前 2 次 0.51 到 0.56，前 5 次 0.52 到 0.57，前 10 次 0.55 到 0.60。这和 E15 的结果对得上：回放 1、5、10 次决策的 z，收益是 +5.9、+10.8、+19.1 pp。成败不是开头某一步定下的，而是开头一段动作累积出来的。</b></td></tr>
         <tr><td><b>③ 记忆的有效半径</b><br><span class="meta">E16，设计已完成，代码写了一半，暂停中</span></td><td>起点偏 0.1、0.5、2 毫米，回放还剩多少收益？</td><td>回答“是不是只在背答案”。调研后准备加一个对照：回放动作序列和回放噪声，谁更耐偏差。</td><td>一次 8 卡任务，约 2 小时。</td></tr>
         <tr><td><b>④ 用学出来的成功检测器重试</b><br><span class="meta">对接智能体方向</span></td><td>把“能看到真实结果”换成一个真实的检测器，57.6% → 91.6% 还剩多少？</td><td>把上限变成一个系统真能拿到的数，也给智能体式重试提供“只换 z”的对照。</td><td>主要是检测器的推理计算，不需要新的机器人执行。</td></tr>
@@ -558,9 +588,9 @@
   <div class="sec-head"><div class="eyebrow">07 · 决定与计划</div><h2>你定了什么，我接下来按什么顺序做</h2></div>
   <div class="ask">
     <div><b>你的决定（10 月 10 日）</b><span>实验继续推进；可用的机器都可以用，也可以提交训练任务，但不能浪费：每个任务要把卡用满，不多提。实验过程中要根据反馈继续完善方案。共享服务器的磁盘和环境问题由我清理。</span></div>
-    <div><b>本阶段计划</b><span><ol class="plain"><li><b>进行中：</b>① 任务级固定噪声的小规模试跑（2 张卡约 1 小时）。</li><li><b>进行中：</b>② 排序信号复测的第一步，用 E15 已有数据，不占卡。</li><li>两个都是探索：结果标明“探索性”，看到苗头再做正式的、预先登记的实验。</li><li>暂不做：③ 记忆的有效半径（设计已写好），④ 用成功检测器重试。</li><li>每做一个实验之前，先查这一方向最新的论文，并把最接近的工作写在这一页上。</li></ol></span></div>
+    <div><b>本阶段计划</b><span><ol class="plain"><li><b>已完成（10 月 11 日，探索性）：</b>① 任务级固定噪声：没见过的起点上 +10.1 pp。② 评分器：动手之前排不出来，走完 50 步才有弱信号。</li><li><b>下一步：</b>① 的正式复现（预先登记，用正式流程），因为这是第一个对没见过的起点也有效的结果。</li><li>用已有的挑选数据（不占卡）看：候选从 6 个加到 24 个，提升涨多少；据此决定要不要加大搜索。</li><li>把最初的想法接回来：让 ASBS 学“好 z 的分布”，看能不能用到没搜索过的任务上。先写设计，查最新文献。</li><li>暂不做：③ 记忆的有效半径（设计已写好），④ 用成功检测器重试。</li></ol></span></div>
     <div><b>用卡原则</b><span>同一时间我们在排队或运行的任务最多 2 个；不让任务在容器里空等；一个任务结束、结果看过，再提下一个。每次启动前在这里写明用多少卡、多久、为了回答什么。</span></div>
-    <div><b>仍需你定的</b><span>1. 论文的主线：按现在的证据，最初的“System 2 → System 1 蒸馏”是一个查明了原因的负结果，“记忆”是一个有边界的正结果。是按这个写，还是等 ① 和 ② 的结果再定？我建议等。2. 集群 B 数据盘上 7 月旧阶段的 rollout 数据（81 GB），删掉或迁走需要你点头。</span></div>
+    <div><b>仍需你定的</b><span>1. ① 的结果是探索性的。我建议下一步做一次预先登记的正式复现；它需要新的起点（现有任务的 50 个起点基本用完了），所以要么生成新的起点，要么换一批任务。你倾向哪种，或者先加大搜索预算看上限？2. 论文主线：现在有了“记忆”（同一起点 +19 pp）和“任务级固定噪声”（没见过的起点 +10 pp，待复现）两个正结果，加上“按状态的评分器/提议器不行、且查明了原因”。是否按这三块来写？3. 集群 B 数据盘上 7 月旧阶段的 rollout 数据（81 GB），删掉或迁走需要你点头。</span></div>
   </div>
 </section>
 
@@ -572,6 +602,7 @@
     <li>推算的数字单独标“推算”，不和实测结果混在一起。</li>
   </ul>
   <ul class="log">
+    <li><time>10-11 10:44Z</time><b>① 的结果（探索性）：</b>每个任务挑一个固定的 z，在 16 个没见过的起点上 65.4%，原生 55.3%，+10.1 pp（区间 4.4 到 16.0，17 个任务）；随便取的固定 z 49.6%；只固定开头 10 次决策 +3.9 pp（区间含 0）。方案事先写定，分析只跑一次。共约 25 卡时。</li>
     <li><time>10-11 08:03Z</time>② 补算了一条曲线（事后分析）：评分器看的执行动作越长，排序越准，前 1、2、5、10 次决策依次约为 0.52、0.54、0.55、0.57；和 E15 里“回放越长收益越大”一致。</li>
     <li><time>10-11 07:33Z</time>② 第二步的最后一组数出来了，并更正上一条：把 50 步执行过的动作全部交给评分器，是 0.56 到 0.60（三个数 p ≤ 0.012），是唯一出现信号的地方；到达状态的粗略特征和动手前的特征仍在 0.48 到 0.55。</li>
     <li><time>10-11 06:38Z</time>② 第二步结果（探索性）：往前看 1、2、5、10 次决策之后的状态，或看动手之前的隐状态，评分器都在 0.48 到 0.55，没有一个达到 0.60。① 的正式比较：挑选阶段的 8 卡任务已提交。</li>
