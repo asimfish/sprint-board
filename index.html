@@ -109,7 +109,7 @@
   <div class="eyebrow">ASBS 项目总览</div>
   <h1>冻结的 VLA，能不能把“这次成没成”的经验留到下一次？</h1>
   <p class="sub">论文题目：<i>Propose or Remember? When Outcome Feedback Can Be Consolidated into VLA Noise</i>。这一页前半是方案（先回答问题，再讲调研、证据、主问题、方法图、做过的实验、证据边界、下一阶段的三条工作线、论文结构、ASBS 的位置），后半是详细材料。</p>
-  <div class="meta">更新于 2026-10-12 20:37 UTC · 由 Claude（监督）维护 · 每到一个里程碑先更新本页</div>
+  <div class="meta">更新于 2026-10-12 22:40 UTC · 由 Claude（监督）维护 · 每到一个里程碑先更新本页</div>
   <nav>
     <a href="#p0">0 先回答</a><a href="#p1">1 调研</a><a href="#p2">2 证据</a><a href="#p3">3 部件</a><a href="#p4">4 主问题</a><a href="#p5">5 方法图</a><a href="#p6">6 要补的实验</a><a href="#p7">7 证据边界</a><a href="#p8">8 下一阶段</a><a href="#p9">9 论文结构</a><a href="#p10">10 ASBS</a><a href="#goal">详细：噪声 z</a><a href="#related">文献表</a><a href="#evidence">证据图</a><a href="#refine">①② 的数字</a><a href="#now">实验台账</a><a href="#log">更新记录</a>
   </nav>
@@ -118,7 +118,7 @@
 <div class="now">
   <h3>现在在哪</h3>
   <ul>
-    <li><b>10 月 12 日：<b>E22-M（已登记）搜索完成，检验任务在跑</b>，预计 22:40Z 前后结束，分析只跑一次。探索性副结果：12 个原生全败的任务上，换固定噪声 2,304 次一次都没成功。<b>定位：</b>“噪声倾斜等于策略改进”的框架已被发表，NSL 还是在冻结 π0.5 加 LIBERO 上做的，而且它的噪声策略是按状态的；我们站得住的是低预算、预先登记的测量结果（同一起点的记忆 +19.1 pp；任务级偏移 +13.0 pp；动手前按状态挑不出来），以及没人占的“可辨认性”问题。</b></li>
+    <li><b>10 月 12 日：<b>E22-M（已登记）四个假设全部确认</b>：LIBERO-90 的 17 个任务、272 个没用过的起点上，学出的偏移比原生高 +12.8 pp（95 % 区间 3.2 到 22.3）；顺着方向推比逆着推高 +21.6 pp；比正交推力高 +11.2 pp（这一条证据较弱）；搜索次数多更好。E23（深采样，ASBS 的第一道关）在跑。<b>定位：</b>框架已被 NSL 发表，它的噪声策略是按状态的；我们站得住的是低预算、预先登记的测量结果，以及没人占的“可辨认性”问题。</b></li>
     <li>这一页分两部分：前面是<b>方案</b>（0 到 8 节，10 月 11 日按你的要求重新整理），后面是<b>详细材料</b>（每个实验的数字、台账、更新记录）。</li>
   </ul>
 </div>
@@ -307,9 +307,9 @@
     <table>
       <thead><tr><th>工作线</th><th>要回答什么</th><th>怎么做</th><th>现在的状态</th></tr></thead>
       <tbody>
-        <tr><td><b>一 · 更全面的基准</b></td><td>三点想法换一个策略、换一个基准还成立吗？现在只有一个策略、一个基准，而且其中只有约 26 个任务单元有改进空间。</td><td>先查清我们手头能跑哪些“策略 + 基准”组合（要求：动作头是流匹配或扩散、能注入噪声、仿真里有成败信号、原生成功率不贴着 0 或 100%）；选一到两个；在每个上面把三件事各测一次：起点重现时的记忆、任务级提议（预先登记）、动手前的评分器。</td><td><span class="tag t-good">调研完成</span> 报告在 <code>bench_survey/BENCH_SURVEY.md</code>，每条事实标了已核对或推断。按“增加的广度 ÷ 工作量”排序，前三个：<br><b>① LIBERO-90 和另外 30 组扰动套件，同一个策略。</b>这 90 + 300 个任务已经装在我们的环境里，不用下载；现在的策略没在 LIBERO-90 上训练过，成功率应该不贴着满分；DSRL 和 Golden Ticket 的 π0 实验也是在 LIBERO-90 上做的。只需给运行工具加一张任务表，约 1 天。先做原生策略筛查。<br><b>② 第二个策略：官方的 π0（LIBERO 版）。</b>同一套代码，公开权重 12 GB，转换后约 7 GB；它比 π0.5 弱，留出的改进空间更大，而且和四篇相关工作可比。约 2 到 4 天。<br><b>③ 第二个策略家族：SmolVLA（LIBERO 版）。</b>只有约 1 GB，是 Golden Ticket 论文用的策略，对方代码和找到的噪声都公开，可以直接对照。约 3 到 5 天。<br>暂不做：SimplerEnv、RoboCasa、RoboTwin 的成功率分布最合适，但都要装新的仿真器，各 1 到 2 周。<br>两个之前的假设被纠正：任务容器 10 月 3 日能访问外网；10 GB 只是共享存储的限制，任务容器本地盘有几百 GB。<br><b>① 的结果（10 月 12 日 14:43Z，原生策略筛查，只看现状，不含任何方法）：</b><span class="tag t-good">完成</span> LIBERO-90 的 90 个任务，每个 8 个起点 × 2 次。<b>81 个任务完整测完，原生成功率 27.6 %</b>（1,296 次执行）。两极分化很明显：46 个任务 16 次全败，12 个任务 16 次全成；<b>18 个任务落在“有提升空间”的区间（成功 2 到 14 次），分布在 12 个场景</b>；另有 4 个任务只成 1 次，1 个成 15 次。9 个任务不计入：两个厨房场景里仿真复位两次结果不一致（一个场景的 5 个任务全部如此），按事先写好的规则不算。<br><b>含义：</b>这个策略没在 LIBERO-90 上训练过，一半以上的任务它根本不会；能检验“改噪声有没有用”的是这 18 个任务，数量和 E20 的 16 个相当，但全是策略没见过的任务。<br><b>下一步：E22-M，LIBERO-90 上预先登记的完整流程</b> <span class="tag t-good">已登记，10 月 12 日 18:32:53Z</span> 登记文件的 sha256：<code>827bfd7c2b8612a434daea61c6e8484c628d9c235d611d6102566328de1535c0</code>（在搜索任务提交之前公布在这里）。复审结论“可以登记”，评审自己重写判定规则做了模拟：没有效果时被误判为“确认”的比例最高 2.57 %（名义 2.5 %）。把握：如果平移的效果和 E20 一样大（+13 pp），主假设被确认的概率约 84 %；如果只有 +10 pp，约 63 %。“比随机方向好”和“搜索次数多更好”两条把握不足（44 % 和 36 %），不确认时不会读成“没有区别”。<br>做法：每个任务 24 个固定噪声 × 8 个起点做搜索（192 次执行）→ 闭式拟合出一个方向 → 在 16 个从未用过的起点上检验。整套流程（连同拟合和分析的代码）在搜索开跑之前一次登记。<br>独立评审的结论是“修改后可登记”，1 个必须改、10 个建议，我全部做了裁定。影响设计的三点：<br>（1）<b>任务数从 18 变 17（11 个场景）。</b>有一个任务所在的场景，筛查时仿真复位不稳定；每个起点连续跑 20 多次几乎必然丢数据，所以按“看状态记录、不看成败”的规则去掉。<br>（2）<b>加一个对照：逆着拟合方向推。</b>E20 没能确认“起作用的是拟合出的方向”。如果随便推一下都有用，顺着推和逆着推应该一样；这个对比的差距预计是“比随机方向好”的两倍左右，更容易看清。原来的随机正交方向对照保留。<br>（3）<b>检验顺序事先定死：</b>先看平移比原生好不好；成立才看顺着推是否比逆着推好；再成立才看“比随机方向好”和“搜索次数多更好”。主问题只有一个，所以不再把显著性水平平分给三个假设（E20 是平分的）；每个成立的结论同时给出两种区间。<br>预计：搜索约 3,300 次执行（一个 4 卡任务，约 2 小时），检验 6,800 次（两个 4 卡任务），合计约 22 卡时。另有 12 个全败任务的探索性搜索（一个 4 卡任务），不在登记之内。<br><b>进度（10 月 12 日 20:36Z）：</b><span class="tag t-warn">检验任务在跑</span> 搜索任务完整结束：3,280 次执行全部完成，没有丢失，6,282 秒。17 个任务都拟合出了方向（没有“拟合不出”的任务）。检验计划已冻结（20:28:32Z），两个检验任务 20:31Z 和 20:35Z 提交，共 6,800 次执行，预计 22:40Z 前后结束；之后合并，登记的分析只跑一次。在那之前谁也不看检验结果。<br><b>探索性副任务的结果（不在登记之内）：</b>在 12 个原生 16 次全败的任务上，同样的 24 个固定噪声 × 8 个起点，<b>2,304 次执行一次都没成功</b>。读法：策略完全不会的任务，随机换固定噪声救不回来；改噪声起作用的范围是“策略本来有时能成”的任务。这是探索性的，只说明这 24 个随机噪声不行，不说明任何噪声都不行。<br><b>② π0 的准备：</b><span class="tag t-good">接入代码已写好并通过本地测试</span>（还没有在真模型上跑过）。发现一个容易漏的细节：π0 的 LIBERO 版输出要多做一步“相对动作转绝对动作”，漏了不报错但动作是错的；第一个 π0 任务先在它训练过的四个套件上跑 320 次验收（公开成绩 82 % 到 98 %），总成功率不到 80 % 就不读后面的结果。<b>权重下载这一步没有执行，是我的配置错误：</b>我给它指定的临时目录放在了目标目录里面，脚本的安全检查一开始就拒绝了，所以连“平台能不能连上官方存储”都还没探测到。没有因此多占卡（它是搭在别的任务里的）。目录已改正，下一个探索性任务（E23 的第一个任务）里重做。</td></tr>
+        <tr><td><b>一 · 更全面的基准</b></td><td>三点想法换一个策略、换一个基准还成立吗？现在只有一个策略、一个基准，而且其中只有约 26 个任务单元有改进空间。</td><td>先查清我们手头能跑哪些“策略 + 基准”组合（要求：动作头是流匹配或扩散、能注入噪声、仿真里有成败信号、原生成功率不贴着 0 或 100%）；选一到两个；在每个上面把三件事各测一次：起点重现时的记忆、任务级提议（预先登记）、动手前的评分器。</td><td><span class="tag t-good">调研完成</span> 报告在 <code>bench_survey/BENCH_SURVEY.md</code>，每条事实标了已核对或推断。按“增加的广度 ÷ 工作量”排序，前三个：<br><b>① LIBERO-90 和另外 30 组扰动套件，同一个策略。</b>这 90 + 300 个任务已经装在我们的环境里，不用下载；现在的策略没在 LIBERO-90 上训练过，成功率应该不贴着满分；DSRL 和 Golden Ticket 的 π0 实验也是在 LIBERO-90 上做的。只需给运行工具加一张任务表，约 1 天。先做原生策略筛查。<br><b>② 第二个策略：官方的 π0（LIBERO 版）。</b>同一套代码，公开权重 12 GB，转换后约 7 GB；它比 π0.5 弱，留出的改进空间更大，而且和四篇相关工作可比。约 2 到 4 天。<br><b>③ 第二个策略家族：SmolVLA（LIBERO 版）。</b>只有约 1 GB，是 Golden Ticket 论文用的策略，对方代码和找到的噪声都公开，可以直接对照。约 3 到 5 天。<br>暂不做：SimplerEnv、RoboCasa、RoboTwin 的成功率分布最合适，但都要装新的仿真器，各 1 到 2 周。<br>两个之前的假设被纠正：任务容器 10 月 3 日能访问外网；10 GB 只是共享存储的限制，任务容器本地盘有几百 GB。<br><b>① 的结果（10 月 12 日 14:43Z，原生策略筛查，只看现状，不含任何方法）：</b><span class="tag t-good">完成</span> LIBERO-90 的 90 个任务，每个 8 个起点 × 2 次。<b>81 个任务完整测完，原生成功率 27.6 %</b>（1,296 次执行）。两极分化很明显：46 个任务 16 次全败，12 个任务 16 次全成；<b>18 个任务落在“有提升空间”的区间（成功 2 到 14 次），分布在 12 个场景</b>；另有 4 个任务只成 1 次，1 个成 15 次。9 个任务不计入：两个厨房场景里仿真复位两次结果不一致（一个场景的 5 个任务全部如此），按事先写好的规则不算。<br><b>含义：</b>这个策略没在 LIBERO-90 上训练过，一半以上的任务它根本不会；能检验“改噪声有没有用”的是这 18 个任务，数量和 E20 的 16 个相当，但全是策略没见过的任务。<br><b>下一步：E22-M，LIBERO-90 上预先登记的完整流程</b> <span class="tag t-good">已登记，10 月 12 日 18:32:53Z</span> 登记文件的 sha256：<code>827bfd7c2b8612a434daea61c6e8484c628d9c235d611d6102566328de1535c0</code>（在搜索任务提交之前公布在这里）。复审结论“可以登记”，评审自己重写判定规则做了模拟：没有效果时被误判为“确认”的比例最高 2.57 %（名义 2.5 %）。把握：如果平移的效果和 E20 一样大（+13 pp），主假设被确认的概率约 84 %；如果只有 +10 pp，约 63 %。“比随机方向好”和“搜索次数多更好”两条把握不足（44 % 和 36 %），不确认时不会读成“没有区别”。<br>做法：每个任务 24 个固定噪声 × 8 个起点做搜索（192 次执行）→ 闭式拟合出一个方向 → 在 16 个从未用过的起点上检验。整套流程（连同拟合和分析的代码）在搜索开跑之前一次登记。<br>独立评审的结论是“修改后可登记”，1 个必须改、10 个建议，我全部做了裁定。影响设计的三点：<br>（1）<b>任务数从 18 变 17（11 个场景）。</b>有一个任务所在的场景，筛查时仿真复位不稳定；每个起点连续跑 20 多次几乎必然丢数据，所以按“看状态记录、不看成败”的规则去掉。<br>（2）<b>加一个对照：逆着拟合方向推。</b>E20 没能确认“起作用的是拟合出的方向”。如果随便推一下都有用，顺着推和逆着推应该一样；这个对比的差距预计是“比随机方向好”的两倍左右，更容易看清。原来的随机正交方向对照保留。<br>（3）<b>检验顺序事先定死：</b>先看平移比原生好不好；成立才看顺着推是否比逆着推好；再成立才看“比随机方向好”和“搜索次数多更好”。主问题只有一个，所以不再把显著性水平平分给三个假设（E20 是平分的）；每个成立的结论同时给出两种区间。<br>预计：搜索约 3,300 次执行（一个 4 卡任务，约 2 小时），检验 6,800 次（两个 4 卡任务），合计约 22 卡时。另有 12 个全败任务的探索性搜索（一个 4 卡任务），不在登记之内。<br><b>E22-M 的结果（登记的分析只跑了一次，10 月 12 日 22:31Z）：四个假设全部确认。</b> <span class="tag t-good">已登记：确认</span><br>数据完整：6,800 次执行全部完成，272 个起点没有一个复位失败，没有丢失，所以“把丢失的都算成对假设不利”的敏感性分析和主分析数字相同。<br>各组的成功率（所有起点合在一起）：原生 53.4 %；<b>学出的偏移 68.8 %</b>；逆着方向推 44.0 %；正交方向推 55.3 %；只用 12 个噪声拟合 67.5 %；只用 6 个 64.8 %；挑出的固定噪声 68.4 %。<br>下面的差值都是“先按场景求平均再比”，括号里是 95 % 区间：<br>① <b>学出的偏移比原生好：+12.8 pp（3.2 到 22.3）</b>。17 个任务里 14 个升、3 个降。按 E20 那种更严的区间是 0.5 到 25.1，仍不含 0。和 E20 的 +13.0 几乎一样大，但这次是在另一个套件、从搜索到检验整套流程预先登记的。<br>② <b>方向的正负是认出来的：顺着推比逆着推高 +21.6 pp（9.9 到 33.3）</b>；15 个任务升、0 个降。逆着推比原生还低 8.8 pp（描述）。所以不是“随便推一下都有用”。<br>③ <b>学到的方向比同样大小的正交推力好：+11.2 pp（1.5 到 21.0）</b>。这是 E20 没能确认的那一条，这次按登记的规则确认了；但要如实说，更严的两种区间（−0.2 到 22.7 和 −1.3 到 23.8）含 0，所以这一条的证据比前两条弱。正交推力自己对原生是 +1.5 pp（−2.3 到 5.4），看不出作用。<br>④ <b>搜索次数多更好：用 24 个噪声比只用 6 个高 +4.6 pp</b>（登记的统计量是它的一半，+2.3，97.5 % 区间 0.2 到 4.4）。用 6、12、24 个噪声拟合，对原生分别是 +8.1、+11.1、+12.8 pp（后两个数是描述）。<br><b>要如实说的几点：</b>各场景差别很大（从 −1.6 到 +46.9 pp），有一个场景特别高；17 个任务里有 6 个是“训练过的长任务里的一步”，它们平均只升 +6.8 pp，其余 11 个平均升 +20.2 pp（描述，不是结论）；“没用过的起点”是同一任务的其他初始状态，不是新任务；只有仿真、一个策略。<br><b>探索性副任务的结果（不在登记之内）：</b>在 12 个原生 16 次全败的任务上，同样的 24 个固定噪声 × 8 个起点，<b>2,304 次执行一次都没成功</b>。读法：策略完全不会的任务，随机换固定噪声救不回来；改噪声起作用的范围是“策略本来有时能成”的任务。这是探索性的，只说明这 24 个随机噪声不行，不说明任何噪声都不行。<br><b>② π0 的准备：</b><span class="tag t-good">接入代码已写好并通过本地测试</span>（还没有在真模型上跑过）。发现一个容易漏的细节：π0 的 LIBERO 版输出要多做一步“相对动作转绝对动作”，漏了不报错但动作是错的；第一个 π0 任务先在它训练过的四个套件上跑 320 次验收（公开成绩 82 % 到 98 %），总成功率不到 80 % 就不读后面的结果。<b>权重下载这一步没有执行，是我的配置错误：</b>我给它指定的临时目录放在了目标目录里面，脚本的安全检查一开始就拒绝了，所以连“平台能不能连上官方存储”都还没探测到。没有因此多占卡（它是搭在别的任务里的）。目录已改正，下一个探索性任务（E23 的第一个任务）里重做。</td></tr>
         <tr><td><b>二 · 论文主线</b></td><td>记忆、提议、评分器的负结果，怎么成为一个故事而不是三个实验？</td><td>用一个统一的对象把三者串起来（见<a href="#p9">方案 9</a>）：成功条件下的噪声后验。三点想法分别是它在三个粒度上的解和不可解。</td><td><span class="tag t-warn">新骨架草稿写好，等你定方向</span> <code>paper/PAPER_SKELETON_v1.md</code>。<br><b>方案 A（我的建议）：测量论文。</b>一句话：只有几百次成败反馈、只做一轮、不训练网络时，反馈能在哪个粒度写进噪声。按起点能记，按任务能平移，按状态（用我们的评分器和数据）排不出来。主线问题是<b>可辨认性</b>：执行次数和验证器的准确度，决定哪一层学得到。<br>四条贡献：① 可辨认性这张图（主线）；② 按起点记：57.6 % → 76.7 %，+19.1 pp（E15，已登记）；③ 按任务平移：按场景平均 +13.0 pp，区间 2.0 到 24.0（E20，已登记；合并成功率是 53.7 % → 65.5 %）；④ 按状态、动手之前排不出：0.51（E17，已登记）。<br><b>方案 B：ASBS 做主线。</b>最强的理由：同一个起点试 8 次挑最好能到 91.6 %，任务级平移只拿到其中一小段，中间的空间只有“看状态出噪声的采样器”拿得到。不利的是我们自己的数据：评分器排不出（0.47 到 0.56）；好噪声换个起点就失效，偏 0.1 毫米就少约 9 pp。粗估要在方案 A 之外再加 110 到 300 卡时，每一关都可能不过。<br>两个方案的第一步相同（E23 深采样），所以实验不等你的决定；要你定的是论文现在按哪个写。<br>骨架里顺带查出的几处旧说法不准，已记下待改：E20 的区间是 98.3 % 水平的（比 95 % 宽）；“偏 0.1 毫米少 9 pp”是相对那次实验自己的 +21.4，不是相对 E15 的 +19.1；验证器模拟里任务级那一半的基准本身区间含 0。</td></tr>
-        <tr><td><b>三 · ASBS 的意义</b></td><td>现在成立的“提议”只是一个均值平移，不需要训练采样器。ASBS 在什么地方是必需的？</td><td>理论上：把“在噪声上倾斜”证明为一次带 KL 约束的策略改进，ASBS 是它的一般解法，均值平移是特例（见<a href="#p10">方案 10</a>）。实验上：找到并做出一个“一般解法比特例好”的情形。</td><td><span class="tag t-warn">要重新想</span> 等价关系和“训练一个噪声空间采样器”都已有人发表（包括 10 月 9 日的 NSL，同样是冻结 π0.5 加 LIBERO）。ASBS 只剩“用在策略噪声上”这一个没人占的位置，而且要过方案 10 里列的五关才算贡献。理论上没人占的是“可辨认性”：哪个粒度能学，取决于执行次数和验证器的准确度。<br><b>在准备的实验（E23，深采样）：</b>直接检验第一关“目标是不是高斯就够”。在 4 个任务上各采 256 个固定噪声 × 8 个起点（约 8,200 次执行），分析在看数据之前写好：除了一个平移方向之外，还有没有别的结构（更多方向、弯曲、两个峰、随起点变化的方向）；同时画出“执行次数增加时，能学到的结构怎样变多”的曲线，这正是没人占的“可辨认性”问题的图。如果什么都没有，ASBS 在这里没有对象，写成负结果；如果有，再做同等执行次数下的采样器对比。<br><b>更正（10 月 12 日，第二、第三遍独立阅读 NSL 之后）：</b>我之前把 NSL 的噪声策略说成“看任务的”，不准确；它看的是当前观测，是按状态的，而且是高斯的。这对 ASBS 的含义：“只有按状态的采样器才拿得到每个起点上的提升空间”不再是支持 ASBS 的理由，因为一个高斯策略在高预算下已经走了这条路。ASBS 要立住，只剩两种可能：目标分布是这个高斯族表示不了的；或者用少得多的执行次数达到同样的提升。对手也因此明确了：NSL 的按状态高斯策略。<br><b>E23 设计完成（未开跑）：</b>自检 39 项通过；在只有平移、没有别的结构的模拟数据上，误报率 0.5 % 到 2.5 %。它能发现的大小：和目前最强的那个平移同等强度的“弯曲”或“不同起点方向不同”，发现率 88 % 到 100 %；一半强度时只有 22 % 到 56 %。<b>它发现不了“两个峰”</b>（任何模拟情形下都不超过 2 %），所以这一步能回答的是“协方差要不要调”和“方向是否随起点变”，回答不了“是不是多峰”。构建者纠正了我原设计的一个错误：弯曲必须在对数几率的尺度上判断，否则普通的平移也会被判成非高斯。安排在 E22-M 的检验任务之后跑，两个 8 卡任务，约 23 到 28 卡时。</td></tr>
+        <tr><td><b>三 · ASBS 的意义</b></td><td>现在成立的“提议”只是一个均值平移，不需要训练采样器。ASBS 在什么地方是必需的？</td><td>理论上：把“在噪声上倾斜”证明为一次带 KL 约束的策略改进，ASBS 是它的一般解法，均值平移是特例（见<a href="#p10">方案 10</a>）。实验上：找到并做出一个“一般解法比特例好”的情形。</td><td><span class="tag t-warn">要重新想</span> 等价关系和“训练一个噪声空间采样器”都已有人发表（包括 10 月 9 日的 NSL，同样是冻结 π0.5 加 LIBERO）。ASBS 只剩“用在策略噪声上”这一个没人占的位置，而且要过方案 10 里列的五关才算贡献。理论上没人占的是“可辨认性”：哪个粒度能学，取决于执行次数和验证器的准确度。<br><b>在准备的实验（E23，深采样）：</b>直接检验第一关“目标是不是高斯就够”。在 4 个任务上各采 256 个固定噪声 × 8 个起点（约 8,200 次执行），分析在看数据之前写好：除了一个平移方向之外，还有没有别的结构（更多方向、弯曲、两个峰、随起点变化的方向）；同时画出“执行次数增加时，能学到的结构怎样变多”的曲线，这正是没人占的“可辨认性”问题的图。如果什么都没有，ASBS 在这里没有对象，写成负结果；如果有，再做同等执行次数下的采样器对比。<br><b>更正（10 月 12 日，第二、第三遍独立阅读 NSL 之后）：</b>我之前把 NSL 的噪声策略说成“看任务的”，不准确；它看的是当前观测，是按状态的，而且是高斯的。这对 ASBS 的含义：“只有按状态的采样器才拿得到每个起点上的提升空间”不再是支持 ASBS 的理由，因为一个高斯策略在高预算下已经走了这条路。ASBS 要立住，只剩两种可能：目标分布是这个高斯族表示不了的；或者用少得多的执行次数达到同样的提升。对手也因此明确了：NSL 的按状态高斯策略。<br><b>E23 设计完成（未开跑）：</b>自检 39 项通过；在只有平移、没有别的结构的模拟数据上，误报率 0.5 % 到 2.5 %。它能发现的大小：和目前最强的那个平移同等强度的“弯曲”或“不同起点方向不同”，发现率 88 % 到 100 %；一半强度时只有 22 % 到 56 %。<b>它发现不了“两个峰”</b>（任何模拟情形下都不超过 2 %），所以这一步能回答的是“协方差要不要调”和“方向是否随起点变”，回答不了“是不是多峰”。构建者纠正了我原设计的一个错误：弯曲必须在对数几率的尺度上判断，否则普通的平移也会被判成非高斯。<br><b>E23 已提交（10 月 12 日 22:30Z 和 22:37Z）：</b>两个 8 卡任务，共 8,192 次执行，预计 00:15Z 前后结束；π0 权重下载搭在第一个任务里。</td></tr>
       </tbody>
     </table>
   </div>
@@ -635,16 +635,16 @@
   <div class="sec-head"><div class="eyebrow">详细材料 04 · 已有证据</div><h2>已经做完的实验说明了什么</h2></div>
   <figure>
     <div class="scroll">
-<svg class="forest" viewBox="0 0 760 1232" role="img" aria-label="各实验相对原生策略的成功率差（百分点）与 95% 区间：同一起点回放约 +9 到 +11；起点平移或换起点后接近 0；ASBS 提议器接近 0。">
-<line x1="276.0" y1="8" x2="276.0" y2="1198" style="stroke:var(--line)" stroke-width="1"/>
-<text x="276.0" y="1214" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">−10</text>
-<line x1="365.7" y1="8" x2="365.7" y2="1198" style="stroke:var(--line)" stroke-width="1.5"/>
-<text x="365.7" y="1214" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">0</text>
-<line x1="455.4" y1="8" x2="455.4" y2="1198" style="stroke:var(--line)" stroke-width="1"/>
-<text x="455.4" y="1214" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+10</text>
-<line x1="545.1" y1="8" x2="545.1" y2="1198" style="stroke:var(--line)" stroke-width="1"/>
-<text x="545.1" y="1214" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+20</text>
-<text x="433.0" y="1229" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">成功率差（百分点），相对原生策略</text>
+<svg class="forest" viewBox="0 0 760 1416" role="img" aria-label="各实验相对原生策略的成功率差（百分点）与 95% 区间：同一起点回放约 +9 到 +11；起点平移或换起点后接近 0；ASBS 提议器接近 0。">
+<line x1="276.0" y1="8" x2="276.0" y2="1382" style="stroke:var(--line)" stroke-width="1"/>
+<text x="276.0" y="1398" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">−10</text>
+<line x1="365.7" y1="8" x2="365.7" y2="1382" style="stroke:var(--line)" stroke-width="1.5"/>
+<text x="365.7" y="1398" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">0</text>
+<line x1="455.4" y1="8" x2="455.4" y2="1382" style="stroke:var(--line)" stroke-width="1"/>
+<text x="455.4" y="1398" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+10</text>
+<line x1="545.1" y1="8" x2="545.1" y2="1382" style="stroke:var(--line)" stroke-width="1"/>
+<text x="545.1" y="1398" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">+20</text>
+<text x="433.0" y="1413" text-anchor="middle" font-size="11.5" style="fill:var(--ink-3)">成功率差（百分点），相对原生策略</text>
 <rect x="0" y="8" width="760" height="34" style="fill:var(--surface)"/>
 <text x="0" y="30" font-size="12.5" font-weight="700" style="fill:var(--ink)">记住：同一个起点，回放存下来的噪声</text>
 <g class="fp-row" tabindex="0" role="img" aria-label="E6 · 16 个起点 × 16 种子：+10.6 个百分点，95% 区间 [0.0, +23.8]。区间下端正好是 0" data-tip="E6 · 16 个起点 × 16 种子：+10.6 个百分点，95% 区间 [0.0, +23.8]。区间下端正好是 0">
@@ -820,77 +820,114 @@
 <text x="760" y="819.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+10.5 <tspan style="fill:var(--ink-3)">[−0.8, +21.7]</tspan></text>
 </g>
 <rect x="0" y="830" width="760" height="34" style="fill:var(--surface)"/>
-<text x="0" y="852" font-size="12.5" font-weight="700" style="fill:var(--ink)">任务级固定噪声：每个任务挑一个 z，在没见过的起点上测（探索性）</text>
-<g class="fp-row" tabindex="0" role="img" aria-label="E18 · 每次决策都用同一个 z，17 个任务：+10.1 个百分点，95% 区间 [+4.4, +16.0]。探索性；区间不含 0" data-tip="E18 · 每次决策都用同一个 z，17 个任务：+10.1 个百分点，95% 区间 [+4.4, +16.0]。探索性；区间不含 0">
+<text x="0" y="852" font-size="12.5" font-weight="700" style="fill:var(--ink)">LIBERO-90 上的完整流程：预先登记，17 个任务、272 个没用过的起点（E22-M；95% 区间）</text>
+<g class="fp-row" tabindex="0" role="img" aria-label="E22-M · 学出的偏移，对原生策略：+12.8 个百分点，95% 区间 [+3.2, +22.3]。已登记：确认" data-tip="E22-M · 学出的偏移，对原生策略：+12.8 个百分点，95% 区间 [+3.2, +22.3]。已登记：确认">
 <rect x="0" y="864" width="760" height="30" fill="transparent"/>
-<text x="10" y="883.0" font-size="12.5" style="fill:var(--ink-2)">E18 · 每次决策都用同一个 z，17 个任务</text>
-<line x1="405.3" y1="879.0" x2="509.2" y2="879.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="456.4" cy="879.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="883.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+10.1 <tspan style="fill:var(--ink-3)">[+4.4, +16.0]</tspan></text>
+<text x="10" y="883.0" font-size="12.5" style="fill:var(--ink-2)">E22-M · 学出的偏移，对原生策略</text>
+<line x1="394.8" y1="879.0" x2="566.0" y2="879.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="480.4" cy="879.0" r="5" style="stroke:var(--series);fill:var(--series)" stroke-width="2"/>
+<text x="760" y="883.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+12.8 <tspan style="fill:var(--ink-3)">[+3.2, +22.3]</tspan></text>
+</g>
+<g class="fp-row" tabindex="0" role="img" aria-label="E22-M · 顺着方向推对逆着推（对照不是原生策略）：+21.6 个百分点，95% 区间 [+9.9, +33.3]。已登记：确认" data-tip="E22-M · 顺着方向推对逆着推（对照不是原生策略）：+21.6 个百分点，95% 区间 [+9.9, +33.3]。已登记：确认">
+<rect x="0" y="894" width="760" height="30" fill="transparent"/>
+<text x="10" y="913.0" font-size="12.5" style="fill:var(--ink-2)">E22-M · 顺着方向推对逆着推（对照不是原生策略）</text>
+<line x1="454.7" y1="909.0" x2="664.6" y2="909.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="559.6" cy="909.0" r="5" style="stroke:var(--series);fill:var(--series)" stroke-width="2"/>
+<text x="760" y="913.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+21.6 <tspan style="fill:var(--ink-3)">[+9.9, +33.3]</tspan></text>
+</g>
+<g class="fp-row" tabindex="0" role="img" aria-label="E22-M · 学到的方向对正交的推力（对照不是原生策略）：+11.2 个百分点，95% 区间 [+1.5, +21.0]。已登记：确认（更严的区间含 0）" data-tip="E22-M · 学到的方向对正交的推力（对照不是原生策略）：+11.2 个百分点，95% 区间 [+1.5, +21.0]。已登记：确认（更严的区间含 0）">
+<rect x="0" y="924" width="760" height="30" fill="transparent"/>
+<text x="10" y="943.0" font-size="12.5" style="fill:var(--ink-2)">E22-M · 学到的方向对正交的推力（对照不是原生策略）</text>
+<line x1="379.4" y1="939.0" x2="553.8" y2="939.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="466.6" cy="939.0" r="5" style="stroke:var(--series);fill:var(--series)" stroke-width="2"/>
+<text x="760" y="943.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+11.2 <tspan style="fill:var(--ink-3)">[+1.5, +21.0]</tspan></text>
+</g>
+<g class="fp-row" tabindex="0" role="img" aria-label="E22-M · 正交的推力，对原生策略（描述）：+1.5 个百分点，95% 区间 [−2.3, +5.4]。描述性；区间含 0" data-tip="E22-M · 正交的推力，对原生策略（描述）：+1.5 个百分点，95% 区间 [−2.3, +5.4]。描述性；区间含 0">
+<rect x="0" y="954" width="760" height="30" fill="transparent"/>
+<text x="10" y="973.0" font-size="12.5" style="fill:var(--ink-2)">E22-M · 正交的推力，对原生策略（描述）</text>
+<line x1="344.7" y1="969.0" x2="414.3" y2="969.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="379.5" cy="969.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="973.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+1.5 <tspan style="fill:var(--ink-3)">[−2.3, +5.4]</tspan></text>
+</g>
+<g class="fp-row" tabindex="0" role="img" aria-label="E22-M · 逆着方向推，对原生策略（描述）：−8.8 个百分点，95% 区间 [−12.9, −4.8]。描述性；区间不含 0" data-tip="E22-M · 逆着方向推，对原生策略（描述）：−8.8 个百分点，95% 区间 [−12.9, −4.8]。描述性；区间不含 0">
+<rect x="0" y="984" width="760" height="30" fill="transparent"/>
+<text x="10" y="1003.0" font-size="12.5" style="fill:var(--ink-2)">E22-M · 逆着方向推，对原生策略（描述）</text>
+<line x1="250.0" y1="999.0" x2="323.0" y2="999.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="286.5" cy="999.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1003.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">−8.8 <tspan style="fill:var(--ink-3)">[−12.9, −4.8]</tspan></text>
+</g>
+<rect x="0" y="1014" width="760" height="34" style="fill:var(--surface)"/>
+<text x="0" y="1036" font-size="12.5" font-weight="700" style="fill:var(--ink)">任务级固定噪声：每个任务挑一个 z，在没见过的起点上测（探索性）</text>
+<g class="fp-row" tabindex="0" role="img" aria-label="E18 · 每次决策都用同一个 z，17 个任务：+10.1 个百分点，95% 区间 [+4.4, +16.0]。探索性；区间不含 0" data-tip="E18 · 每次决策都用同一个 z，17 个任务：+10.1 个百分点，95% 区间 [+4.4, +16.0]。探索性；区间不含 0">
+<rect x="0" y="1048" width="760" height="30" fill="transparent"/>
+<text x="10" y="1067.0" font-size="12.5" style="fill:var(--ink-2)">E18 · 每次决策都用同一个 z，17 个任务</text>
+<line x1="405.3" y1="1063.0" x2="509.2" y2="1063.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="456.4" cy="1063.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1067.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+10.1 <tspan style="fill:var(--ink-3)">[+4.4, +16.0]</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="E18 · 只固定开头 10 次决策的 z：+3.9 个百分点，95% 区间 [−0.9, +9.4]。探索性；区间含 0" data-tip="E18 · 只固定开头 10 次决策的 z：+3.9 个百分点，95% 区间 [−0.9, +9.4]。探索性；区间含 0">
-<rect x="0" y="894" width="760" height="30" fill="transparent"/>
-<text x="10" y="913.0" font-size="12.5" style="fill:var(--ink-2)">E18 · 只固定开头 10 次决策的 z</text>
-<line x1="357.5" y1="909.0" x2="449.9" y2="909.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="400.3" cy="909.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="913.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+3.9 <tspan style="fill:var(--ink-3)">[−0.9, +9.4]</tspan></text>
+<rect x="0" y="1078" width="760" height="30" fill="transparent"/>
+<text x="10" y="1097.0" font-size="12.5" style="fill:var(--ink-2)">E18 · 只固定开头 10 次决策的 z</text>
+<line x1="357.5" y1="1093.0" x2="449.9" y2="1093.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="400.3" cy="1093.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1097.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+3.9 <tspan style="fill:var(--ink-3)">[−0.9, +9.4]</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="E18-G · 学出方向后直接采样（+2），对原生策略：+5.1 个百分点，95% 区间 [−1.6, +12.1]。探索性；区间含 0" data-tip="E18-G · 学出方向后直接采样（+2），对原生策略：+5.1 个百分点，95% 区间 [−1.6, +12.1]。探索性；区间含 0">
-<rect x="0" y="924" width="760" height="30" fill="transparent"/>
-<text x="10" y="943.0" font-size="12.5" style="fill:var(--ink-2)">E18-G · 学出方向后直接采样（+2），对原生策略</text>
-<line x1="351.7" y1="939.0" x2="474.5" y2="939.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="411.1" cy="939.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="943.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+5.1 <tspan style="fill:var(--ink-3)">[−1.6, +12.1]</tspan></text>
+<rect x="0" y="1108" width="760" height="30" fill="transparent"/>
+<text x="10" y="1127.0" font-size="12.5" style="fill:var(--ink-2)">E18-G · 学出方向后直接采样（+2），对原生策略</text>
+<line x1="351.7" y1="1123.0" x2="474.5" y2="1123.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="411.1" cy="1123.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1127.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+5.1 <tspan style="fill:var(--ink-3)">[−1.6, +12.1]</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="E18-G · 同上，对不偏移的固定 z（对照不是原生策略）：+12.2 个百分点，95% 区间 [+7.8, +16.5]。探索性；区间不含 0" data-tip="E18-G · 同上，对不偏移的固定 z（对照不是原生策略）：+12.2 个百分点，95% 区间 [+7.8, +16.5]。探索性；区间不含 0">
-<rect x="0" y="954" width="760" height="30" fill="transparent"/>
-<text x="10" y="973.0" font-size="12.5" style="fill:var(--ink-2)">E18-G · 同上，对不偏移的固定 z（对照不是原生策略）</text>
-<line x1="435.8" y1="969.0" x2="514.1" y2="969.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="475.3" cy="969.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="973.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+12.2 <tspan style="fill:var(--ink-3)">[+7.8, +16.5]</tspan></text>
+<rect x="0" y="1138" width="760" height="30" fill="transparent"/>
+<text x="10" y="1157.0" font-size="12.5" style="fill:var(--ink-2)">E18-G · 同上，对不偏移的固定 z（对照不是原生策略）</text>
+<line x1="435.8" y1="1153.0" x2="514.1" y2="1153.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="475.3" cy="1153.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1157.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+12.2 <tspan style="fill:var(--ink-3)">[+7.8, +16.5]</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="E18-H · 学出的偏移加在每次新采样的噪声上（+2），对原生策略：+12.0 个百分点，95% 区间 [+6.9, +17.5]。探索性；区间不含 0" data-tip="E18-H · 学出的偏移加在每次新采样的噪声上（+2），对原生策略：+12.0 个百分点，95% 区间 [+6.9, +17.5]。探索性；区间不含 0">
-<rect x="0" y="984" width="760" height="30" fill="transparent"/>
-<text x="10" y="1003.0" font-size="12.5" style="fill:var(--ink-2)">E18-H · 学出的偏移加在每次新采样的噪声上（+2），对原生策略</text>
-<line x1="427.5" y1="999.0" x2="522.4" y2="999.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="473.7" cy="999.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="1003.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+12.0 <tspan style="fill:var(--ink-3)">[+6.9, +17.5]</tspan></text>
+<rect x="0" y="1168" width="760" height="30" fill="transparent"/>
+<text x="10" y="1187.0" font-size="12.5" style="fill:var(--ink-2)">E18-H · 学出的偏移加在每次新采样的噪声上（+2），对原生策略</text>
+<line x1="427.5" y1="1183.0" x2="522.4" y2="1183.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="473.7" cy="1183.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1187.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+12.0 <tspan style="fill:var(--ink-3)">[+6.9, +17.5]</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="E18-I · 方向随机的同样大小的推力，对原生策略（对照）：+6.4 个百分点，95% 区间 [+0.9, +11.9]。探索性；区间不含 0" data-tip="E18-I · 方向随机的同样大小的推力，对原生策略（对照）：+6.4 个百分点，95% 区间 [+0.9, +11.9]。探索性；区间不含 0">
-<rect x="0" y="1014" width="760" height="30" fill="transparent"/>
-<text x="10" y="1033.0" font-size="12.5" style="fill:var(--ink-2)">E18-I · 方向随机的同样大小的推力，对原生策略（对照）</text>
-<line x1="374.0" y1="1029.0" x2="472.9" y2="1029.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="423.4" cy="1029.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="1033.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+6.4 <tspan style="fill:var(--ink-3)">[+0.9, +11.9]</tspan></text>
+<rect x="0" y="1198" width="760" height="30" fill="transparent"/>
+<text x="10" y="1217.0" font-size="12.5" style="fill:var(--ink-2)">E18-I · 方向随机的同样大小的推力，对原生策略（对照）</text>
+<line x1="374.0" y1="1213.0" x2="472.9" y2="1213.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="423.4" cy="1213.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1217.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+6.4 <tspan style="fill:var(--ink-3)">[+0.9, +11.9]</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="E18-I · 学到的方向对随机方向（对照不是原生策略）：+8.5 个百分点，95% 区间 [+2.4, +14.7]。探索性；区间不含 0" data-tip="E18-I · 学到的方向对随机方向（对照不是原生策略）：+8.5 个百分点，95% 区间 [+2.4, +14.7]。探索性；区间不含 0">
-<rect x="0" y="1044" width="760" height="30" fill="transparent"/>
-<text x="10" y="1063.0" font-size="12.5" style="fill:var(--ink-2)">E18-I · 学到的方向对随机方向（对照不是原生策略）</text>
-<line x1="387.2" y1="1059.0" x2="497.7" y2="1059.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="441.6" cy="1059.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="1063.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+8.5 <tspan style="fill:var(--ink-3)">[+2.4, +14.7]</tspan></text>
+<rect x="0" y="1228" width="760" height="30" fill="transparent"/>
+<text x="10" y="1247.0" font-size="12.5" style="fill:var(--ink-2)">E18-I · 学到的方向对随机方向（对照不是原生策略）</text>
+<line x1="387.2" y1="1243.0" x2="497.7" y2="1243.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="441.6" cy="1243.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1247.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+8.5 <tspan style="fill:var(--ink-3)">[+2.4, +14.7]</tspan></text>
 </g>
-<rect x="0" y="1074" width="760" height="34" style="fill:var(--surface)"/>
-<text x="0" y="1096" font-size="12.5" font-weight="700" style="fill:var(--ink)">提议：学一个噪声提议器（ASBS），以及在线挑选的参考</text>
+<rect x="0" y="1258" width="760" height="34" style="fill:var(--surface)"/>
+<text x="0" y="1280" font-size="12.5" font-weight="700" style="fill:var(--ink)">提议：学一个噪声提议器（ASBS），以及在线挑选的参考</text>
 <g class="fp-row" tabindex="0" role="img" aria-label="ASBS · 留出测试 240 对：+0.06 个百分点，95% 区间 [−7.2, +7.6]。没有差别" data-tip="ASBS · 留出测试 240 对：+0.06 个百分点，95% 区间 [−7.2, +7.6]。没有差别">
-<rect x="0" y="1108" width="760" height="30" fill="transparent"/>
-<text x="10" y="1127.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · 留出测试 240 对</text>
-<line x1="301.4" y1="1123.0" x2="433.5" y2="1123.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="366.3" cy="1123.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="1127.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+0.06 <tspan style="fill:var(--ink-3)">[−7.2, +7.6]</tspan></text>
+<rect x="0" y="1292" width="760" height="30" fill="transparent"/>
+<text x="10" y="1311.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · 留出测试 240 对</text>
+<line x1="301.4" y1="1307.0" x2="433.5" y2="1307.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="366.3" cy="1307.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1311.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+0.06 <tspan style="fill:var(--ink-3)">[−7.2, +7.6]</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="ASBS · E6+E7 重复起点：+2.2 个百分点，95% 区间 区间未记录。不显著（区间未记录）" data-tip="ASBS · E6+E7 重复起点：+2.2 个百分点，95% 区间 区间未记录。不显著（区间未记录）">
-<rect x="0" y="1138" width="760" height="30" fill="transparent"/>
-<text x="10" y="1157.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · E6+E7 重复起点</text>
-<circle cx="385.5" cy="1153.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="1157.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+2.2 <tspan style="fill:var(--ink-3)">不显著</tspan></text>
+<rect x="0" y="1322" width="760" height="30" fill="transparent"/>
+<text x="10" y="1341.0" font-size="12.5" style="fill:var(--ink-2)">ASBS · E6+E7 重复起点</text>
+<circle cx="385.5" cy="1337.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1341.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+2.2 <tspan style="fill:var(--ink-3)">不显著</tspan></text>
 </g>
 <g class="fp-row" tabindex="0" role="img" aria-label="R0 · 在线 4 选 1（上界参考）：+6.7 个百分点，95% 区间 [−5.2, +18.5]。60 对，功效低" data-tip="R0 · 在线 4 选 1（上界参考）：+6.7 个百分点，95% 区间 [−5.2, +18.5]。60 对，功效低">
-<rect x="0" y="1168" width="760" height="30" fill="transparent"/>
-<text x="10" y="1187.0" font-size="12.5" style="fill:var(--ink-2)">R0 · 在线 4 选 1（上界参考）</text>
-<line x1="319.3" y1="1183.0" x2="531.3" y2="1183.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
-<circle cx="425.6" cy="1183.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
-<text x="760" y="1187.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+6.7 <tspan style="fill:var(--ink-3)">[−5.2, +18.5]</tspan></text>
+<rect x="0" y="1352" width="760" height="30" fill="transparent"/>
+<text x="10" y="1371.0" font-size="12.5" style="fill:var(--ink-2)">R0 · 在线 4 选 1（上界参考）</text>
+<line x1="319.3" y1="1367.0" x2="531.3" y2="1367.0" style="stroke:var(--series)" stroke-width="2" stroke-linecap="round"/>
+<circle cx="425.6" cy="1367.0" r="5" style="stroke:var(--series);fill:var(--surface)" stroke-width="2"/>
+<text x="760" y="1371.0" text-anchor="end" font-size="12" style="fill:var(--ink)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">+6.7 <tspan style="fill:var(--ink-3)">[−5.2, +18.5]</tspan></text>
 </g>
 </svg>
     </div>
@@ -986,7 +1023,7 @@
     <li class="done"><span class="dot"></span><div><b>分析</b> <span class="s">· 完成，10 月 10 日 11:19Z</span><br>冻结的分析脚本只运行了一次。结论：确认有正向效果，+19.1 pp，区间 15.1 到 23.4；按任务、按场景分组算区间，结论不变（13.1 到 25.0）。</div></li>
   </ol>
   <p><b>主实验事先担心的风险没有发生：</b>登记要求至少 80 个起点、20 个任务、12 个场景通过筛选，结果才算确证性的。实际通过 126 个起点、32 个任务、23 个场景。</p>
-  <p><b>用卡记录：</b>全部在 PRO 6000 上，同时在跑的任务最多 2 个。10 月 9 日约 22 卡时；10 月 10 日是 E15 主实验（8 张卡）和 E17 的登记；10 月 11 日：E19 的前缀任务 2 张卡约 40 分钟，E18 约 25 卡时，E18-G 两个 4 卡任务（4,213 秒和 4,405 秒）约 9.6 卡时。E18-H 两个 4 卡任务（5,147 秒和 4,964 秒）约 11.2 卡时，其中约 1.6 卡时因节点被占用接近空转。E18-I 两个 4 卡任务各 3,044 秒，约 6.8 卡时，没有空转。E20 两个 4 卡任务约 9.9 卡时。E16-ZX 两个 4 卡任务约 10.5 卡时。E16-ZX2 两个 4 卡任务约 9.4 卡时。10 月 11 日合计约 82 卡时。10 月 12 日：E21 筛查一个 4 卡任务 3,093 秒，约 3.4 卡时。平移筛查一个 4 卡任务 3,359 秒，约 3.7 卡时。LIBERO-90 筛查一个 4 卡任务 3,050 秒，约 3.4 卡时；最后约 5 分钟各 worker 的清单长短不一，部分卡接近空闲。恢复平台时的几个探测任务和取回任务各约 1 分钟。E22-M 搜索一个 4 卡任务 6,282 秒，约 7.0 卡时；探索性副任务一个 4 卡任务 4,569 秒，约 5.1 卡时；两个任务的最后几分钟各 worker 清单长短不一，部分卡接近空闲。</p>
+  <p><b>用卡记录：</b>全部在 PRO 6000 上，同时在跑的任务最多 2 个。10 月 9 日约 22 卡时；10 月 10 日是 E15 主实验（8 张卡）和 E17 的登记；10 月 11 日：E19 的前缀任务 2 张卡约 40 分钟，E18 约 25 卡时，E18-G 两个 4 卡任务（4,213 秒和 4,405 秒）约 9.6 卡时。E18-H 两个 4 卡任务（5,147 秒和 4,964 秒）约 11.2 卡时，其中约 1.6 卡时因节点被占用接近空转。E18-I 两个 4 卡任务各 3,044 秒，约 6.8 卡时，没有空转。E20 两个 4 卡任务约 9.9 卡时。E16-ZX 两个 4 卡任务约 10.5 卡时。E16-ZX2 两个 4 卡任务约 9.4 卡时。10 月 11 日合计约 82 卡时。10 月 12 日：E21 筛查一个 4 卡任务 3,093 秒，约 3.4 卡时。平移筛查一个 4 卡任务 3,359 秒，约 3.7 卡时。LIBERO-90 筛查一个 4 卡任务 3,050 秒，约 3.4 卡时；最后约 5 分钟各 worker 的清单长短不一，部分卡接近空闲。恢复平台时的几个探测任务和取回任务各约 1 分钟。E22-M 搜索一个 4 卡任务 6,282 秒，约 7.0 卡时；探索性副任务一个 4 卡任务 4,569 秒，约 5.1 卡时；两个任务的最后几分钟各 worker 清单长短不一，部分卡接近空闲。E22-M 检验两个 4 卡任务（5,964 秒和约 6,100 秒），约 13.4 卡时，没有丢失的执行。10 月 12 日到 22:40Z 合计约 29 卡时。</p>
 </section>
 
 <section id="decide">
@@ -1007,6 +1044,7 @@
     <li>推算的数字单独标“推算”，不和实测结果混在一起。</li>
   </ul>
   <ul class="log">
+    <li><time>10-12 22:40Z</time><b>E22-M 完成，登记的分析只跑了一次（22:31:37Z）：H1 到 H4 全部确认。</b>学出的偏移对原生 +12.8 pp（3.2 到 22.3）；顺推对逆推 +21.6 pp（9.9 到 33.3）；对正交推力 +11.2 pp（1.5 到 21.0，更严的区间含 0）；预算统计量 +2.3（97.5 % 区间 0.2 到 4.4）。6,800 次执行完整，无复位失败。E23 两个 8 卡任务已提交。</li>
     <li><time>10-12 20:37Z</time>E22-M 搜索任务完整结束（3,280 次，无丢失）；拟合完成，17 个任务都有方向；检验计划冻结（20:28:32Z），两个检验任务已提交（6,800 次执行）。探索性副任务：12 个全败任务 2,304 次执行 0 次成功。π0 权重下载因我指定的目录冲突没有执行，已改正，下次重做。</li>
     <li><time>10-12 18:33Z</time><b>E22-M 登记完成</b>（2026-10-12T18:32:53Z；登记文件 sha256 827bfd7c2b8612a434daea61c6e8484c628d9c235d611d6102566328de1535c0）。17 个任务、11 个场景，搜索 3,264 次执行。第一次登记被工具拒绝（登记工具和自检对最后一行输出的约定不一致），改了一行判断后重跑通过；这个改动写进了裁定记录，改后的工具在登记的哈希清单里。登记的全套文件已复制到项目目录。E23（深采样）设计完成。</li>
     <li><time>10-12 17:39Z</time>把两个独立的简单任务派给了 Codex 对话，都已完成：独立核对 NSL 论文的 12 条事实；SmolVLA 接入笔记和探测脚本（真模型还没跑，它那边磁盘不够）。核对结果更正了我对 NSL 的两处描述（噪声策略是按状态的；训练权重不只是成败），我自己又直接读了一遍原文确认，页面和备忘已改。</li>
