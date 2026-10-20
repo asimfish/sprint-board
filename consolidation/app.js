@@ -119,9 +119,9 @@
   }
 
   var MATRIX_COLS = [
-    ['原生', ['native', 'base']], ['平移 2 倍', ['shift2', 'r1']], ['平移约 3 / 4 倍', ['shift3', 'shift4', 'r1m']], ['第二轮方向', ['r2']], ['随机正交平移', ['ortho2']],
+    ['原生', ['native', 'base']], ['平移 2 倍', ['shift2', 'r1', 'ds2', 'cs2']], ['平移约 3 / 4 倍', ['shift3', 'shift4', 'r1m']], ['第二轮方向', ['r2']], ['随机正交平移', ['ortho2']],
     ['最好的固定噪声', ['chosen']], ['自我模仿微调', ['distilled', 'unfiltered_control', 'dsmall_a', 'dsmall_b', 'dzero', 'dmem']],
-    ['蒸馏进权重', ['d_succ', 'd_all', 'c_off', 'c_on']]
+    ['蒸馏进权重', ['d_succ', 'd_all', 'c_off', 'c_on', 'ds2', 'cs2']]
   ];
   function renderMatrix() {
     var head = el('tr', {}, [el('th', { scope: 'col', text: '实验' })].concat(MATRIX_COLS.map(function (c) { return el('th', { scope: 'col', text: c[0] }); }))

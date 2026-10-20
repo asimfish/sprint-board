@@ -20,7 +20,7 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-20 16:59Z</span><span class="chip">PLA-D v3（叠加两种固化）排队中</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-20 17:36Z</span><span class="chip">下一个实验设计中</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在 13 个任务的四次测试里都显著提高成功率，换到 10 个原本很少成功的新任务上也提高（+10.3 pp）；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约三分之一。</p>
     <div class="tiles">
@@ -112,6 +112,7 @@
           <li>不是代码问题：学习率为 0 的“空训练”与原模型逐回合一致（360 / 360，成败和回合长度都相同）。</li>
           <li>自我模仿：中等训练量暂时变差，训练 4,000 步回到原水平；即使在 System 2 解出 49 / 60 的训练起点上，学生也只有约 29 %。</li>
           <li>蒸馏平移策略：保住约三分之一的提升；只用成功回合和用全部回合一样，说明学到的是平移后的行为本身。</li>
+          <li>PLA-D v3：在蒸馏权重上再加平移，不超过只加平移；在 D_ALL 权重上平移几乎失效。两种固化抓的是同一件事。</li>
           <li>PLA-D v2：换成老师完整动作块当标签（更差，−5.2 pp），或让学生自己走、老师逐点标注（+4.2 pp，不显著），都没有越过三分之一。训练损失几乎不降：老师与学生是同一网络，动作样本分布很接近，模仿动作学不到“噪声往哪推”。</li>
           <li>推断：成败主要取决于噪声在关键维度上有没有一致偏向；模仿动作很难抓住它，直接学噪声方向可以。RoboDojo 模仿线修复训练框架的 EMA 漂移问题后，自我模仿同样没有提升。</li>
         </ul>
@@ -164,6 +165,7 @@
     <div class="section-head"><span class="kicker">原始记录</span><h2>逐回合记录</h2>
       <p>每个文件的 <code>rows</code> 是 <code>[任务, 起点, 种子, 组别编号, 是否成功, 控制步数]</code>；<code>arms</code> 给出组别编号的含义。汇总数字在 <a href="consolidation/data/summary.json">summary.json</a>。</p></div>
     <div class="panel"><ul class="list" id="raw-list">
+      <li><a href="consolidation/data/pla_d_v3.json">PLA-D v3</a> · 1,040 个测试回合 + 参照</li>
       <li><a href="consolidation/data/pla_d_v2.json">PLA-D v2</a> · 1,040 个测试回合 + 参照</li>
       <li><a href="consolidation/data/pla_n_v6.json">PLA-N v6</a> · 800 个测试回合</li>
       <li><a href="consolidation/data/pla_s_v1.json">PLA-S v1</a> · 1,232 个筛查回合</li>
@@ -182,6 +184,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>10-20 17:40Z</time><span>PLA-D v3：蒸馏权重 + 平移不超过只加平移（D_ALL + 平移 53.5 %，C_ON + 平移 63.8 %，只加平移 63.1 %）；两种固化叠不起来。</span></li>
       <li><time>10-20 17:20Z</time><span>事后描述：平移试 1 次 ≈ 原生试 2–3 次；PLA-D v3（蒸馏权重 + 平移）规则写定并排队。</span></li>
       <li><time>10-20 17:05Z</time><span>PLA-D v2：C_ON 52.1 %、C_OFF 47.9 %，都不比 PLA-D v1（53.1 %）好；权重路线卡在约三分之一。</span></li>
       <li><time>10-20 14:45Z</time><span>PLA-D v2 规则写定并排队：分开“标签格式”和“状态分布”两个原因，看蒸馏能否保住更多提升。</span></li>
