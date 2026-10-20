@@ -119,7 +119,7 @@
   }
 
   var MATRIX_COLS = [
-    ['原生', ['native', 'base']], ['平移 2 倍', ['shift2']], ['平移 3 / 4 倍', ['shift3', 'shift4']], ['随机正交平移', ['ortho2']],
+    ['原生', ['native', 'base']], ['平移 2 倍', ['shift2', 'r1']], ['平移约 3 / 4 倍', ['shift3', 'shift4', 'r1m']], ['第二轮方向', ['r2']], ['随机正交平移', ['ortho2']],
     ['最好的固定噪声', ['chosen']], ['自我模仿微调', ['distilled', 'unfiltered_control', 'dsmall_a', 'dsmall_b', 'dzero', 'dmem']],
     ['蒸馏进权重', ['d_succ', 'd_all']]
   ];
@@ -237,6 +237,7 @@
   function renderQueue() {
     var host = document.getElementById('queue');
     host.innerHTML = '';
+    if (!state.summary.queue.length) { host.appendChild(el('p', { class: 'role', text: '暂无；下一个实验在设计中，规则写定后会列在这里。' })); return; }
     state.summary.queue.forEach(function (q) {
       host.appendChild(el('div', { class: 'queue-item' }, [el('strong', { text: q.name }), el('span', { class: 'state', text: q.state }),
         el('span', { text: q.what }), el('span', { class: 'role', text: '规则写定 ' + q.fixed })]));
