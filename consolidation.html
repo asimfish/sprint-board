@@ -20,7 +20,7 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-20 17:36Z</span><span class="chip">下一个实验设计中</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-20 18:50Z</span><span class="chip">PLA-N v7（预算曲线）排队中</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在 13 个任务的四次测试里都显著提高成功率，换到 10 个原本很少成功的新任务上也提高（+10.3 pp）；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约三分之一。</p>
     <div class="tiles">
@@ -153,7 +153,7 @@
       <div class="panel"><h3>已写好规则、在排队或在跑</h3><div id="queue"><p class="loading">正在读取…</p></div></div>
       <div class="panel"><h3>之后</h3>
         <ul class="list">
-          <li>新任务已做（v6）：筛查里 63 个任务原生 0 / 16，平移救不救得了“从来不成功”的任务还没测。</li>
+          <li>“从来不成功”的任务（PLA-Z v1，事先写定）：12 个原生 0 / 16 的任务各搜 96 回合，共 1,152 回合只成功 5 次（0.43 %，4 个任务各 1–2 次）。System 2 在这里几乎找不到成功，平移无从固化；它放大的是偶尔已经会出现的成功（π0.5 上同类检查 0 / 2,304）。</li>
           <li>状态相关的平移（ASBS 的位置）：任务级平移一轮就基本饱和（v5）。再往上要按起点或状态调整方向；π0.5 的 E23 显示同一任务不同起点的有利方向确实不同，但每个起点需要更多数据。</li>
           <li>RoboDojo：RoboDojo 的 π0 接口已经把噪声当显式参数传入，把平移搬到 stack_bowls 只需改一处；按现有速度估算约 30 卡时以上，尚未开始。</li>
         </ul>
@@ -165,6 +165,7 @@
     <div class="section-head"><span class="kicker">原始记录</span><h2>逐回合记录</h2>
       <p>每个文件的 <code>rows</code> 是 <code>[任务, 起点, 种子, 组别编号, 是否成功, 控制步数]</code>；<code>arms</code> 给出组别编号的含义。汇总数字在 <a href="consolidation/data/summary.json">summary.json</a>。</p></div>
     <div class="panel"><ul class="list" id="raw-list">
+      <li><a href="consolidation/data/pla_z_v1.json">PLA-Z v1</a> · 12 个任务的每票得分（1,152 个搜索回合）</li>
       <li><a href="consolidation/data/pla_d_v3.json">PLA-D v3</a> · 1,040 个测试回合 + 参照</li>
       <li><a href="consolidation/data/pla_d_v2.json">PLA-D v2</a> · 1,040 个测试回合 + 参照</li>
       <li><a href="consolidation/data/pla_n_v6.json">PLA-N v6</a> · 800 个测试回合</li>
@@ -184,6 +185,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>10-20 18:55Z</time><span>PLA-Z v1：12 个从来不成功的任务上搜 1,152 回合只成功 5 次；平移不能“解锁”这类任务。PLA-N v7（预算曲线）排队中。</span></li>
       <li><time>10-20 17:40Z</time><span>PLA-D v3：蒸馏权重 + 平移不超过只加平移（D_ALL + 平移 53.5 %，C_ON + 平移 63.8 %，只加平移 63.1 %）；两种固化叠不起来。</span></li>
       <li><time>10-20 17:20Z</time><span>事后描述：平移试 1 次 ≈ 原生试 2–3 次；PLA-D v3（蒸馏权重 + 平移）规则写定并排队。</span></li>
       <li><time>10-20 17:05Z</time><span>PLA-D v2：C_ON 52.1 %、C_OFF 47.9 %，都不比 PLA-D v1（53.1 %）好；权重路线卡在约三分之一。</span></li>
