@@ -46,7 +46,7 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <body><main>
 <header>
   <h1>RoboDojo 引导模仿</h1>
-  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 23:20 UTC</div>
+  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-21 00:00 UTC</div>
   <nav class="nav"><a href="#status">当前状态</a><a href="#dp">DP：加入引导数据</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#diagnosis">找原因 / DP</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
 </header>
 
@@ -87,6 +87,12 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <tr><td>dpGo</td><td>84 个引导成功回合</td><td class="n">4 / 120</td><td>vs dpN p = 1.0</td></tr>
 <tr><td>dpG</td><td>58 个原生 + 84 个引导</td><td class="n good">18 / 120</td><td>vs dpN p = 0.0023；vs dpGo 16 比 2，p = 0.0013</td></tr></table></div>
 <p>只用引导数据并不比只用原生数据好（同回合数 4 比 5），所以 System 2 的数据不是“单独更好”；但把它加到原生数据上，成功率从 4% 到 15%，远超两者相加。也不是单纯数据越多越好：84 个引导回合比 58 个原生回合多，却没有更好。合理的解释是两者互补：原生回合提供 pi0 自己风格的、从头到尾完整一致的正常流程；引导回合提供 pi0 做不到的 33 个布局上的成功经验和纠错动作；单独的引导回合里学生和教师两种动作风格混在一起，难以单独学好。</p>
+<h3>训练种子重复：方向一致，幅度随训练随机性变化</h3>
+<div class="table-wrap"><table><tr><th>同一批留出起点</th><th>只用原生</th><th>原生 + 引导</th><th>仅原生 / 仅加引导成功</th><th>p</th></tr>
+<tr><td>训练种子 0（上表）</td><td class="n">5 / 120</td><td class="n">18 / 120</td><td class="n">2 / 15</td><td class="n">0.0023</td></tr>
+<tr><td>训练种子 1（重新训练两者）</td><td class="n">4 / 119</td><td class="n">8 / 119</td><td class="n">3 / 7</td><td class="n">0.34</td></tr>
+<tr><td>两个训练种子合并</td><td class="n">9 / 239</td><td class="n good">26 / 239</td><td class="n">5 / 22</td><td class="n">0.0015</td></tr></table></div>
+<p class="note">换一个训练种子，加入引导数据仍然更好，但提升从 +10.8 个百分点降到 +3.4 个百分点，说明从零训练的 DP 本身波动较大，单个训练种子的数字不能当精确效应量。合并检验把两个种子的同一起点当作两对，属近似。另：再加入失败引导回合中已完成的纠错段（约 5 倍纠错数据），前半评测与 dpG 持平（9/59 对 9/60），没有额外收益。</p>
 <p class="note"><b>最后一个待排除的解释：</b>dpG 共 142 个回合。正在补收原生回合（训练布局、新种子，3 × 160 回合），训练“142 个原生回合”的 dpNb 与 dpG 比较；同时训练“全部原生 + 84 个引导”。另有训练种子重复（dpN2 vs dpG2）和加入失败回合纠错段（约 5 倍纠错数据）的 DP 正在训练。<a href="rd/records/dp_heldout_240.json">dpN / dpG 逐回合记录</a>。</p></section>
 
 <section class="section"><div class="grid">
