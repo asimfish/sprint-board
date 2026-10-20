@@ -46,7 +46,7 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <body><main>
 <header>
   <h1>RoboDojo 引导模仿</h1>
-  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 18:20 UTC</div>
+  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 19:40 UTC</div>
   <nav class="nav"><a href="#status">当前状态</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#diagnosis">找原因 / DP</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
 </header>
 
@@ -158,7 +158,15 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <ul><li><b>平滑不是原因：</b>不平滑、5 步平滑、9 步平滑加压缩停顿，三者几乎一样。</li>
 <li><b>不是练过头：</b>少训（5 轮）或调低学习率，漂移反而更大、纠错学得更少。漂移在训练一开始就发生（教师样本的损失是原生的约 10 倍），之后靠原生样本慢慢拉回。</li>
 <li><b>真正的杠杆是“防遗忘”的原生数据占比：</b>回放 ×3 时漂移最小、原生成功回合上与原版持平（0.046 对 0.045），纠错仍学到一部分（0.100 → 0.081）。但六个变体都没达到 0.040 的门槛。</li></ul>
-<p class="note">按事先规则（都未过门槛时选漂移最小者），“原生回放 ×3”已进入仿真成对评测（set2 布局 40–54 × 新种子 6016–6023，与原版同起点同种子）。第二轮扫描继续加大原生锚定：原生成功 ×3 或 ×6，再加原生失败回合前 300 步的画面。另一个 Codex 代理按文献（CLEAR 的“向旧策略看齐”）在实现更直接的锚定损失：在原生画面上让微调后的动作场贴近原版。</p>
+<div class="fail"><b>仿真结果：离线更好不等于闭环更好。</b>按事先规则（都未过门槛时选漂移最小者），“原生回放 ×3”在 set2 布局 40–54 × 新种子 6016–6023 上与原版成对评测：完成 72 对（部分回合因作业时限未跑完），模仿后 7/72，原版 15/72（只有模仿后成功 5，只有原版成功 13，p = 0.096），无提升。</div>
+<h3>失败类型：System 2 擅长纠正的失败是否变少（离线重放）</h3>
+<p>把 System 2 的检测器套到已完成的成对评测的真值轨迹上，统计每类事件发生过的回合数（原版 → 模仿后，set2 留出布局）。</p>
+<div class="table-wrap"><table><tr><th>配方</th><th>成对数</th><th>结束时仍有碗倒着</th><th>停滞（200 步无进展）</th><th>抓空</th><th>掉落</th><th>成功</th></tr>
+<tr><td>HGD（System 2 纠错段 + 回放）</td><td class="n">120</td><td class="n good">18 → 11（p = 0.23）</td><td class="n">65 → 76</td><td class="n">30 → 42</td><td class="n">7 → 8</td><td class="n">18 → 12</td></tr>
+<tr><td>GIL（整条引导轨迹）</td><td class="n">120</td><td class="n">20 → 22</td><td class="n bad">60 → 101（p &lt; 0.001）</td><td class="n">26 → 34</td><td class="n bad">1 → 10（p = 0.004）</td><td class="n">19 → 1</td></tr>
+<tr><td>对照：自我模仿 SI-1f（只学自己的成功）</td><td class="n">111</td><td class="n">20 → 9（p = 0.06）</td><td class="n">58 → 70</td><td class="n">22 → 27</td><td class="n">1 → 3</td><td class="n">15 → 15</td></tr></table></div>
+<p class="note">“碗不再被碰倒”在 HGD 上有迹象（18 → 11），但不显著，而且自我模仿对照也有同样变化，所以不能归功于 System 2。所有微调版本的共同副作用是停滞变多，和离线看到的“正常动作被带偏”一致：小数据微调让 pi0 变得犹豫。</p>
+<p class="note">接下来三项检验（已提交）：(1) DP 从零训练、只用原生数据 vs 加入引导数据，在留出布局上成对评测，并有同回合数的“只用引导数据”对照；(2) 训练布局（见过的场景、新种子）上的同分布检验：原版 / HGD / DP 两臂同起点；(3) 引导模式下，模仿后的学生是否更少需要 System 2（接管次数、教师步数）。另有流场锚定配方（a1–a3）和更高原生占比（s7–s9）的离线结果待出。</p>
 <h3>正在验证（结果出来后更新本节）</h3>
 <ul>
 <li><b>Diffusion Policy 从零训练：</b>dpN 只用 58 个原生成功回合；dpG 用同样 58 个原生回合 + 84 个引导成功回合（接管前 50 步的学生动作和失败的教师段不作为训练起点）。两者架构、步数相同（各 6 万步），在 set2 布局 40–54 上同起点同种子成对评测。数据管线已检查：视频第 i 帧与第 i 步的策略输入逐像素对齐（平均差 1.5 灰度级，错开一帧为 2–6，错配相机为 50 以上）。</li></ul></section>
