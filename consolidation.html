@@ -13,14 +13,14 @@
     <a class="brand" href="#top"><span class="brand-mark">S2</span><span>System 2 固化<span class="long"> · 实验记录</span></span></a>
     <nav aria-label="页面目录">
       <a href="#results">结果</a><a href="#method">做法</a><a href="#field-dictionary">字段</a><a href="#arms">组别</a>
-      <a href="#tasks">逐任务</a><a href="#episodes">逐回合</a><a href="#why">为什么</a><a href="#next">下一步</a><a href="#raw">原始记录</a><a href="index.html">总览</a>
+      <a href="#tasks">逐任务</a><a href="#episodes">逐回合</a><a href="#why">为什么</a><a href="#passk">多试几次</a><a href="#next">下一步</a><a href="#raw">原始记录</a><a href="index.html">总览</a>
     </nav>
   </div>
 </header>
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-20 16:57Z</span><span class="chip">下一个实验设计中</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-20 16:59Z</span><span class="chip">PLA-D v3（叠加两种固化）排队中</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在 13 个任务的四次测试里都显著提高成功率，换到 10 个原本很少成功的新任务上也提高（+10.3 pp）；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约三分之一。</p>
     <div class="tiles">
@@ -129,6 +129,18 @@
     </div>
   </section>
 
+  <section class="section" id="passk">
+    <div class="section-head"><span class="kicker">多试几次时（事后、描述性）</span><h2>平移试 1 次，大约抵得上原生试 2–3 次</h2>
+      <p>同一起点用不同种子试 k 次、至少成功一次的比例（用已有逐回合记录按组合数算，没有新跑实验，也不作判定）。平移在测试时再用 System 2 多试几次时仍然更好，在 10 个低成功率新任务上差距还在扩大：固化之后，同样的成功率需要更少的尝试。</p></div>
+    <div class="panel table-wrap"><table><thead><tr><th>测试</th><th class="num">原生：试 1 / 2 / 3 / 4 次</th><th class="num">平移 2 倍：试 1 / 2 / 3 / 4 次</th></tr></thead><tbody>
+      <tr><th scope="row">v2 (13 tasks, starts 20–29)</th><td class="num">47.7 / 64.5 / 73.3 / 78.5 %</td><td class="num">63.1 / 75.9 / 81.3 / 84.6 %</td></tr>
+      <tr><th scope="row">v3 (13 tasks, starts 10–19)</th><td class="num">35.4 / 51.3 / 60.8 %</td><td class="num">58.5 / 72.8 / 79.2 %</td></tr>
+      <tr><th scope="row">v5 (13 tasks, 20–29 new seeds)</th><td class="num">45.6 / 61.8 / 73.8 %</td><td class="num">64.4 / 77.7 / 83.8 %</td></tr>
+      <tr><th scope="row">v6 (10 new low tasks)</th><td class="num">15.8 / 25.2 / 31.8 / 37.0 %</td><td class="num">26.0 / 37.7 / 46.2 / 53.0 %</td></tr>
+      <tr><th scope="row">v4 (7 tasks, starts 30–49)</th><td class="num">51.8 / 70.0 %</td><td class="num">74.3 / 86.4 %</td></tr>
+    </tbody></table></div>
+  </section>
+
   <section class="section">
     <div class="section-head"><span class="kicker">π0.5 上的已登记结果</span><h2>同一机制在第一个策略上的正式结论</h2></div>
     <div class="panel table-wrap" id="context"><p class="loading">正在读取…</p></div>
@@ -170,6 +182,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>10-20 17:20Z</time><span>事后描述：平移试 1 次 ≈ 原生试 2–3 次；PLA-D v3（蒸馏权重 + 平移）规则写定并排队。</span></li>
       <li><time>10-20 17:05Z</time><span>PLA-D v2：C_ON 52.1 %、C_OFF 47.9 %，都不比 PLA-D v1（53.1 %）好；权重路线卡在约三分之一。</span></li>
       <li><time>10-20 14:45Z</time><span>PLA-D v2 规则写定并排队：分开“标签格式”和“状态分布”两个原因，看蒸馏能否保住更多提升。</span></li>
       <li><time>10-20 14:30Z</time><span>PLA-N v6：10 个新的低成功率任务上平移 26.0 % vs 原生 15.8 %（+10.3 pp，GAIN）；门槛 G10 不成立。</span></li>

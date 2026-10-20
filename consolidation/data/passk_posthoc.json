@@ -1,0 +1,95 @@
+{
+ "v2 (13 tasks, starts 20\u201329)": {
+  "k": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "native": [
+   47.7,
+   64.5,
+   73.3,
+   78.5
+  ],
+  "shift": [
+   63.1,
+   75.9,
+   81.3,
+   84.6
+  ],
+  "native_k_to_match_shift_k1": 2
+ },
+ "v3 (13 tasks, starts 10\u201319)": {
+  "k": [
+   1,
+   2,
+   3
+  ],
+  "native": [
+   35.4,
+   51.3,
+   60.8
+  ],
+  "shift": [
+   58.5,
+   72.8,
+   79.2
+  ],
+  "native_k_to_match_shift_k1": 3
+ },
+ "v5 (13 tasks, 20\u201329 new seeds)": {
+  "k": [
+   1,
+   2,
+   3
+  ],
+  "native": [
+   45.6,
+   61.8,
+   73.8
+  ],
+  "shift": [
+   64.4,
+   77.7,
+   83.8
+  ],
+  "native_k_to_match_shift_k1": 3
+ },
+ "v6 (10 new low tasks)": {
+  "k": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "native": [
+   15.8,
+   25.2,
+   31.8,
+   37.0
+  ],
+  "shift": [
+   26.0,
+   37.7,
+   46.2,
+   53.0
+  ],
+  "native_k_to_match_shift_k1": 3
+ },
+ "v4 (7 tasks, starts 30\u201349)": {
+  "k": [
+   1,
+   2
+  ],
+  "native": [
+   51.8,
+   70.0
+  ],
+  "shift": [
+   74.3,
+   86.4
+  ],
+  "native_k_to_match_shift_k1": null
+ }
+}
