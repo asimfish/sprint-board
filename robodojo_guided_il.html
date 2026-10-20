@@ -46,17 +46,17 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <body><main>
 <header>
   <h1>RoboDojo 引导模仿</h1>
-  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 07:40 UTC</div>
+  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 08:15 UTC</div>
   <nav class="nav"><a href="#status">当前状态</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
 </header>
 
-<section class="section status" id="status"><span class="kicker">当前状态</span><h2>引导救回已经成立；模仿学习评测进行中</h2><p><b>已得到的阶段性成果：</b>System 2 在 pi0 快失败时接管，能把原本失败的回合救回来。16 个原生两次都失败的起点，引导成功 4 个、同起点原生 0 个；330 个引导回合成功率 25.5%，同批训练布局原生 17.8%。由此得到 84 条引导成功轨迹（全部是 stack_bowls）。</p><p><b>正在进行：</b>84 条轨迹已训练进 pi0（2,000 步，冻结权重逐位检查通过）；在从未使用过的 set2 布局上，原版与模仿后的 pi0 正在同时成对运行（240 回合），结果出来后更新本页。</p></section>
+<section class="section status" id="status"><span class="kicker">当前状态</span><h2>引导救回成立；整条轨迹模仿失败（已找到原因）；修正配方训练中</h2><p><b>成立的部分：</b>System 2 在 pi0 快失败时接管，能把原本失败的回合救回来：16 个原生两次都失败的起点，引导成功 4 个、原生 0 个；330 个引导回合成功率 25.5%，同批训练布局原生 17.8%；得到 84 条引导成功轨迹（全部是 stack_bowls）。</p><p><b>第一次模仿失败：</b>把 84 条引导成功轨迹整条训练进 pi0，在留出布局上模仿后 1/120，原版 19/120（p = 4×10⁻⁵）。原因是数据配方：整条轨迹里平均 433 步是学生自己控制的，大量是接管前“快要失败”的动作，模型学到了失败行为。</p><p><b>正在进行：</b>改为只学教师成功完成的纠错段，加上原生成功回合作为回放（HG-DAgger 式），学习率降到 1e-5；在同一组留出布局的新种子上与原版同时成对评测。</p></section>
 
 <section class="section"><div class="grid">
   <div class="card"><span class="small">任务与数据</span><span class="stat">1 个任务</span>stack_bowls（标准布局）；训练布局 110 个，留出布局另用</div>
   <div class="card"><span class="small">救回（成对，同起点同种子）</span><span class="stat good">4 / 16 <small>原生 0 / 16</small></span>16 个原生两次都失败的起点</div>
   <div class="card"><span class="small">引导收集</span><span class="stat">84 / 330 <small>25.5%</small></span>同批布局原生 57 / 320（17.8%）</div>
-  <div class="card"><span class="small">模仿后 pi0 独立运行 vs 原版</span><span class="stat warn">评测中</span>set2 布局 40–54 × 8 个种子，120 对</div>
+  <div class="card"><span class="small">模仿后 pi0 独立运行 vs 原版</span><span class="stat bad">1 / 120 <small>原版 19 / 120</small></span>第一版配方（整条轨迹）显著变差；修正配方评测中</div>
 </div></section>
 
 <section class="section" id="trajectories"><span class="kicker">数据</span><h2>引导轨迹在哪些任务上、每个任务多少条</h2>
@@ -128,7 +128,7 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <p class="note">收集和原生筛查用的策略种子不同，所以 25.5% 对 17.8% 不是成对比较；成对的救回证据见证据一。几乎每个回合都会触发接管，其中一部分打断了本可成功的学生动作。</p>
 </section>
 
-<section class="section" id="imitation"><span class="kicker">模仿学习</span><h2>84 条引导轨迹已训练进 pi0，留出布局评测进行中</h2><ul><li>数据：84 条引导成功轨迹 → 5,076 个样本（教师段平滑）。</li><li>训练：只训练 pi0 的动作专家，视觉-语言部分冻结；峰值学习率 2.5e-5，2,000 步，无 EMA。训练前检查训练输入与推理输入逐字节一致；训练后逐位核对冻结权重（32 组全部相同）。</li><li>评测：set2 布局 40–54 × 策略种子 6000–6007 = 120 个起点，原版与模仿后的 pi0 同时运行、同一起点同一种子成对；不开 System 2。</li><li>事先登记的判定：精确 McNemar，模仿后 &gt; 原版且 p &lt; 0.05 记为“初步有效”；模仿后 &gt; 原版但不显著记为“正向趋势”；执行错误单列，不补跑。</li></ul></section>
+<section class="section" id="imitation"><span class="kicker">模仿学习</span><h2>第一版：整条引导轨迹模仿 → 显著变差；修正配方进行中</h2><div class="table-wrap"><table><tr><th>配方</th><th>训练数据</th><th>评测（set2 布局 40–54，成对）</th><th>原版</th><th>模仿后</th><th>只有模仿后成功 / 只有原版成功</th><th>精确 McNemar</th><th>判定</th></tr><tr><td>GIL：整条引导轨迹</td><td>84 回合 → 5,076 样本；lr 2.5e-5，2,000 步</td><td>种子 6000–6007，120 对</td><td class="n">19（15.8%）</td><td class="n bad">1（0.8%）</td><td class="n">1 / 19</td><td class="n">p = 4×10⁻⁵</td><td class="bad">显著变差</td></tr><tr><td>HGD：只学教师纠错段 + 原生成功回放</td><td>成功完成的教师段（剔除以技能失败告终的段）+ 58 个原生成功回合；lr 1e-5，300–1200 步</td><td>新种子 6008–6015，120 对</td><td colspan="5" class="warn">训练与评测进行中</td></tr></table></div><div class="fail"><b>为什么第一版变差：</b>数据一致性检查都通过了（676 个取样点上原始存档与策略输入逐字节一致；冻结权重 32/32 相同），问题在于学了什么。模仿后的模型停滞从 11 次增加到 32 次；视频里它抓起碗后往身前挪、原地反复抓放，不往中间的碗走。整条引导轨迹平均 584 步，其中 433 步是学生自己控制，而多数接管发生在第 550 步或停滞 200 步之后，所以这些学生步大量是“快要失败”的动作。</div><div class="videos"><figure><video controls preload="metadata" src="rd/media/base_ok_l0042_s6001.mp4"></video><figcaption>原版：set2 布局 42、种子 6001，成功。</figcaption></figure><figure><video controls preload="metadata" src="rd/media/gil_fail_l0042_s6001.mp4"></video><figcaption><span class="bad">第一版模仿后</span>：同一起点同一种子，抓起碗后往身前挪、反复抓放，失败。</figcaption></figure></div><p class="note">修正配方是在看过第一版的失败回合之后定的，属于开发阶段修正；评测换了新种子，但布局仍是 40–54，报告时会注明。判定规则事先写入协议：模仿后 &gt; 原版且 p &lt; 0.05 记为“初步有效”。</p></section>
 
 <section class="section" id="history"><span class="kicker">更正与教训</span><h2>之前的结论哪些作废了</h2>
 <div class="fail"><b>“微调让成功率下降 8–12 pp”已作废。</b>原因是训练管线 bug：openpi 的 EMA 作用在已转成 bf16 的冻结视觉-语言权重上，使其偏离原值约 5%。关掉 EMA 后，冻结权重逐位等于原版；零训练对照与原版无差异（25.9% vs 19.6%，p = 0.25）。</div>
