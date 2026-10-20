@@ -20,12 +20,12 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 个任务</span><span>更新 2026-10-20 07:44Z</span><span class="chip">PLA-N v4 排队中</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 个任务</span><span>更新 2026-10-20 09:43Z</span><span class="chip">PLA-N v5 运行中</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
-    <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在两批从未测过的起点上都显著提高成功率；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约三分之一。</p>
+    <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在三批从未测过的起点上都显著提高成功率；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约三分之一。</p>
     <div class="tiles">
-      <div class="tile"><span class="k">PLA-N v3 · 起点 10–19</span><span class="v good">+23.1 pp</span><span class="s">35.4 % → 58.5 %，区间 +15.4 到 +31.5，13/13 个任务提高</span></div>
-      <div class="tile"><span class="k">PLA-N v2 · 起点 20–29</span><span class="v good">+15.4 pp</span><span class="s">47.7 % → 63.1 %，区间 +4.6 到 +26.2，10/13 个任务提高</span></div>
+      <div class="tile"><span class="k">平移 2 倍 · 三批新起点</span><span class="v good">+15 ~ +23 pp</span><span class="s">v2 +15.4 · v3 +23.1 · v4 +22.5，三次按任务聚类都判 GAIN</span></div>
+      <div class="tile"><span class="k">3 倍剂量 · PLA-N v4</span><span class="v flat">+0.4 pp</span><span class="s">比 2 倍没有更好（74.6 % vs 74.3 %）；部署剂量维持 2 倍</span></div>
       <div class="tile"><span class="k">蒸馏进权重 · PLA-D v1</span><span class="v flat">+5.4 pp</span><span class="s">53.1 %，区间含 0；约为平移提升的三分之一</span></div>
       <div class="tile"><span class="k">自我模仿微调 · PLA v1 / v1c</span><span class="v bad">−10 / 0 pp</span><span class="s">1,500 步变差，4,000 步回到原水平</span></div>
     </div>
@@ -120,7 +120,7 @@
         <ul class="list">
           <li>v2 里没提升的 3 个任务（14、33、51）恰好是搜索时成功过的固定噪声最少的（24 张里 1、3、9 张，其余 11–24 张）。</li>
           <li>据此写定门槛 G10，拿 π0.5 的 E22-M 检验：17 个任务全部过门槛，按规则记“无法检验”。</li>
-          <li>v3 的新起点上这 3 个任务没有再变差（平均 +7.8 pp，任务 51 从 10 到 13），但平移加到 4 倍时任务 33、51 又低于原生。</li>
+          <li>v3 的新起点上这 3 个任务没有再变差（平均 +7.8 pp，任务 51 从 10 到 13），但平移加到 4 倍时任务 33、51 又低于原生；v4 里任务 51 在 3 倍时也下降（17 → 12 / 40）。</li>
           <li>现阶段读法：成功票少的任务，提升小且不稳，剂量越大越容易伤；真正检验需要新任务。</li>
         </ul>
       </div>
@@ -135,7 +135,7 @@
   <section class="section" id="next">
     <div class="section-head"><span class="kicker">下一步</span><h2>下一步验证什么</h2></div>
     <div class="two">
-      <div class="panel"><h3>已写好规则、在排队</h3><div id="queue"><p class="loading">正在读取…</p></div></div>
+      <div class="panel"><h3>已写好规则、在跑</h3><div id="queue"><p class="loading">正在读取…</p></div></div>
       <div class="panel"><h3>之后</h3>
         <ul class="list">
           <li>新任务：13 个中等难度任务的起点快用完了（最初 6 个任务的 50 个起点已全部用过）。门槛和剂量都需要在 π0 没用过的任务上检验。</li>
@@ -150,6 +150,7 @@
     <div class="section-head"><span class="kicker">原始记录</span><h2>逐回合记录</h2>
       <p>每个文件的 <code>rows</code> 是 <code>[任务, 起点, 种子, 组别编号, 是否成功, 控制步数]</code>；<code>arms</code> 给出组别编号的含义。汇总数字在 <a href="consolidation/data/summary.json">summary.json</a>。</p></div>
     <div class="panel"><ul class="list" id="raw-list">
+      <li><a href="consolidation/data/pla_n_v4.json">PLA-N v4</a> · 840 回合</li>
       <li><a href="consolidation/data/pla_n_v3.json">PLA-N v3</a> · 1,950 回合</li>
       <li><a href="consolidation/data/pla_d_v1.json">PLA-D v1</a> · 1,040 回合 + v2 的原生 / 平移参照</li>
       <li><a href="consolidation/data/pla_n_v2.json">PLA-N v2</a> · 1,560 回合</li>
@@ -163,6 +164,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>10-20 09:45Z</time><span>PLA-N v4：3 倍 74.6 % ≈ 2 倍 74.3 %（+0.4 pp），都比原生 51.8 % 高约 23 pp；剂量维持 2 倍。v5 冒烟 08:28Z 通过，v5 09:33Z 开跑。</span></li>
       <li><time>10-20 07:58Z</time><span>排队：PLA-N v4（确认 3 倍剂量）→ v5 冒烟 → v5（第二轮固化）；v5 规则已写定。</span></li>
       <li><time>10-20 07:38Z</time><span>记录从私有页面搬到这里；补齐 PLA v1 到 PLA-N v3 的逐回合数据。</span></li>
       <li><time>10-20 06:54Z</time><span>PLA-N v3：起点 10–19 上平移 58.5 % vs 原生 35.4 %（+23.1 pp，GAIN）；3 倍剂量 65.1 %；最好的固定噪声 52.3 %。</span></li>
