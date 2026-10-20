@@ -20,7 +20,7 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 个任务</span><span>更新 2026-10-20 11:58Z</span><span class="chip">新任务筛查运行中</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 个任务</span><span>更新 2026-10-20 12:46Z</span><span class="chip">PLA-N v6（新任务）排队中</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在四次测试（三批从未测过的起点、一批新种子）里都显著提高成功率；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约三分之一。</p>
     <div class="tiles">
@@ -150,6 +150,7 @@
     <div class="section-head"><span class="kicker">原始记录</span><h2>逐回合记录</h2>
       <p>每个文件的 <code>rows</code> 是 <code>[任务, 起点, 种子, 组别编号, 是否成功, 控制步数]</code>；<code>arms</code> 给出组别编号的含义。汇总数字在 <a href="consolidation/data/summary.json">summary.json</a>。</p></div>
     <div class="panel"><ul class="list" id="raw-list">
+      <li><a href="consolidation/data/pla_s_v1.json">PLA-S v1</a> · 1,232 个筛查回合</li>
       <li><a href="consolidation/data/pla_n_v5.json">PLA-N v5</a> · 1,560 个测试回合</li>
       <li><a href="consolidation/data/pla_n_v4.json">PLA-N v4</a> · 840 回合</li>
       <li><a href="consolidation/data/pla_n_v3.json">PLA-N v3</a> · 1,950 回合</li>
@@ -165,6 +166,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>10-20 12:48Z</time><span>PLA-S v1 筛查：77 个任务里 63 个原生 0/16；按规则选出 10 个低成功率任务进入 v6（已排队）。</span></li>
       <li><time>10-20 12:00Z</time><span>开始推广到新任务：77 个任务的原生筛查已提交；v6 的选任务规则和门槛检验在出数据前写定。</span></li>
       <li><time>10-20 11:50Z</time><span>PLA-N v5：第二轮固化 70.3 % vs 同推力只沿第一轮 68.5 %（+1.8 pp，未显示）；第一轮 64.4 % vs 原生 45.6 %（第四次 GAIN）。</span></li>
       <li><time>10-20 09:45Z</time><span>PLA-N v4：3 倍 74.6 % ≈ 2 倍 74.3 %（+0.4 pp），都比原生 51.8 % 高约 23 pp；剂量维持 2 倍。v5 冒烟 08:28Z 通过，v5 09:33Z 开跑。</span></li>

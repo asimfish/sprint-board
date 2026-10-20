@@ -84,7 +84,7 @@
     var host = document.getElementById('result-cards');
     host.innerHTML = '';
     state.summary.experiments.forEach(function (exp) {
-      var primary = exp.comparisons[0];
+      var primary = exp.comparisons[0] || {};
       var head = el('div', { class: 'card-head' }, [
         el('div', { class: 'card-title' }, [
           el('span', { class: 'id', text: exp.name }),
@@ -103,7 +103,7 @@
       ]);
       var body = el('div', { class: 'card-body' }, [
         el('div', {}, [el('h4', { text: '各组成功次数' }), armTable(exp)]),
-        el('div', {}, [el('h4', { text: '比较（事先写定的主比较在前）' }), compTable(exp)]),
+        exp.comparisons.length ? el('div', {}, [el('h4', { text: '比较（事先写定的主比较在前）' }), compTable(exp)]) : el('div', {}, [el('h4', { text: '比较' }), el('p', { class: 'role', text: '筛查没有比较组，只用来按事先写定的规则选任务。' })]),
         el('ul', { class: 'readings' }, exp.reading.map(function (t) { return el('li', { text: t }); })),
         el('div', { class: 'raw-link' }, [el('a', { href: BASE + exp.id + '.json', text: '逐回合原始记录（JSON）' }),
           ' · ', el('a', { href: '#episodes', 'data-jump': exp.id, text: '在下面逐回合看' })])
@@ -134,8 +134,8 @@
         return el('td', {}, [el('span', { class: has ? 'yes' : 'no', text: has ? '✓' : '—', 'aria-label': has ? '有' : '无' })]);
       });
       return el('tr', {}, [el('th', { scope: 'row' }, [el('a', { href: '#exp-' + exp.id, text: exp.name }), el('div', { class: 'role', text: exp.date + ' · ' + exp.tasks + ' 个任务' })])]
-        .concat(cells).concat([el('td', { class: 'left' }, [label(p.a) + ' − ' + label(p.b) + ' ' + signed(p.delta) + ' pp ',
-          p.verdict ? el('span', { class: 'badge ' + p.verdict, text: VERDICT[p.verdict] }) : ''])]));
+        .concat(cells).concat([el('td', { class: 'left' }, p ? [label(p.a) + ' − ' + label(p.b) + ' ' + signed(p.delta) + ' pp ',
+          p.verdict ? el('span', { class: 'badge ' + p.verdict, text: VERDICT[p.verdict] }) : ''] : ['筛查（无比较）'])]));
     });
     var host = document.getElementById('matrix');
     host.innerHTML = '';
@@ -260,7 +260,7 @@
       return Promise.all(summary.experiments.map(function (e) {
         return fetch(BASE + e.id + '.json').then(function (r) { return r.json(); }).then(function (d) {
           state.data[e.id] = d;
-          e.hasTrainStarts = d.rows.some(function (r) { return r[1] < 10; });
+          e.hasTrainStarts = !e.no_split && d.rows.some(function (r) { return r[1] < 10; });
         });
       }));
     }).then(function () {
