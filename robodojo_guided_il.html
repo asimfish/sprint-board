@@ -46,11 +46,11 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <body><main>
 <header>
   <h1>RoboDojo 引导模仿</h1>
-  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 10:05 UTC</div>
-  <nav class="nav"><a href="#status">当前状态</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
+  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 17:45 UTC</div>
+  <nav class="nav"><a href="#status">当前状态</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#diagnosis">找原因 / DP</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
 </header>
 
-<section class="section status" id="status"><span class="kicker">当前状态</span><h2>引导救回成立；把引导轨迹模仿进 pi0 还没有带来提升</h2><p><b>成立：</b>System 2 在 pi0 快失败时接管，能把原本失败的回合救回来。16 个原生两次都失败的起点，引导成功 4 个、原生 0 个；330 个引导回合成功率 25.5%，同批训练布局原生 17.8%；得到 84 条引导成功轨迹（全部 stack_bowls）。</p><p><b>未成立：</b>把引导轨迹模仿进 pi0 后，pi0 独立运行的成功率没有超过原版。整条轨迹模仿显著变差（1/120 vs 19/120）；只学教师纠错段并加原生回放后为 12/120 vs 18/120（p = 0.26，无提升）。</p><p><b>判断：</b>特权脚本教师的动作风格与 pi0 自身差异很大（训练初始损失 0.11，是原生数据的 10 倍），约 1,100 个纠错样本不足以让 pi0 学会这些纠错，反而轻微干扰了它原有的行为。</p></section>
+<section class="section status" id="status"><span class="kicker">当前状态</span><h2>引导救回成立；pi0 模仿未提升，已找到一个主要原因，正在做两条补救实验</h2><p><b>成立：</b>System 2 在 pi0 快失败时接管，能把原本失败的回合救回来。16 个原生两次都失败的起点，引导成功 4 个、原生 0 个；330 个引导回合成功率 25.5%，同批训练布局原生 17.8%；得到 84 条引导成功轨迹（全部 stack_bowls）。</p><p><b>未成立：</b>把引导轨迹模仿进 pi0 后，pi0 独立运行的成功率没有超过原版。整条轨迹模仿显著变差（1/120 vs 19/120）；只学教师纠错段并加原生回放后为 12/120 vs 18/120（p = 0.26，无提升）。</p><p><b>判断：</b>特权脚本教师的动作风格与 pi0 自身差异很大（训练初始损失 0.11，是原生数据的 10 倍），约 1,100 个纠错样本不足以让 pi0 学会这些纠错，反而轻微干扰了它原有的行为。</p><p><b>找原因（新）：</b>离线比较动作发现，pi0 微调后确实学会了教师的纠错（留出纠错片段误差 0.100 → 0.070），但正常画面上的动作也偏离原版 63%，收益被抵消。现在两条线并行：pi0 单因素扫描（数据量 / 平滑 / 训练参数），以及用 Diffusion Policy 从零训练、对比“只用原生数据”和“加入引导数据”。</p></section>
 
 <section class="section"><div class="grid">
   <div class="card"><span class="small">任务与数据</span><span class="stat">1 个任务</span>stack_bowls（标准布局）；训练布局 110 个，留出布局另用</div>
@@ -94,6 +94,9 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <div><dt>N50</dt><dd>pi0 每次输出 50 步动作并全部执行，然后才看新画面重新规划；被接管时剩下的动作作废。</dd></div>
 <div><dt>布局 set0 / set1 / set2、策略种子</dt><dd>布局决定三只碗的初始摆放（每个集合 55 个）；策略种子决定 pi0 采样噪声。set0、set1 用于收集和训练，set2 只用于评测。</dd></div>
 <div><dt>成对比较 / 精确 McNemar</dt><dd>同一布局、同一策略种子分别跑两种条件；只看“一边成功一边失败”的起点数，检验差异是否显著。</dd></div>
+<div><dt>动作误差（L1）</dt><dd>给定同一时刻的图像和状态，让模型采样 4 次动作块，与目标动作块逐元素相减取绝对值的平均（手臂关节，单位弧度，看 50 步整块）。不跑仿真，只看模型“会不会做这个动作”。</dd></div>
+<div><dt>原生漂移</dt><dd>在原版自己跑过的留出画面上，以原版自己当时的动作为目标测 L1。原版自己的误差（0.035）就是采样噪声的底线；微调后超出底线越多，说明正常行为被带偏越多。</dd></div>
+<div><dt>Diffusion Policy（DP）</dt><dd>扩散策略：从零训练（不用预训练权重），输入前后两帧三路相机（缩到 120×160）和关节状态，输出 16 步关节动作，执行前 8 步后看新画面重新规划。与 pi0 不同，它没有“原有行为”可被带偏，用来检验引导数据本身有没有用。</dd></div>
 <div><dt>样本 / 处理</dt><dd>一个样本 = 当时学生看到的三路图像和关节状态 + 之后实际执行的 50 步指令（学生和教师都在内）；教师段的手臂关节做 5 步滑动平均，夹爪不变。</dd></div>
 </dl></section>
 
@@ -129,6 +132,22 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 </section>
 
 <section class="section" id="imitation"><span class="kicker">模仿学习</span><h2>两种配方都没有让 pi0 独立运行的成功率提升</h2><div class="table-wrap"><table><tr><th>配方</th><th>训练数据</th><th>评测（set2 布局 40–54，成对）</th><th>原版</th><th>模仿后</th><th>只有模仿后成功 / 只有原版成功</th><th>精确 McNemar</th><th>判定</th></tr><tr><td>GIL：整条引导轨迹</td><td>84 回合 → 5,076 样本；lr 2.5e-5，2,000 步</td><td>种子 6000–6007，120 对</td><td class="n">19（15.8%）</td><td class="n bad">1（0.8%）</td><td class="n">1 / 19</td><td class="n">p = 4×10⁻⁵</td><td class="bad">显著变差</td></tr><tr><td>HGD：只学教师纠错段 + 原生成功回放</td><td>1,111 个教师纠错样本（剔除以技能失败告终的段）+ 原生成功回合，共 1,767 样本；lr 1e-5，1,104 步</td><td>新种子 6008–6015，120 对</td><td class="n">18（15.0%）</td><td class="n">12（10.0%）</td><td class="n">7 / 13</td><td class="n">p = 0.26</td><td class="warn">无提升（方向偏负）</td></tr></table></div><div class="fail"><b>第一版为什么显著变差：</b>整条引导轨迹平均 584 步，其中 433 步是学生自己控制；多数接管发生在第 550 步或停滞 200 步之后，所以这些学生步大量是“快要失败”的动作，模型学到了失败行为（停滞 11 → 32）。数据一致性检查都通过了（676 个取样点逐字节一致；冻结权重 32/32 相同）。</div><div class="fail"><b>修正版为什么仍无提升（推断）：</b>教师动作和 pi0 自己的动作差别很大（训练开始时损失 0.11，用原生数据训练时约 0.01），1,111 个纠错样本不够让 pi0 学会这些纠错；失败类型几乎不变（放偏 68 → 66，停滞 18 → 27）。</div><div class="videos"><figure><video controls preload="metadata" src="rd/media/base_ok_l0042_s6001.mp4"></video><figcaption>原版：set2 布局 42、种子 6001，成功。</figcaption></figure><figure><video controls preload="metadata" src="rd/media/gil_fail_l0042_s6001.mp4"></video><figcaption><span class="bad">第一版模仿后</span>：同一起点同一种子，抓起碗后往身前挪、反复抓放，失败。</figcaption></figure></div><h3>下一步可选方向</h3><ul><li><b>让 System 2 的纠错更像 pi0 自己的动作</b>：例如接管时只给目标（把哪只碗放到哪里），由 pi0 自身或一个按 pi0 风格训练的低层去执行；或用 Astra 做决策，执行仍由 VLA 完成。</li><li><b>多收纠错数据</b>：目前只有约 1,100 个纠错样本；再收 2–3 倍，并提高教师成功率（现在约 40% 的接管以技能失败告终）。</li><li><b>只在“快失败”的状态上用纠错</b>：训练时按状态加权，避免改动 pi0 在正常状态下的行为。</li></ul><p class="note">修正配方是在看过第一版的失败回合之后定的，属于开发阶段修正。判定规则事先写入协议：模仿后 &gt; 原版且 p &lt; 0.05 记为“初步有效”。</p></section>
+
+<section class="section" id="diagnosis"><span class="kicker">找原因</span><h2>pi0 学会了纠错，但正常动作也被带偏；同时用 Diffusion Policy 从零再试</h2><p>不跑仿真，直接比较模型输出的动作和目标动作（同一批样本、同一套打分，原版 / 整条轨迹模仿 GIL / 只学纠错段 HGD 三个 checkpoint）。</p>
+<div class="table-wrap"><table><tr><th>50 步手臂动作误差（L1，弧度）</th><th>教师纠错段（训练用到的，160 个）</th><th>教师纠错段（留出，未参与训练，49 个）</th><th>原生成功回合（训练布局，120 个）</th><th>原生漂移（留出画面，120 个）</th></tr>
+<tr><td>原版 pi0</td><td class="n">0.140</td><td class="n">0.100</td><td class="n">0.045</td><td class="n">0.035（噪声底线）</td></tr>
+<tr><td>GIL（整条引导轨迹）</td><td class="n good">0.060</td><td class="n good">0.068</td><td class="n bad">0.071</td><td class="n bad">0.057（+63%）</td></tr>
+<tr><td>HGD（纠错段 + 原生回放）</td><td class="n good">0.066</td><td class="n good">0.070</td><td class="n bad">0.059</td><td class="n bad">0.057（+63%）</td></tr></table></div>
+<div class="ok"><b>纠错学到了：</b>微调后，模型对教师纠错动作的误差减半，且在没见过的纠错片段上同样减小（0.100 → 0.070），说明不是死记。</div>
+<div class="fail"><b>正常行为被带偏：</b>在原版自己能做好的画面上，微调后的动作偏离原版 63%，比噪声底线高出一截。在仿真里，这表现为一部分原本成功的起点失败（HGD：仅原版成功 13 个），抵消了纠错带来的收益（仅 HGD 成功 7 个）。</div>
+<div class="table-wrap"><table><tr><th>每步指令的平滑度（引导成功回合，c1 + c2）</th><th>教师控制的步（8,610）</th><th>学生控制的步（24,075）</th></tr>
+<tr><td>每步关节最大变化（中位数 / 90 分位，弧度）</td><td class="n">0.022 / 0.044</td><td class="n">0.015 / 0.054</td></tr>
+<tr><td>抖动（三阶差分，90 分位）</td><td class="n">0.025</td><td class="n">0.015</td></tr>
+<tr><td>静止的步占比</td><td class="n">29%</td><td class="n">0%</td></tr></table></div>
+<p class="note">教师动作“走走停停”：移动时比学生快，但有 29% 的步完全不动（等夹爪闭合、到位后停顿），起停处更突兀。pi0 自己从不完全停下。这种风格差异可能是 pi0 学纠错时连带改变正常动作的原因之一。</p>
+<h3>正在验证（结果出来后更新本节）</h3>
+<ul><li><b>pi0 单因素扫描（6 个变体，每次只改一个因素）：</b>参数（训练轮数 20 → 5；学习率 1e-5 → 2.5e-6；原生回放 ×3 加强防遗忘）、平滑（教师段不平滑；9 步平滑并把长停顿压到 ≤ 10 步）、数据量（只用一半引导回合）。用上表同一批样本打分；按事先写好的规则选一个（原生漂移 ≤ 0.040 中教师留出误差最低者），再在新种子上与原版成对仿真评测。</li>
+<li><b>Diffusion Policy 从零训练：</b>dpN 只用 58 个原生成功回合；dpG 用同样 58 个原生回合 + 84 个引导成功回合（接管前 50 步的学生动作和失败的教师段不作为训练起点）。两者架构、步数相同（各 6 万步），在 set2 布局 40–54 上同起点同种子成对评测。数据管线已检查：视频第 i 帧与第 i 步的策略输入逐像素对齐（平均差 1.5 灰度级，错开一帧为 2–6，错配相机为 50 以上）。</li></ul></section>
 
 <section class="section" id="history"><span class="kicker">更正与教训</span><h2>之前的结论哪些作废了</h2>
 <div class="fail"><b>“微调让成功率下降 8–12 pp”已作废。</b>原因是训练管线 bug：openpi 的 EMA 作用在已转成 bf16 的冻结视觉-语言权重上，使其偏离原值约 5%。关掉 EMA 后，冻结权重逐位等于原版；零训练对照与原版无差异（25.9% vs 19.6%，p = 0.25）。</div>
