@@ -234,6 +234,75 @@
     host.appendChild(el('table', { class: 'ep' }, [el('thead', {}, [head]), el('tbody', {}, body)]));
   }
 
+
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function svg(tag, attrs, text) {
+    var n = document.createElementNS(SVGNS, tag);
+    Object.keys(attrs || {}).forEach(function (k) { n.setAttribute(k, attrs[k]); });
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  var FOREST = [
+    ['pla_n_v1', 'shift2', 'native', 'PLA-N v1 · 6 任务', 'noise'], ['pla_n_v2', 'shift2', 'native', 'PLA-N v2 · 13 任务', 'noise'],
+    ['pla_n_v3', 'shift2', 'native', 'PLA-N v3 · 13 任务', 'noise'], ['pla_n_v4', 'shift2', 'native', 'PLA-N v4 · 7 任务', 'noise'],
+    ['pla_n_v5', 'r1', 'native', 'PLA-N v5 · 13 任务', 'noise'], ['pla_n_v7', 's24', 'native', 'PLA-N v7 · 13 任务', 'noise'],
+    ['pla_n_v6', 'shift2', 'native', 'PLA-N v6 · 10 个新任务', 'noise'],
+    ['pla_v1', 'distilled', 'base', 'PLA v1 · 自我模仿', 'weights'], ['pla_d_v1', 'd_succ', 'native', 'PLA-D v1 · 蒸馏', 'weights'],
+    ['pla_d_v2', 'c_on', 'native', 'PLA-D v2 · DAgger 式蒸馏', 'weights']
+  ];
+  function renderForest() {
+    var host = document.getElementById('forest');
+    if (!host) return;
+    var items = FOREST.map(function (f) {
+      var e = expById(f[0]); if (!e) return null;
+      var c = e.comparisons.filter(function (x) { return x.a === f[1] && x.b === f[2]; })[0];
+      return c && c.ci ? { label: f[3], d: c.delta, lo: c.ci[0], hi: c.ci[1], fam: f[4], verdict: c.verdict } : null;
+    }).filter(Boolean);
+    var W = 720, rowH = 30, top = 28, left = 210, right = 70, H = top + items.length * rowH + 34;
+    var lo = -25, hi = 40, x = function (v) { return left + (v - lo) / (hi - lo) * (W - left - right); };
+    var s = svg('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': '各实验：比原生高多少（pp）及 95 % 区间', class: 'chart' });
+    [-20, -10, 0, 10, 20, 30, 40].forEach(function (v) {
+      s.appendChild(svg('line', { x1: x(v), x2: x(v), y1: top - 6, y2: H - 28, class: v === 0 ? 'axis0' : 'grid' }));
+      s.appendChild(svg('text', { x: x(v), y: H - 10, 'text-anchor': 'middle', class: 'tick' }, (v > 0 ? '+' : '') + v));
+    });
+    s.appendChild(svg('text', { x: left, y: 14, class: 'tick' }, '比原生高多少（pp），横线为 95 % 区间'));
+    items.forEach(function (it, i) {
+      var y = top + i * rowH + rowH / 2;
+      s.appendChild(svg('text', { x: left - 10, y: y + 4, 'text-anchor': 'end', class: 'lab' }, it.label));
+      s.appendChild(svg('line', { x1: x(it.lo), x2: x(it.hi), y1: y, y2: y, class: 'ci ' + it.fam }));
+      s.appendChild(svg('circle', { cx: x(it.d), cy: y, r: 5, class: 'pt ' + it.fam }));
+      s.appendChild(svg('text', { x: Math.min(x(it.hi) + 8, W - right + 8), y: y + 4, class: 'val' }, (it.d > 0 ? '+' : '') + it.d.toFixed(1)));
+    });
+    host.innerHTML = ''; host.appendChild(s);
+  }
+  function renderBudget() {
+    var host = document.getElementById('budget');
+    var e = expById('pla_n_v7'); if (!host || !e) return;
+    var c = counts(e);
+    var pts = [['原生', 0, 'native'], ['6', 6, 's6'], ['12', 12, 's12'], ['24', 24, 's24'], ['48', 48, 's48']].map(function (p) {
+      return { label: p[0], k: p[1], r: 100 * c[p[2]][0] / c[p[2]][1] };
+    });
+    var W = 720, H = 260, left = 56, right = 30, top = 24, bottom = 44;
+    var xs = function (i) { return left + i * (W - left - right) / (pts.length - 1); };
+    var y = function (v) { return top + (70 - v) / (70 - 35) * (H - top - bottom); };
+    var s = svg('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': '搜索预算与部署成功率（PLA-N v7）', class: 'chart' });
+    [40, 50, 60, 70].forEach(function (v) {
+      s.appendChild(svg('line', { x1: left, x2: W - right, y1: y(v), y2: y(v), class: 'grid' }));
+      s.appendChild(svg('text', { x: left - 8, y: y(v) + 4, 'text-anchor': 'end', class: 'tick' }, v + ' %'));
+    });
+    s.appendChild(svg('line', { x1: left, x2: W - right, y1: y(pts[0].r), y2: y(pts[0].r), class: 'ref' }));
+    s.appendChild(svg('text', { x: W - right, y: y(pts[0].r) - 6, 'text-anchor': 'end', class: 'tick' }, '原生 ' + pts[0].r.toFixed(1) + ' %'));
+    var d = pts.slice(1).map(function (p, i) { return (i ? 'L' : 'M') + xs(i + 1) + ' ' + y(p.r); }).join(' ');
+    s.appendChild(svg('path', { d: d, class: 'line noise' }));
+    pts.forEach(function (p, i) {
+      if (i) s.appendChild(svg('circle', { cx: xs(i), cy: y(p.r), r: 5, class: 'pt noise' }));
+      if (i) s.appendChild(svg('text', { x: xs(i), y: y(p.r) - 12, 'text-anchor': 'middle', class: 'val' }, p.r.toFixed(1) + ' %'));
+      if (i) s.appendChild(svg('text', { x: xs(i), y: H - 18, 'text-anchor': 'middle', class: 'tick' }, p.label + ' 张'));
+    });
+    s.appendChild(svg('text', { x: (left + W - right) / 2, y: H - 2, 'text-anchor': 'middle', class: 'tick' }, '搜索用的固定噪声张数（每张 × 8 个起点）'));
+    host.innerHTML = ''; host.appendChild(s);
+  }
+
   function renderQueue() {
     var host = document.getElementById('queue');
     host.innerHTML = '';
@@ -264,7 +333,7 @@
         });
       }));
     }).then(function () {
-      renderCards(); renderMatrix(); renderQueue(); renderContext();
+      renderCards(); renderMatrix(); renderQueue(); renderContext(); renderForest(); renderBudget();
       ['task-exp', 'ep-exp'].forEach(function (id) {
         var sel = document.getElementById(id);
         state.summary.experiments.forEach(function (e) { sel.appendChild(el('option', { value: e.id, text: e.name + ' · ' + e.title })); });

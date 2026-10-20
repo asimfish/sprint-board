@@ -131,6 +131,18 @@ td.rate{white-space:nowrap}
 .ep td.cell .fail{background:var(--neutral-bg);color:var(--muted)}
 .ep tr.diff td{background:var(--sunk)}
 
+svg.chart{width:100%;height:auto;display:block}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .axis0{stroke:var(--muted);stroke-width:1.2}
+.chart .ref{stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 4}
+.chart .tick{fill:var(--muted);font-size:12px;font-family:var(--sans)}
+.chart .lab{fill:var(--ink-2);font-size:13px;font-family:var(--sans)}
+.chart .val{fill:var(--ink);font-size:12px;font-weight:600;font-family:var(--sans)}
+.chart .ci.noise{stroke:var(--accent);stroke-width:3;stroke-linecap:round}
+.chart .ci.weights{stroke:var(--muted);stroke-width:3;stroke-linecap:round}
+.chart .pt.noise{fill:var(--accent)}
+.chart .pt.weights{fill:var(--muted)}
+.chart .line.noise{fill:none;stroke:var(--accent);stroke-width:2.5}
 .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .list{margin:0;padding-left:20px;color:var(--ink-2)}
 .list li+li{margin-top:6px}
