@@ -46,12 +46,12 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <body><main>
 <header>
   <h1>RoboDojo 引导模仿</h1>
-  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 22:25 UTC</div>
+  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 23:05 UTC</div>
   <nav class="nav"><a href="#status">当前状态</a><a href="#dp">DP：加入引导数据</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#diagnosis">找原因 / DP</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
 </header>
 
 <section class="section status" id="status"><span class="kicker">当前状态</span><h2>第一个正面结果：加入 System 2 引导轨迹训练的 Diffusion Policy，留出布局成功率 4.2% → 15.0%（p = 0.002）</h2><p><b>模仿的意义（新）：</b>从零训练 Diffusion Policy，只用 pi0 自己的 58 个成功回合时，在没见过的布局上成功 5/120（4.2%）；加入 84 个 System 2 引导出的成功回合后成功 18/120（15.0%），成对比较 15 比 2，p = 0.0023。对照显示两种数据单独都只有约 4%（58 个引导回合 4/120，84 个引导回合 4/120），合起来 15%：System 2 的数据与 System 1 自己的成功回合互补。“142 个原生回合”的等总量对照正在收集数据。</p>
-<p><b>成立：</b>System 2 在 pi0 快失败时接管，能把原本失败的回合救回来（成对 4/16 对 0/16；330 个引导回合成功率 25.5%，原生 17.8%）。</p>
+<p><b>模仿后更少需要 System 2（新）：</b>同样有 System 2 帮助时，模仿了 System 2 数据的 DP 学生接管次数少 12%（p = 0.046）、教师步数少 17%（p = 0.004），系统成功 23/100 对 14/100。</p><p><b>成立：</b>System 2 在 pi0 快失败时接管，能把原本失败的回合救回来（成对 4/16 对 0/16；330 个引导回合成功率 25.5%，原生 17.8%）。</p>
 <p><b>pi0 微调仍未提升：</b>pi0 能学会纠错（留出纠错误差 0.100 → 0.070），但正常动作同时被带偏，闭环成功率都不高于原版；单因素扫描显示原生数据的防遗忘占比是主要杠杆，平滑无影响。正在试：流场锚定 + 更大原生锚定集，以及把失败引导回合里已完成的纠错段也用上（纠错数据约 5 倍）。</p></section>
 
 <section class="section" id="dp"><span class="kicker">模仿的意义</span><h2>从零训练的 Diffusion Policy：加入 System 2 引导轨迹后，留出布局成功率 4.2% → 15.0%（p = 0.002）</h2><p>同一套 Diffusion Policy（三路相机 + 关节状态，16 步动作、执行 8 步重规划，各 6 万步、各 4 张卡），只改训练数据，在<b>从未训练过的 set2 布局 40–54</b>上评测；两种策略在同一布局、同一采样种子（6100–6107）上成对运行，共 240 回合全部有效。</p>
@@ -72,13 +72,15 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <tr><td>HGD（pi0 模仿纠错段）</td><td class="n">10 / 60</td><td>vs 原版 p = 1.0</td></tr>
 <tr><td>dpN（只用原生）</td><td class="n">14 / 60</td><td>—</td></tr>
 <tr><td>dpG（加入引导）</td><td class="n">17 / 60</td><td>vs dpN p = 0.66；vs 原版 17 比 9，p = 0.077</td></tr></table></div>
-<p class="note">在见过的布局上，只用原生数据的 DP 已有 23%，加入引导数据只多 5 个百分点（不显著）；在没见过的布局上从 4% 提高到 15%（p = 0.002）。和覆盖数据一致：引导数据的价值主要在于让策略见过更多“难”的情况，从而在新布局上更稳。</p><h3>模仿后是否更少需要 System 2（引导模式：学生 + 同一个 System 2）</h3>
-<div class="table-wrap"><table><tr><th>set2 留出布局 40–54 × 种子 6100–6103，成对</th><th>系统成功</th><th>每回合接管次数</th><th>每回合教师步数</th></tr>
-<tr><td>原版 pi0 + System 2</td><td class="n">14 / 59</td><td class="n">1.98</td><td class="n">291</td></tr>
+<p class="note">在见过的布局上，只用原生数据的 DP 已有 23%，加入引导数据只多 5 个百分点（不显著）；在没见过的布局上从 4% 提高到 15%（p = 0.002）。和覆盖数据一致：引导数据的价值主要在于让策略见过更多“难”的情况，从而在新布局上更稳。</p><h3>模仿后更少需要 System 2（引导模式：学生 + 同一个 System 2）</h3>
+<div class="table-wrap"><table><tr><th>set2 留出布局 40–54，成对</th><th>系统成功</th><th>每回合接管次数</th><th>每回合教师步数</th></tr>
+<tr><td>原版 pi0 + System 2（59 对）</td><td class="n">14 / 59</td><td class="n">1.98</td><td class="n">291</td></tr>
 <tr><td>HGD（pi0 模仿纠错段）+ System 2</td><td class="n">12 / 59（p = 0.79）</td><td class="n">2.02（p = 1.0）</td><td class="n">306（p = 0.89）</td></tr>
-<tr><td>dpN（DP，只用原生）+ System 2</td><td class="n">7 / 59</td><td class="n">2.10</td><td class="n">365</td></tr>
-<tr><td>dpG（DP，加入引导数据）+ System 2</td><td class="n good">12 / 59（p = 0.33）</td><td class="n good">1.85（27 对更少、14 对更多，p = 0.060）</td><td class="n good">305，−16%（36 对更少、21 对更多，p = 0.063）</td></tr></table></div>
-<p class="note">pi0 的 HGD 没有减少对 System 2 的调用（它的正常动作被带偏、停滞更多）。真正学到东西的 DP：模仿了 System 2 数据的 dpG 接管更少、教师步数少 16%、系统成功更高，方向一致但 p ≈ 0.06，尚未达到事先规定的 0.05；种子 6104–6107 的后半正在跑，最终按两半合并判定。另：原版 pi0 + System 2 在留出布局上也达到 24%（原版单独约 15%），System 2 的救回在新布局上同样成立。</p><h3>数据来源对照：两种数据单独都不行，合起来才行</h3>
+<tr><td>dpN（DP，只用原生）+ System 2（100 对，种子 6100–6107）</td><td class="n">14 / 100</td><td class="n">2.08</td><td class="n">358</td></tr>
+<tr><td>dpG（DP，加入引导数据）+ System 2</td><td class="n good">23 / 100（p = 0.14）</td><td class="n good">1.82，−12%（41 对更少、24 对更多，p = 0.046）</td><td class="n good">298，−17%（63 对更少、34 对更多，p = 0.004）</td></tr></table></div>
+<div class="ok"><b>第二个正面结果：</b>模仿了 System 2 数据的 DP 学生，在系统成功率不降低（23 对 14）的前提下，System 2 的接管次数少 12%（p = 0.046）、教师步数少 17%（p = 0.004），按事先规则判为成立——System 1 通过模仿内化了一部分 System 2 的能力，减少了对 System 2 的调用。pi0 的 HGD 没有这个效果。</div>
+<p class="note">种子 6104–6107 那一半有 8 个回合因共享存储余量不足在启动阶段失败、触发熔断又停掉 15 个；丢失的起点在两种学生之间对称，按规则不补跑、不计入。另：原版 pi0 + System 2 在留出布局上也达到 24%（原版单独约 15%）。</p>
+<h3>数据来源对照：两种数据单独都不行，合起来才行</h3>
 <div class="table-wrap"><table><tr><th>DP 从零训练（同一批 120 个留出起点）</th><th>训练数据</th><th>成功</th><th>对照</th></tr>
 <tr><td>dpN</td><td>58 个原生成功回合</td><td class="n">5 / 120</td><td>—</td></tr>
 <tr><td>dpGs</td><td>58 个引导成功回合（与 dpN 回合数相同）</td><td class="n">4 / 120</td><td>vs dpN p = 1.0</td></tr>
