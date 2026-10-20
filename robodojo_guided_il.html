@@ -46,7 +46,7 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <body><main>
 <header>
   <h1>RoboDojo 引导模仿</h1>
-  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 20:50 UTC</div>
+  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-20 21:05 UTC</div>
   <nav class="nav"><a href="#status">当前状态</a><a href="#dp">DP：加入引导数据</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#diagnosis">找原因 / DP</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
 </header>
 
@@ -60,7 +60,19 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <tr><td>dpG</td><td>同样 58 个原生回合 + 84 个 System 2 引导成功回合（接管前 50 步的“快失败”动作和失败的教师段不作为训练样本）</td><td class="n good">18 / 120（15.0%）</td><td class="n">9.7–22.5%</td></tr></table></div>
 <div class="ok"><b>成对比较：</b>只有 dpG 成功的起点 15 个，只有 dpN 成功的 2 个，两者都成功 3 个；精确 McNemar p = 0.0023，按事先写好的规则判为 PRELIMINARY_GAIN。dpG 的成功分布在 5 个布局上（布局 47 占 8 个；去掉布局 47 仍是 10 比 2）。dpG 的 15% 与原版 pi0 在这批布局上的成功率（约 15–16%）相当，而 dpN 只有 4%。</div>
 <div class="videos"><figure><video controls preload="metadata" src="rd/media/dpG_ok_l0045_s6100.mp4"></video><figcaption><span class="good">dpG</span>：set2 布局 45、种子 6100，第 497 步完成。</figcaption></figure><figure><video controls preload="metadata" src="rd/media/dpN_fail_l0045_s6100.mp4"></video><figcaption>dpN：同一起点同一种子，800 步未完成。</figcaption></figure><figure><video controls preload="metadata" src="rd/media/dpG_ok_l0042_s6101.mp4"></video><figcaption><span class="good">dpG</span>：布局 42、种子 6101，第 494 步完成。</figcaption></figure><figure><video controls preload="metadata" src="rd/media/dpN_fail_l0042_s6101.mp4"></video><figcaption>dpN：同一起点同一种子，失败。</figcaption></figure></div>
-<p class="note"><b>还需排除的解释：</b>dpG 的数据比 dpN 多（142 对 58 回合），提升可能部分来自数据量。正在训练两个对照：只用 58 个引导回合（与 dpN 回合数相同）、只用 84 个引导回合；若“58 个引导回合”也明显好于“58 个原生回合”，说明提升来自 System 2 引导数据本身。<a href="rd/records/dp_heldout_240.json">逐回合记录</a>。</p></section>
+<h3>为什么引导数据有用：它把 System 1 做不到的情况变成了成功示范</h3>
+<div class="table-wrap"><table><tr><th>训练布局（共 110 个）</th><th>原生（pi0 自己）</th><th>System 2 引导</th></tr>
+<tr><td>成功回合</td><td class="n">58（来自 338 个原生回合）</td><td class="n">84（来自 330 个引导回合）</td></tr>
+<tr><td>有成功示范的布局</td><td class="n">44</td><td class="n">60</td></tr>
+<tr><td>其中 pi0 从未独立成功的布局</td><td class="n">0（按定义）</td><td class="n good">33 个布局、43 个回合</td></tr></table></div>
+<p>原生成功只出现在 pi0 本来就能做好的布局上；System 2 在 pi0 快失败时接管，把其中 33 个“pi0 从来做不成”的布局变成了成功示范，有成功示范的布局从 44 个增加到 77 个。</p>
+<h3>同分布检验：见过的布局上差别不大</h3>
+<div class="table-wrap"><table><tr><th>训练布局 set0/set1 0–29 × 新种子 6200（60 个起点，同起点成对）</th><th>成功</th><th>对照</th></tr>
+<tr><td>原版 pi0</td><td class="n">9 / 60</td><td>—</td></tr>
+<tr><td>HGD（pi0 模仿纠错段）</td><td class="n">10 / 60</td><td>vs 原版 p = 1.0</td></tr>
+<tr><td>dpN（只用原生）</td><td class="n">14 / 60</td><td>—</td></tr>
+<tr><td>dpG（加入引导）</td><td class="n">17 / 60</td><td>vs dpN p = 0.66；vs 原版 17 比 9，p = 0.077</td></tr></table></div>
+<p class="note">在见过的布局上，只用原生数据的 DP 已有 23%，加入引导数据只多 5 个百分点（不显著）；在没见过的布局上从 4% 提高到 15%（p = 0.002）。和覆盖数据一致：引导数据的价值主要在于让策略见过更多“难”的情况，从而在新布局上更稳。</p><p class="note"><b>还需排除的解释：</b>dpG 的数据比 dpN 多（142 对 58 回合），提升可能部分来自数据量。正在训练两个对照：只用 58 个引导回合（与 dpN 回合数相同）、只用 84 个引导回合；若“58 个引导回合”也明显好于“58 个原生回合”，说明提升来自 System 2 引导数据本身。<a href="rd/records/dp_heldout_240.json">逐回合记录</a>。</p></section>
 
 <section class="section"><div class="grid">
   <div class="card"><span class="small">任务与数据</span><span class="stat">1 个任务</span>stack_bowls（标准布局）；训练布局 110 个，留出布局另用</div>
