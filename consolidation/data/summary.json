@@ -1,0 +1,520 @@
+{
+ "updated": "2026-10-20",
+ "tasks": {
+  "14": "把中间的黑碗放到盘子上",
+  "19": "把摩卡壶放到炉子上",
+  "22": "关上柜子最下层抽屉",
+  "33": "关上微波炉",
+  "43": "把白碗放到柜子顶上",
+  "46": "拿起字母汤罐放进篮子",
+  "47": "拿起奶油奶酪盒放进篮子",
+  "51": "拿起黄油放进篮子",
+  "56": "拿起黄油放进托盘",
+  "57": "拿起奶油奶酪放进托盘",
+  "60": "拿起左边的黑碗放进托盘",
+  "70": "把巧克力布丁放到盘子右边",
+  "72": "把白色马克杯放到盘子上"
+ },
+ "arm_labels": {
+  "native": "原生",
+  "base": "原生",
+  "shift2": "平移 2 倍",
+  "shift3": "平移 3 倍",
+  "shift4": "平移 4 倍",
+  "ortho2": "随机正交平移",
+  "chosen": "最好的固定噪声",
+  "distilled": "自我模仿微调",
+  "unfiltered_control": "不筛选微调",
+  "dsmall_a": "温和微调 A",
+  "dsmall_b": "温和微调 B",
+  "dzero": "学习率 0",
+  "dmem": "长训练 4,000 步",
+  "d_succ": "蒸馏（成功回合）",
+  "d_all": "蒸馏（全部回合）"
+ },
+ "experiments": [
+  {
+   "id": "pla_n_v3",
+   "name": "PLA-N v3",
+   "date": "10-20",
+   "status": "done",
+   "family": "noise",
+   "title": "另一批新起点上复验，加剂量曲线和“最好的固定噪声”对照",
+   "question": "平移在第三批没测过的起点上还有效吗？平移加大会更好吗？直接复用搜索中最好的一张固定噪声行不行？",
+   "fixed": "10-20 ~05:15Z",
+   "ran": "10-20 05:53–06:53Z",
+   "policy": "π0（官方 pi0_libero）",
+   "tasks": 13,
+   "test": "起点 10–19 × 3 个种子，每组 390 回合",
+   "arms": [
+    "native",
+    "shift2",
+    "shift3",
+    "shift4",
+    "chosen"
+   ],
+   "comparisons": [
+    {
+     "a": "shift2",
+     "b": "native",
+     "delta": 23.1,
+     "ci": [
+      15.4,
+      31.5
+     ],
+     "verdict": "GAIN",
+     "gained": 119,
+     "lost": 29,
+     "role": "主比较（事先定的剂量）",
+     "note": ""
+    },
+    {
+     "a": "shift3",
+     "b": "native",
+     "delta": 29.7,
+     "ci": [
+      19.7,
+      39.7
+     ],
+     "verdict": null,
+     "gained": 143,
+     "lost": 27,
+     "role": "描述（剂量是这次挑的）",
+     "note": ""
+    },
+    {
+     "a": "shift4",
+     "b": "native",
+     "delta": 28.5,
+     "ci": [
+      15.9,
+      40.5
+     ],
+     "verdict": null,
+     "gained": 138,
+     "lost": 27,
+     "role": "描述",
+     "note": ""
+    },
+    {
+     "a": "chosen",
+     "b": "native",
+     "delta": 16.9,
+     "ci": [
+      1.5,
+      31.0
+     ],
+     "verdict": null,
+     "gained": 111,
+     "lost": 45,
+     "role": "描述",
+     "note": ""
+    },
+    {
+     "a": "shift2",
+     "b": "chosen",
+     "delta": 6.2,
+     "ci": [
+      -6.7,
+      19.5
+     ],
+     "verdict": "NO_GAIN_SHOWN",
+     "gained": 73,
+     "lost": 49,
+     "role": "描述",
+     "note": ""
+    }
+   ],
+   "reading": [
+    "13 个任务全部提高；v2 里任务 51 的下降没有重现（10 → 13 / 30）。",
+    "剂量 0 / 2 / 3 / 4 倍 → 35.4 / 58.5 / 65.1 / 63.8 %：升到 3 倍后持平；3 倍是这次看数据挑的，由 PLA-N v4 确认。",
+    "最好的固定噪声平均也有提升，但在任务 47、70、33 上远低于原生（3 vs 13、3 vs 11、0 vs 6）；平移在任何任务上都不低于原生。"
+   ]
+  },
+  {
+   "id": "pla_d_v1",
+   "name": "PLA-D v1",
+   "date": "10-20",
+   "status": "done",
+   "family": "weights",
+   "title": "把“加了平移的策略”蒸馏进权重",
+   "question": "让学生模仿更强的老师（平移后的策略），部署时不加平移，提升能不能留在权重里？",
+   "fixed": "10-20 ~04:20Z（作业已提交，测试数据出现之前）",
+   "ran": "10-20 04:10–05:50Z",
+   "policy": "π0",
+   "tasks": 13,
+   "test": "与 PLA-N v2 相同的 520 个测试回合（起点 20–29 × 4 个种子）",
+   "arms": [
+    "d_succ",
+    "d_all"
+   ],
+   "ref_arms": [
+    "native",
+    "shift2"
+   ],
+   "comparisons": [
+    {
+     "a": "d_succ",
+     "b": "native",
+     "delta": 5.4,
+     "ci": [
+      -5.6,
+      17.7
+     ],
+     "verdict": "NO_GAIN_SHOWN",
+     "gained": 116,
+     "lost": 88,
+     "role": "主比较",
+     "note": ""
+    },
+    {
+     "a": "d_all",
+     "b": "native",
+     "delta": 5.4,
+     "ci": [
+      -4.8,
+      16.3
+     ],
+     "verdict": "NO_GAIN_SHOWN",
+     "gained": 102,
+     "lost": 74,
+     "role": "次要",
+     "note": ""
+    },
+    {
+     "a": "d_succ",
+     "b": "shift2",
+     "delta": -10.0,
+     "ci": [
+      -19.2,
+      -1.0
+     ],
+     "verdict": "HARM",
+     "gained": 54,
+     "lost": 106,
+     "role": "次要：搬进权重的比例",
+     "note": ""
+    },
+    {
+     "a": "d_all",
+     "b": "shift2",
+     "delta": -10.0,
+     "ci": [
+      -15.6,
+      -4.6
+     ],
+     "verdict": "HARM",
+     "gained": 49,
+     "lost": 101,
+     "role": "次要",
+     "note": ""
+    },
+    {
+     "a": "d_succ",
+     "b": "d_all",
+     "delta": 0.0,
+     "ci": [
+      -5.0,
+      4.8
+     ],
+     "verdict": "NO_GAIN_SHOWN",
+     "gained": 78,
+     "lost": 78,
+     "role": "描述",
+     "note": ""
+    }
+   ],
+   "reading": [
+    "老师（平移 2 倍）在训练起点 0–9 上采 1,040 回合，成功 648（62.3 %）；只微调动作专家 3,000 步。",
+    "两个学生都是 276/520（53.1 %）：约三分之一的提升（5.4 / 15.4 pp）进了权重，按任务的区间含 0。",
+    "只用成功回合与用全部回合一样：学生学到的是平移后的行为本身，连任务 51 的下降（19 → 9）也学了过去。"
+   ]
+  },
+  {
+   "id": "pla_n_v2",
+   "name": "PLA-N v2",
+   "date": "10-20",
+   "status": "done",
+   "family": "noise",
+   "title": "噪声平移：13 个任务、新起点",
+   "question": "每个任务试 24 个固定噪声、拟合一个方向，部署时把新采的噪声沿方向推 2 倍，能否在没测过的起点上提高成功率？",
+   "fixed": "10-20 ~01:45Z",
+   "ran": "10-20 01:36–03:50Z",
+   "policy": "π0",
+   "tasks": 13,
+   "test": "起点 20–29 × 4 个种子，每组 520 回合",
+   "arms": [
+    "native",
+    "shift2",
+    "ortho2"
+   ],
+   "comparisons": [
+    {
+     "a": "shift2",
+     "b": "native",
+     "delta": 15.4,
+     "ci": [
+      4.6,
+      26.2
+     ],
+     "verdict": "GAIN",
+     "gained": 125,
+     "lost": 45,
+     "role": "主比较",
+     "note": ""
+    },
+    {
+     "a": "shift2",
+     "b": "ortho2",
+     "delta": 18.3,
+     "ci": [
+      7.9,
+      28.5
+     ],
+     "verdict": "GAIN",
+     "gained": 138,
+     "lost": 43,
+     "role": "主比较",
+     "note": ""
+    },
+    {
+     "a": "ortho2",
+     "b": "native",
+     "delta": -2.9,
+     "ci": null,
+     "verdict": null,
+     "gained": null,
+     "lost": null,
+     "role": "描述",
+     "note": ""
+    }
+   ],
+   "reading": [
+    "13 个任务里 10 个提高；任务 51 从 19 降到 9（每任务 40 回合）。",
+    "同样大小、方向随机的正交平移不比原生好：起作用的是拟合出的方向。"
+   ]
+  },
+  {
+   "id": "pla_n_v1",
+   "name": "PLA-N v1",
+   "date": "10-19",
+   "status": "done",
+   "family": "noise",
+   "title": "噪声平移：第一次在 π0 上试（6 个任务）",
+   "question": "同一机制在第二个策略（π0）上有没有用？",
+   "fixed": "10-19 ~20:30Z",
+   "ran": "10-19 22:28–23:38Z",
+   "policy": "π0",
+   "tasks": 6,
+   "test": "起点 30–49 × 2 个种子，每组 240 回合（与 PLA v1 同一测试集）",
+   "arms": [
+    "native",
+    "shift2",
+    "ortho2"
+   ],
+   "comparisons": [
+    {
+     "a": "shift2",
+     "b": "native",
+     "delta": 14.6,
+     "ci": [
+      -2.5,
+      31.7
+     ],
+     "verdict": "NO_GAIN_SHOWN",
+     "gained": 62,
+     "lost": 27,
+     "role": "主比较（6 个任务，区间宽）",
+     "note": ""
+    },
+    {
+     "a": "shift2",
+     "b": "ortho2",
+     "delta": 17.1,
+     "ci": [
+      1.7,
+      33.3
+     ],
+     "verdict": "GAIN",
+     "gained": null,
+     "lost": null,
+     "role": "主比较",
+     "note": ""
+    }
+   ],
+   "reading": [
+    "原生 84 次与 PLA v1 的原模型逐任务完全一样：流程可复现。",
+    "配对 62 胜 27 负（p = 0.0003），但 6 个任务的聚类区间含 0，按规则记“未显示”，所以扩到 13 个任务（v2）。"
+   ]
+  },
+  {
+   "id": "pla_v1c",
+   "name": "PLA v1c",
+   "date": "10-20",
+   "status": "done",
+   "family": "weights",
+   "title": "自我模仿微调的定位：流程有没有错？训练够久呢？",
+   "question": "学习率为 0 的“空训练”能否逐回合复现原模型？训练 4,000 步会怎样？",
+   "fixed": "诊断实验，无单独计划文件（设计写在构建脚本里，10-20 ~00:20Z 提交前）",
+   "ran": "10-20 00:21–01:32Z",
+   "policy": "π0",
+   "tasks": 6,
+   "test": "PLA v1 测试集（起点 30–49 × 2）+ 训练起点 0–9 的新种子 8–9",
+   "arms": [
+    "dzero",
+    "dmem"
+   ],
+   "comparisons": [
+    {
+     "a": "dzero",
+     "b": "base",
+     "delta": 0.0,
+     "ci": null,
+     "verdict": null,
+     "gained": null,
+     "lost": null,
+     "role": "",
+     "note": "测试 240 + 训练起点 120 回合，结果和回合长度逐个一致"
+    },
+    {
+     "a": "dmem",
+     "b": "base",
+     "delta": 0.0,
+     "ci": null,
+     "verdict": null,
+     "gained": 39,
+     "lost": 39,
+     "role": "测试集 84 vs 84；训练起点 35/120 vs 31/120",
+     "note": ""
+    }
+   ],
+   "reading": [
+    "保存、加载、评估都正确。",
+    "训练够久回到原水平，即使在 System 2 解出 49/60 的训练起点上也只有约 29 %。"
+   ]
+  },
+  {
+   "id": "pla_v1b",
+   "name": "PLA v1b",
+   "date": "10-20",
+   "status": "done",
+   "family": "weights",
+   "title": "更温和的微调",
+   "question": "是不是训练过头了？更小的学习率、更少的步数会不会好？",
+   "fixed": "10-19 ~20:00Z",
+   "ran": "10-19 23:38–10-20 00:19Z",
+   "policy": "π0",
+   "tasks": 6,
+   "test": "PLA v1 测试集 + 训练起点 0–9 的新种子 8–9",
+   "arms": [
+    "base",
+    "distilled",
+    "dsmall_a",
+    "dsmall_b"
+   ],
+   "comparisons": [
+    {
+     "a": "dsmall_a",
+     "b": "base",
+     "delta": -15.4,
+     "ci": null,
+     "verdict": null,
+     "gained": null,
+     "lost": null,
+     "role": "",
+     "note": "测试 47/240 vs 84/240"
+    },
+    {
+     "a": "dsmall_b",
+     "b": "base",
+     "delta": -11.3,
+     "ci": null,
+     "verdict": null,
+     "gained": null,
+     "lost": null,
+     "role": "",
+     "note": "测试 57/240 vs 84/240（p = 0.002）"
+    }
+   ],
+   "reading": [
+    "温和微调在测试集上更差；在训练过的起点上也没变好（原模型 31/120，微调后 27–33/120）。"
+   ]
+  },
+  {
+   "id": "pla_v1",
+   "name": "PLA v1",
+   "date": "10-19",
+   "status": "done",
+   "family": "weights",
+   "title": "自我模仿：用 System 2 挑出的成功回合微调",
+   "question": "用学生自己被挑出的成功回合微调动作专家，学生能不能一次做成？",
+   "fixed": "10-19（数据之前）",
+   "ran": "10-19 18:48–19:53Z",
+   "policy": "π0",
+   "tasks": 6,
+   "test": "起点 30–49 × 2 个种子，每组 240 回合",
+   "arms": [
+    "base",
+    "distilled",
+    "unfiltered_control"
+   ],
+   "comparisons": [
+    {
+     "a": "distilled",
+     "b": "base",
+     "delta": -10.0,
+     "ci": [
+      -22.1,
+      0.4
+     ],
+     "verdict": "NO_GAIN_SHOWN",
+     "gained": 29,
+     "lost": 53,
+     "role": "主比较（配对 p = 0.011，变差）",
+     "note": ""
+    },
+    {
+     "a": "distilled",
+     "b": "unfiltered_control",
+     "delta": 6.7,
+     "ci": [
+      -1.7,
+      14.2
+     ],
+     "verdict": "NO_GAIN_SHOWN",
+     "gained": null,
+     "lost": null,
+     "role": "主比较",
+     "note": ""
+    }
+   ],
+   "reading": [
+    "System 2（8 次里任一次成功）解出 49/60 个训练起点，但微调后的学生在测试集上更差。"
+   ]
+  }
+ ],
+ "context": [
+  {
+   "name": "E20（已登记）",
+   "policy": "π0.5",
+   "what": "任务级噪声平移 vs 原生",
+   "result": "+13.0 pp [+2.0, +24.0]，CONFIRMED",
+   "n": "16 个任务，151 个新起点"
+  },
+  {
+   "name": "E22-M（已登记）",
+   "policy": "π0.5",
+   "what": "任务级噪声平移 vs 原生（LIBERO-90）",
+   "result": "+12.8 pp [+3.2, +22.3]，CONFIRMED；方向符号、对正交平移、24 > 6 张票也确认",
+   "n": "17 个任务，272 个新起点"
+  }
+ ],
+ "queue": [
+  {
+   "name": "PLA-N v4",
+   "state": "排队：两条线合计已有 2 个任务在跑，等其中一个结束",
+   "what": "确认 3 倍剂量：后 7 个任务的起点 30–49（从未用过）× 2 个种子；原生 / 平移 2 倍 / 平移 3 倍；840 回合，8 卡约 40 分钟",
+   "fixed": "10-20 07:00Z"
+  }
+ ]
+}
