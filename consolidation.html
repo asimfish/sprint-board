@@ -20,7 +20,7 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 个任务</span><span>更新 2026-10-20 07:38Z</span><span class="chip">PLA-N v4 排队中</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 个任务</span><span>更新 2026-10-20 07:44Z</span><span class="chip">PLA-N v4 排队中</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在两批从未测过的起点上都显著提高成功率；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约三分之一。</p>
     <div class="tiles">
@@ -139,7 +139,7 @@
       <div class="panel"><h3>之后</h3>
         <ul class="list">
           <li>新任务：13 个中等难度任务的起点快用完了（最初 6 个任务的 50 个起点已全部用过）。门槛和剂量都需要在 π0 没用过的任务上检验。</li>
-          <li>搜索预算：π0.5 上 24 张票比 6 张好（E22-M）；π0 上加到 48 张，看方向是否更准、弱任务是否改善。</li>
+          <li>搜索预算：π0.5 上 24 张票比 6 张好（E22-M）。如果 v5 的第二轮有用，再做同预算对照：一轮 48 张 vs 两轮各 24 张。</li>
           <li>RoboDojo：RoboDojo 的 π0 接口已经把噪声当显式参数传入，把平移搬到 stack_bowls 只需改一处；按现有速度估算约 30 卡时以上，尚未开始。</li>
         </ul>
       </div>
@@ -163,6 +163,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>10-20 07:58Z</time><span>排队：PLA-N v4（确认 3 倍剂量）→ v5 冒烟 → v5（第二轮固化）；v5 规则已写定。</span></li>
       <li><time>10-20 07:38Z</time><span>记录从私有页面搬到这里；补齐 PLA v1 到 PLA-N v3 的逐回合数据。</span></li>
       <li><time>10-20 06:54Z</time><span>PLA-N v3：起点 10–19 上平移 58.5 % vs 原生 35.4 %（+23.1 pp，GAIN）；3 倍剂量 65.1 %；最好的固定噪声 52.3 %。</span></li>
       <li><time>10-20 05:51Z</time><span>PLA-D v1：蒸馏 53.1 % vs 原生 47.7 % vs 保留平移 63.1 %，约三分之一进了权重。</span></li>
