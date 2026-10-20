@@ -1,0 +1,1455 @@
+[
+{
+"source": "pilot-p5",
+"mode": "script",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 16,
+"policy_seed": 1005,
+"success": true,
+"status": "completed",
+"controls": 411,
+"teacher_controls": 411,
+"student_controls": 0,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl1",
+"control": 0,
+"target": "bowl0",
+"trigger": {
+"bowl": null
+}
+},
+{
+"arm": "left",
+"bowl": "bowl2",
+"control": 166,
+"target": "bowl1",
+"trigger": {
+"bowl": null
+}
+}
+],
+"skill_failures": [],
+"teacher_fraction": 1.0,
+"proposals": 0,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "script",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 3,
+"policy_seed": 1001,
+"success": true,
+"status": "completed",
+"controls": 381,
+"teacher_controls": 381,
+"student_controls": 0,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [
+{
+"arm": "left",
+"bowl": "bowl1",
+"control": 0,
+"target": "bowl2",
+"trigger": {
+"bowl": null
+}
+},
+{
+"arm": "right",
+"bowl": "bowl0",
+"control": 150,
+"target": "bowl1",
+"trigger": {
+"bowl": null
+}
+}
+],
+"skill_failures": [],
+"teacher_fraction": 1.0,
+"proposals": 0,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "script",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 7,
+"policy_seed": 1002,
+"success": true,
+"status": "completed",
+"controls": 445,
+"teacher_controls": 445,
+"student_controls": 0,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl2",
+"control": 0,
+"target": "bowl0",
+"trigger": {
+"bowl": null
+}
+},
+{
+"arm": "left",
+"bowl": "bowl1",
+"control": 160,
+"target": "bowl2",
+"trigger": {
+"bowl": null
+}
+}
+],
+"skill_failures": [],
+"teacher_fraction": 1.0,
+"proposals": 0,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "script",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 9,
+"policy_seed": 1003,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 800,
+"student_controls": 0,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl1",
+"control": 0,
+"target": "bowl2",
+"trigger": {
+"bowl": null
+}
+},
+{
+"arm": "left",
+"bowl": "bowl0",
+"control": 166,
+"target": "bowl1",
+"trigger": {
+"bowl": null
+}
+}
+],
+"skill_failures": [
+{
+"control": 456,
+"phase": "carry",
+"plan": {
+"arm": "left",
+"bowl": "bowl0",
+"control": 166,
+"target": "bowl1",
+"trigger": {
+"bowl": null
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 1.0,
+"proposals": 0,
+"script_failed": true,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "script",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 0,
+"policy_seed": 1000,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 800,
+"student_controls": 0,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl2",
+"control": 0,
+"target": "bowl0",
+"trigger": {
+"bowl": null
+}
+},
+{
+"arm": "left",
+"bowl": "bowl1",
+"control": 157,
+"target": "bowl2",
+"trigger": {
+"bowl": null
+}
+}
+],
+"skill_failures": [
+{
+"control": 450,
+"phase": "carry",
+"plan": {
+"arm": "left",
+"bowl": "bowl1",
+"control": 157,
+"target": "bowl2",
+"trigger": {
+"bowl": null
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 1.0,
+"proposals": 0,
+"script_failed": true,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "script",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 10,
+"policy_seed": 1004,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 800,
+"student_controls": 0,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl1",
+"control": 0,
+"target": "bowl0",
+"trigger": {
+"bowl": null
+}
+},
+{
+"arm": "left",
+"bowl": "bowl2",
+"control": 174,
+"target": "bowl1",
+"trigger": {
+"bowl": null
+}
+}
+],
+"skill_failures": [
+{
+"control": 389,
+"phase": "approach",
+"plan": {
+"arm": "left",
+"bowl": "bowl2",
+"control": 174,
+"target": "bowl1",
+"trigger": {
+"bowl": null
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 1.0,
+"proposals": 0,
+"script_failed": true,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 1,
+"policy_seed": 1100,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 148,
+"student_controls": 652,
+"takeovers": 1,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 435,
+"kind": "stalled"
+}
+],
+"teacher_plans": [
+{
+"arm": "left",
+"bowl": "bowl2",
+"control": 435,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+}
+],
+"skill_failures": [],
+"teacher_fraction": 0.185,
+"proposals": 14,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 1,
+"policy_seed": 1100,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 2,
+"policy_seed": 1101,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 4,
+"policy_seed": 1102,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 6,
+"policy_seed": 1104,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 5,
+"policy_seed": 1103,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 219,
+"student_controls": 581,
+"takeovers": 1,
+"triggers": [
+{
+"arm": "left",
+"bowl": "bowl1",
+"control": 121,
+"kind": "empty_grasp"
+}
+],
+"teacher_plans": [
+{
+"arm": "left",
+"bowl": "bowl2",
+"control": 121,
+"target": "bowl1",
+"trigger": {
+"arm": "left",
+"bowl": "bowl1",
+"kind": "empty_grasp"
+}
+}
+],
+"skill_failures": [
+{
+"control": 340,
+"phase": "approach",
+"plan": {
+"arm": "left",
+"bowl": "bowl2",
+"control": 121,
+"target": "bowl1",
+"trigger": {
+"arm": "left",
+"bowl": "bowl1",
+"kind": "empty_grasp"
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 0.27375,
+"proposals": 13,
+"script_failed": false,
+"teacher_disabled": true
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 6,
+"policy_seed": 1104,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 388,
+"student_controls": 412,
+"takeovers": 2,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 200,
+"kind": "stalled"
+},
+{
+"arm": null,
+"bowl": null,
+"control": 550,
+"kind": "late"
+}
+],
+"teacher_plans": [
+{
+"arm": "left",
+"bowl": "bowl2",
+"control": 200,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+},
+{
+"arm": "right",
+"bowl": "bowl0",
+"control": 550,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "late"
+}
+}
+],
+"skill_failures": [],
+"teacher_fraction": 0.485,
+"proposals": 9,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 4,
+"policy_seed": 1102,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 250,
+"student_controls": 550,
+"takeovers": 1,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 550,
+"kind": "late"
+}
+],
+"teacher_plans": [
+{
+"arm": "left",
+"bowl": "bowl0",
+"control": 550,
+"target": "bowl2",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "late"
+}
+}
+],
+"skill_failures": [],
+"teacher_fraction": 0.3125,
+"proposals": 11,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 2,
+"policy_seed": 1101,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 304,
+"student_controls": 496,
+"takeovers": 1,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 369,
+"kind": "stalled"
+}
+],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl0",
+"control": 369,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+}
+],
+"skill_failures": [
+{
+"control": 673,
+"phase": "place",
+"plan": {
+"arm": "right",
+"bowl": "bowl0",
+"control": 369,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 0.38,
+"proposals": 11,
+"script_failed": false,
+"teacher_disabled": true
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 5,
+"policy_seed": 1103,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 8,
+"policy_seed": 1105,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 220,
+"student_controls": 580,
+"takeovers": 1,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 200,
+"kind": "stalled"
+}
+],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl1",
+"control": 200,
+"target": "bowl2",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+}
+],
+"skill_failures": [
+{
+"control": 420,
+"phase": "approach",
+"plan": {
+"arm": "right",
+"bowl": "bowl1",
+"control": 200,
+"target": "bowl2",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 0.275,
+"proposals": 12,
+"script_failed": false,
+"teacher_disabled": true
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 8,
+"policy_seed": 1105,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 11,
+"policy_seed": 1106,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 101,
+"student_controls": 699,
+"takeovers": 1,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 240,
+"kind": "stalled"
+}
+],
+"teacher_plans": [
+{
+"arm": "left",
+"bowl": "bowl0",
+"control": 240,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+}
+],
+"skill_failures": [
+{
+"control": 341,
+"phase": "lift",
+"plan": {
+"arm": "left",
+"bowl": "bowl0",
+"control": 240,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+},
+"reason": "bowl did not follow actual lift; no retry"
+}
+],
+"teacher_fraction": 0.12625,
+"proposals": 15,
+"script_failed": false,
+"teacher_disabled": true
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 12,
+"policy_seed": 1107,
+"success": true,
+"status": "completed",
+"controls": 691,
+"teacher_controls": 306,
+"student_controls": 385,
+"takeovers": 2,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 307,
+"kind": "stalled"
+},
+{
+"arm": "left",
+"bowl": "bowl2",
+"control": 518,
+"kind": "empty_grasp"
+}
+],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl0",
+"control": 307,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+},
+{
+"arm": "left",
+"bowl": "bowl2",
+"control": 518,
+"target": "bowl0",
+"trigger": {
+"arm": "left",
+"bowl": "bowl2",
+"kind": "empty_grasp"
+}
+}
+],
+"skill_failures": [],
+"teacher_fraction": 0.44283646888567296,
+"proposals": 10,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 11,
+"policy_seed": 1106,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 12,
+"policy_seed": 1107,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 13,
+"policy_seed": 1108,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 423,
+"student_controls": 377,
+"takeovers": 2,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 200,
+"kind": "stalled"
+},
+{
+"arm": null,
+"bowl": null,
+"control": 550,
+"kind": "late"
+}
+],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl1",
+"control": 200,
+"target": "bowl2",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+},
+{
+"arm": "left",
+"bowl": "bowl0",
+"control": 550,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "late"
+}
+}
+],
+"skill_failures": [],
+"teacher_fraction": 0.52875,
+"proposals": 8,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 13,
+"policy_seed": 1108,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 18,
+"policy_seed": 1112,
+"success": true,
+"status": "completed",
+"controls": 485,
+"teacher_controls": 53,
+"student_controls": 432,
+"takeovers": 1,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 432,
+"kind": "unreturned"
+}
+],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.10927835051546392,
+"proposals": 9,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 14,
+"policy_seed": 1109,
+"success": true,
+"status": "completed",
+"controls": 699,
+"teacher_controls": 125,
+"student_controls": 574,
+"takeovers": 1,
+"triggers": [
+{
+"arm": "left",
+"bowl": "bowl0",
+"control": 449,
+"kind": "empty_grasp"
+}
+],
+"teacher_plans": [
+{
+"arm": "left",
+"bowl": "bowl2",
+"control": 449,
+"target": "bowl0",
+"trigger": {
+"arm": "left",
+"bowl": "bowl0",
+"kind": "empty_grasp"
+}
+}
+],
+"skill_failures": [],
+"teacher_fraction": 0.17882689556509299,
+"proposals": 12,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 14,
+"policy_seed": 1109,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 17,
+"policy_seed": 1111,
+"success": true,
+"status": "completed",
+"controls": 751,
+"teacher_controls": 286,
+"student_controls": 465,
+"takeovers": 1,
+"triggers": [
+{
+"arm": "right",
+"bowl": "bowl1",
+"control": 212,
+"kind": "empty_grasp"
+}
+],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl1",
+"control": 212,
+"target": "bowl2",
+"trigger": {
+"arm": "right",
+"bowl": "bowl1",
+"kind": "empty_grasp"
+}
+}
+],
+"skill_failures": [
+{
+"control": 498,
+"phase": "carry",
+"plan": {
+"arm": "right",
+"bowl": "bowl1",
+"control": 212,
+"target": "bowl2",
+"trigger": {
+"arm": "right",
+"bowl": "bowl1",
+"kind": "empty_grasp"
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 0.3808255659121172,
+"proposals": 11,
+"script_failed": false,
+"teacher_disabled": true
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 15,
+"policy_seed": 1110,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 15,
+"policy_seed": 1110,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 287,
+"student_controls": 513,
+"takeovers": 1,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 360,
+"kind": "stalled"
+}
+],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl2",
+"control": 360,
+"target": "bowl0",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+}
+],
+"skill_failures": [
+{
+"control": 647,
+"phase": "descend",
+"plan": {
+"arm": "right",
+"bowl": "bowl2",
+"control": 360,
+"target": "bowl0",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 0.35875,
+"proposals": 12,
+"script_failed": false,
+"teacher_disabled": true
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 18,
+"policy_seed": 1112,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 17,
+"policy_seed": 1111,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 19,
+"policy_seed": 1113,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 217,
+"student_controls": 583,
+"takeovers": 1,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 467,
+"kind": "stalled"
+}
+],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl2",
+"control": 467,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+}
+],
+"skill_failures": [
+{
+"control": 684,
+"phase": "approach",
+"plan": {
+"arm": "right",
+"bowl": "bowl2",
+"control": 467,
+"target": "bowl1",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 0.27125,
+"proposals": 13,
+"script_failed": false,
+"teacher_disabled": true
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 19,
+"policy_seed": 1113,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 25,
+"policy_seed": 1114,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 261,
+"student_controls": 539,
+"takeovers": 1,
+"triggers": [
+{
+"arm": null,
+"bowl": null,
+"control": 292,
+"kind": "stalled"
+}
+],
+"teacher_plans": [
+{
+"arm": "left",
+"bowl": "bowl0",
+"control": 292,
+"target": "bowl2",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+}
+],
+"skill_failures": [
+{
+"control": 553,
+"phase": "carry",
+"plan": {
+"arm": "left",
+"bowl": "bowl0",
+"control": 292,
+"target": "bowl2",
+"trigger": {
+"arm": null,
+"bowl": null,
+"kind": "stalled"
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 0.32625,
+"proposals": 11,
+"script_failed": false,
+"teacher_disabled": true
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 25,
+"policy_seed": 1114,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+},
+{
+"source": "pilot-p5",
+"mode": "guided",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 26,
+"policy_seed": 1115,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 272,
+"student_controls": 528,
+"takeovers": 1,
+"triggers": [
+{
+"arm": "right",
+"bowl": "bowl0",
+"control": 93,
+"kind": "empty_grasp"
+}
+],
+"teacher_plans": [
+{
+"arm": "right",
+"bowl": "bowl0",
+"control": 93,
+"target": "bowl2",
+"trigger": {
+"arm": "right",
+"bowl": "bowl0",
+"kind": "empty_grasp"
+}
+}
+],
+"skill_failures": [
+{
+"control": 365,
+"phase": "carry",
+"plan": {
+"arm": "right",
+"bowl": "bowl0",
+"control": 93,
+"target": "bowl2",
+"trigger": {
+"arm": "right",
+"bowl": "bowl0",
+"kind": "empty_grasp"
+}
+},
+"reason": "skill phase made insufficient progress"
+}
+],
+"teacher_fraction": 0.34,
+"proposals": 11,
+"script_failed": false,
+"teacher_disabled": true
+},
+{
+"source": "pilot-p5",
+"mode": "native",
+"task": "stack_bowls",
+"layout_set": 0,
+"layout": 26,
+"policy_seed": 1115,
+"success": false,
+"status": "completed",
+"controls": 800,
+"teacher_controls": 0,
+"student_controls": 800,
+"takeovers": 0,
+"triggers": [],
+"teacher_plans": [],
+"skill_failures": [],
+"teacher_fraction": 0.0,
+"proposals": 16,
+"script_failed": false,
+"teacher_disabled": false
+}
+]
