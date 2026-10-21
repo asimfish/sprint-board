@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>System 2 → System 1 蒸馏方案</title>
+<meta name="description" content="按 IdeaScientist（gap → 跨领域机制 → 方案报告）与 PaperOrchestra（idea.md / experimental_log.md）格式整理的方案、证据与下一步实验。">
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#17202e;--muted:#526277;--line:#c8d2e3;--head:#eff4fc;--blue:#245ab1;--teal:#16776d;--good:#267b51;--good-bg:#edf8f1;--bad:#b4472f;--bad-bg:#fff3e8;--warn:#94660c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 -apple-system,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-left)) 64px max(16px,env(safe-area-inset-right))}
+header h1{font-size:28px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:14px}
+.nav{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+.nav a{font-size:13px;color:var(--blue);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--card)}
+.section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:18px 0}
+.section h2{font-size:20px;margin:0 0 10px}
+.kicker{display:block;font-size:12px;color:var(--teal);letter-spacing:.06em;font-weight:600}
+.status{border:2px solid var(--blue);background:#f5f9ff}
+.status p{margin:6px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:10px;padding:14px;background:#fbfcfe}
+.card .small{font-size:12px;color:var(--muted)}
+.card .stat{display:block;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;margin:4px 0}
+.card .stat small{font-size:13px;font-weight:400;color:var(--muted)}
+.good{color:var(--good)}.bad{color:var(--bad)}.warn{color:var(--warn)}
+.table-wrap{overflow-x:auto;margin:10px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--head);font-weight:600}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{font-size:13px;color:var(--muted);margin:8px 0}
+.field-dictionary dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;margin:8px 0}
+.field-dictionary dl>div{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#fbfcfe}
+.field-dictionary dt{font-weight:700}
+.field-dictionary dd{margin:4px 0 0;color:#2d3a4c;font-size:14px}
+.videos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.videos figure{margin:0}
+.videos video{width:100%;height:auto;aspect-ratio:4/3;background:#142035;border-radius:8px}
+figcaption{font-size:13px;color:var(--muted);margin-top:4px}
+.ok{padding:10px 12px;background:var(--good-bg);border-left:4px solid var(--good);margin:8px 0}
+.fail{padding:10px 12px;background:var(--bad-bg);border-left:4px solid var(--bad);margin:8px 0}
+img.montage{width:100%;border-radius:8px;border:1px solid var(--line)}
+code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
+@media(max-width:700px){.section{padding:14px}th,td{font-size:12px;padding:6px}}
+</style>
+</head><body><main>
+<header>
+  <h1>System 2 → System 1 蒸馏方案</h1>
+  <div class="sub">工作标题：Failure Harvesting——把 System 2 接管蒸馏进快速视觉运动策略 · 按 IdeaScientist（gap → 跨领域机制 → 方案报告）与 PaperOrchestra 输入格式整理 · 更新于 2026-10-21</div>
+  <nav class="nav"><a href="#status">一句话</a><a href="#gaps">Gap</a><a href="#innov">跨领域机制</a><a href="#proposal">方案报告</a><a href="#pred">可证伪预测</a><a href="#po">PaperOrchestra 输入</a><a href="#next">下一步与分工</a><a href="robodojo_guided_il.html">实验记录页</a></nav>
+</header>
+
+<section class="section status" id="status"><span class="kicker">一句话</span><h2>System 2 的价值在“覆盖”，不在“数据量”</h2>
+<p>System 2 在 System 1 快失败时接管，把 System 1 永远做不成的情况变成成功示范；把这些示范与 System 1 自己的成功回合一起模仿，得到的策略在新布局上更好（从零训练的 Diffusion Policy：4% → 15%，p = 0.002；原生数据加倍反而 1%），而且同样有 System 2 时更少需要它（教师步数 −17%，p = 0.004）。对已经预训练好的 pi0，直接改权重会在“学纠错”与“保正常行为”之间取舍，所以下一步改用参数隔离（System 1.5）。</p>
+</section>
+
+<section class="section" id="gaps"><span class="kicker">第一段 · Gap finding</span><h2>四个方向上的空缺</h2>
+<div class="table-wrap"><table><tr><th>方向</th><th>已有工作的共同机制</th><th>Gap（对比句）</th><th>最接近的工作及不足</th></tr>
+<tr><td>A 交互式模仿</td><td>专家（人）适时介入，介入标签并入训练集；价值被理解为“纠正局部动作”</td><td>没有人分离介入的价值来自覆盖新配置还是来自纠正动作；没有人用自动 System 2 把“调用代价”作为蒸馏要降低的量</td><td>DAgger、HG-DAgger、Sirius、RLIF：人类专家、同分布评测、无等量对照；ThriftyDAgger / LazyDAgger：靠门控少问人，而不是让学习者少需要帮助</td></tr>
+<tr><td>B System 2 / 分层引导</td><td>慢模型在部署时给指令或接管，改进发生在高层，低层不吸收</td><td>没有证明可以把 System 2 的救回内化成独立 System 1 并减少调用；预训练 VLA 学纠错时的稳定性–可塑性冲突未被量化</td><td>Hi Robot、Yell At Your Robot、π*0.6 / RECAP、GPT-as-Policy、Distilling System 2 into System 1（LLM 推理，无具身）</td></tr>
+<tr><td>C 数据组成与覆盖</td><td>多样性比数量重要；覆盖来自合成或噪声</td><td>没有人用慢教师在学习者真实失败点上收割“做不到的配置”的成功示范，并证明它比更多同源成功更好、单一来源互补不足</td><td>Data Scaling Laws in IL、MimicGen、DART、CCIL</td></tr>
+<tr><td>D 预训练策略防遗忘</td><td>回放、锚定、LoRA、冻结 + 新列</td><td>权重空间约束在“学少量纠错 vs 保持原有能力”之间相互掣肘；参数隔离（冻结基座 + 伴随纠错器 + 学到的门控）没有被比较</td><td>CLEAR、DSRL、Progressive Neural Networks</td></tr></table></div>
+<p class="note">全文：<a href="rd/plan/gaps.md">gaps.md</a>（每条近似工作都核对过 arXiv 编号）。</p>
+</section>
+
+<section class="section" id="innov"><span class="kicker">第二段 · Innovation</span><h2>从其他领域迁移来的四个机制</h2>
+<div class="table-wrap"><table><tr><th>机制（来源领域）</th><th>迁移到我们这里</th><th>迁移依赖的条件</th><th>证据</th></tr>
+<tr><td>I1 推测解码：草稿模型提议、大模型验证（LLM 推理）</td><td>System 1 = 草稿，System 2 = 验证器；接管与教师步数 = 拒绝率；模仿 System 2 = 把验证器蒸馏进草稿模型，应降低拒绝率</td><td>System 2 的介入由廉价可验证的检测触发</td><td class="good">已成立：接管 −12%（p = 0.046）、教师步数 −17%（p = 0.004）</td></tr>
+<tr><td>I2 在线难例挖掘（目标检测）</td><td>System 2 只在 System 1 失败处接管，收割“难例”成功示范；System 1 自己的成功提供“易例”与一致性，二者互补</td><td>System 2 能在 System 1 失败的配置上成功（已验证：33 个训练布局）</td><td class="good">已成立：等量原生 1/120，只用引导 4/120，二者结合 13–18/120；<span class="warn">修正：收益在中等难度布局，最难布局未解决</span></td></tr>
+<tr><td>I3 渐进网络 / 参数隔离（持续学习）</td><td>System 1.5：pi0 冻结 + 只用 System 1 输入预测“System 2 会接管”的门控 + 用教师段训练的纠错器，部署时不需要 System 2</td><td>门控精度足够；纠错器在接管处能成功</td><td>间接：pi0 权重微调最好只到持平（−2 pp）；DP 能吸收 System 2 数据。待验证（X2）</td></tr>
+<tr><td>I4 脚手架与淡出 / DAgger 迭代（教育、模仿学习）</td><td>第二轮让 System 2 引导已经学会的学生本身，聚合后再训练，System 2 介入应越来越少</td><td>学生能在引导模式下运行（已具备）</td><td>进行中（X1）</td></tr></table></div>
+<p class="note">全文：<a href="rd/plan/innovations.md">innovations.md</a>。</p>
+</section>
+
+<section class="section" id="proposal"><span class="kicker">第三段 · Report</span><h2>方案报告（要点）</h2>
+<ul>
+<li><b>形式化：</b>训练布局与留出布局不相交；System 1 每 N 步输出动作块；System 2 = 失败检测器 + 执行器，调用有代价（接管次数、教师步数）。数据源：原生成功、引导成功（去掉接管前“快失败”窗口和失败的教师段）。目标：(a) 学到的 System 1 在留出布局上单独更好；(b) 仍有 System 2 时，调用更少且系统成功不降。</li>
+<li><b>核心新意：</b>(1) System 2 的价值是覆盖而非数据量；(2) 把 System 2 调用代价当作蒸馏目标；(3) 对预训练 VLA 用参数隔离代替权重微调。</li>
+<li><b>与最近工作的区别：</b>专家是自动 System 2，代价可量化；用等量原生对照和只用引导对照分离覆盖、互补与数据量；在留出配置上评测；把 System 2 蒸馏出部署回路而非常驻。</li>
+<li><b>方法：</b>接管引导收集 → 数据清洗 → 学生学习（从零训练的 DP；或冻结 pi0 + 门控 + 纠错器）→ 迭代淡出。</li>
+<li><b>局限：</b>System 2 目前是读仿真真值的特权脚本（Astra 在接入）；单任务、仿真；DP 绝对成功率不高且训练种子波动大；最难布局无人解决；pi0 权重微调尚未超过原版。</li>
+</ul>
+<p class="note">全文：<a href="rd/plan/proposal.md">proposal.md</a>（结果遮蔽写法，状态单列在文末）。</p>
+</section>
+
+<section class="section" id="pred"><span class="kicker">可证伪预测</span><h2>每条预测都写了反驳条件</h2>
+<div class="table-wrap"><table><tr><th>#</th><th>预测</th><th>反驳条件</th><th>状态</th></tr>
+<tr><td>P1</td><td>收益集中在对 System 1 最难的留出配置</td><td>最难配置上所有模型≈0，收益全在中等配置</td><td class="bad">被否定（最难 5 布局 0–1/40；中等布局 dpN 5/80 → dpG 18/80），已修正表述</td></tr>
+<tr><td>P2</td><td>等量原生达不到原生 + 引导</td><td>等量原生 ≥ 原生 + 引导</td><td class="good">成立：1/120 vs 13/120，p = 0.002</td></tr>
+<tr><td>P3</td><td>只用引导不如原生 + 引导（互补）</td><td>只用引导 ≥ 原生 + 引导</td><td class="good">成立：4/120 vs 18/120，p = 0.001</td></tr>
+<tr><td>P4</td><td>学了 System 2 数据的学生更少需要 System 2，成功不降</td><td>接管 / 教师步数不显著降低或成功下降</td><td class="good">成立：−12% / −17%，成功 23 vs 14</td></tr>
+<tr><td>P5</td><td>第二轮学生优于第一轮，调用继续下降</td><td>第二轮 ≤ 第一轮</td><td>进行中（X1）</td></tr>
+<tr><td>P6</td><td>System 1.5 优于 pi0 单独</td><td>≤ pi0，或门控精度 &lt; 0.5</td><td>待做（X2）</td></tr>
+<tr><td>P7</td><td>换成通用 VLM 规划器（Astra）当 System 2 也成立</td><td>不复现</td><td>待做（X4）</td></tr></table></div>
+</section>
+
+<section class="section" id="po"><span class="kicker">PaperOrchestra 输入</span><h2>可直接交给 PaperOrchestra 的三份文件</h2>
+<ul>
+<li><a href="rd/plan/idea.md">idea.md</a>：Sparse Idea 格式（Problem Statement / Core Hypothesis / Proposed Methodology / Expected Contribution），第一人称将来时，无公式、无引用。</li>
+<li><a href="rd/plan/experimental_log.md">experimental_log.md</a>：Experimental Setup / Raw Numeric Data（9 张表）/ Qualitative Observations，所有数字来自已完成的作业。</li>
+<li><a href="rd/plan/conference_guidelines.md">conference_guidelines.md</a>：占位，按 ICLR 风格；<b>投稿会议与截止日期待确认</b>（它决定文献综述的截止日期）。</li>
+</ul>
+<p class="note">PaperOrchestra 自带的预检脚本 check_idea_density.py：通过（idea.md 651 词、含假设；experimental_log.md 9 张表、521 个数值；两者 Jaccard 0.21 不重复）。</p>
+</section>
+
+<section class="section" id="next"><span class="kicker">下一步</span><h2>实验与分工（规则先写好）</h2>
+<div class="table-wrap"><table><tr><th>#</th><th>实验</th><th>检验</th><th>负责</th><th>判定规则</th><th>状态</th></tr>
+<tr><td>X1</td><td>迭代淡出引导：System 2 引导 dpG（训练布局 110 × 2 种子）→ 聚合两轮引导数据训练 dpR2（两个训练种子）→ 与 dpG 同 120 个留出起点成对</td><td>P5</td><td>Claude（现有流水线）</td><td>dpR2 &gt; dpG（p &lt; 0.05）且第二轮教师步数更少</td><td>收集已提交</td></tr>
+<tr><td>X2</td><td>System 1.5：冻结 pi0 + 门控 + DP 纠错器</td><td>P6</td><td>Codex（asbs_模仿_cc）写模块与 CPU 自测；Claude 接入与评测</td><td>pi0+S1.5 &gt; pi0（p &lt; 0.05），门控精度 ≥ 0.5</td><td>已下发</td></tr>
+<tr><td>X3</td><td>覆盖消融：去掉 33 个“只有引导”布局上的引导回合后重训</td><td>I2 的证伪</td><td>Claude</td><td>收益不降则覆盖解释被否定</td><td>待做</td></tr>
+<tr><td>X4</td><td>Astra 当 System 2，同接管协议收集与模仿</td><td>P7</td><td>Codex（asbs_模仿）</td><td>引导成功率 &gt; 原生；dpN + Astra 引导 &gt; dpN</td><td>待下发（需要该会话的执行权限）</td></tr>
+<tr><td>X5</td><td>用 PaperOrchestra 起草论文</td><td>—</td><td>Codex（asbs_模仿_cc）</td><td>可编译初稿，数字可追溯</td><td>排在 X2 之后</td></tr></table></div>
+<p class="note">全文：<a href="rd/plan/next_experiments.md">next_experiments.md</a>。风险：共享存储（并发回合需临时空间，余量低于门槛会在启动时失败）、DP 训练种子波动（新结论至少两个训练种子）。</p>
+</section>
+</main></body></html>
