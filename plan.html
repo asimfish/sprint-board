@@ -25,7 +25,7 @@
 </header>
 <main class="page">
   <section class="intro">
-    <div class="eyebrow"><span>方案 · IdeaScientist 式整理</span><span>更新 2026-10-21 11:35Z</span></div>
+    <div class="eyebrow"><span>方案 · IdeaScientist 式整理</span><span>更新 2026-10-21 11:37Z</span></div>
     <p class="lead">按“找缺口 → 跨领域创新 → 构思报告”整理当前方案；数字来自 <a href="consolidation.html">实验记录</a>，π0 上为探索性实验，π0.5 上的 E20、E22-M 为正式登记。论文写作用的 PaperOrchestra 输入（idea.md、experimental_log.md）在项目仓库里。</p>
   </section>
   <article class="panel prose">
@@ -46,7 +46,7 @@
 <ul class="list"><li>对照句：噪声空间方法通常在原生已有一定成功率的任务上评估，很少报告它们在原生从不成功的任务上是否有效。</li><li>Evidence route：PLA-Z v1，12 个原生 0 / 16 的任务各搜 96 回合，共 1,152 回合只成功 5 次（0.43 %）；π0.5 上同类检查 0 / 2,304。固化只能放大偶尔已经出现的成功。</li></ul>
 <hr>
 <h3 id="h5">第二部分 创新候选（Innovator）</h3>
-<p>优先级（10-21 11:55Z 更新）：K1 已检验，未成立（见 K1 末尾）；新增 K6（平移是否只等于固定动作偏置，PLA-B v1，已派发）优先；然后 K3 &gt; K4。K2 已做零成本检验并否定（见 K2 末尾）；K5 已有证据否定，列出备查。</p>
+<p>优先级（10-21 11:35Z 更新）：K1 已检验，未成立（见 K1 末尾）；新增 K6（平移是否只等于固定动作偏置，PLA-B v1，已派发）优先；然后 K3 &gt; K4。K2 已做零成本检验并否定（见 K2 末尾）；K5 已有证据否定，列出备查。</p>
 <h4 id="h6">K1 耦合蒸馏：用 reflow 把噪声平移搬进权重（最高优先）</h4>
 <ul class="list"><li>Intuition：让学生学“从同一个噪声出发，老师会落到哪里”，而不是“老师会做什么动作”。</li><li>Gap it attacks：A1。</li><li>If improving prior candidate：改进 PLA-D v1 / v2 的边际流匹配蒸馏。</li><li>Source inspiration：图像生成里 rectified flow 的 reflow（用固定的“噪声—样本”配对重新训练流，arXiv 2209.03003）与一致性蒸馏（同一噪声起点的输出对齐，arXiv 2303.01469）。</li><li>How it maps to this problem：每个重规划点记下学生实际用的原生噪声 z，以及老师（同一网络、噪声 z + 2·d）在该观测下给出的 50 步动作块；训练时把 (z, 老师动作块) 作为流匹配的配对噪声和目标直接喂给动作专家（π0 的训练接口本身接受显式噪声），学生沿“z → 老师动作”的直线学速度场。部署时用原生噪声，不加平移。</li><li>Why it could work：PLA-D v2 的训练损失几乎不降，说明边际匹配下老师和学生的动作分布太像、没有信号；配对后每个样本都有确定目标，平移被写成“噪声 → 动作”的对应关系本身，正是平移起作用的那个量。</li><li>Novelty vs. closest in-domain work：Golden Ticket / DSRL / NSL 把改进留在噪声模块；Noise Hypernetworks 方向相反（权重 → 噪声）。我们没有在已核实文献里见到把噪声空间改进用配对方式搬进 VLA 权重的报告（投稿前需再检索一次）。</li><li>Main risk：学生只学会训练状态附近的对应关系；或配对目标改变整个速度场，像 D_ALL 那样破坏原有的噪声—动作映射。对照设计：耦合 vs 不耦合（同数据、同步数）、学生状态 vs 老师状态。</li><li><b>结果（PLA-D v4，10-21，分析只跑一次）：未成立。</b> K_ON 266 / 520（51.2 %）vs 原生 248（47.7 %）：+3.5 pp [−6.2, +12.1]，NO_GAIN_SHOWN，未达事先门槛 302 / 520；搬进比例 22.5 %；K_ON − 平移 −11.9 pp HARM；K_ON − C_ON −1.0，K_OFF（276）− C_OFF +5.2 [−2.9, +13.3]，都未显示。训练损失降到不耦合的约四分之一（0.0062 → 0.0028），闭环却没变。读法："标签与噪声对不上"不是权重路线的瓶颈。下一步由 K6 的诊断 F 区分：没拟合上执行块，还是跨状态没泛化。</li></ul>
 <h4 id="h7">K6 平移是否只等于固定动作偏置（PLA-B v1，10-21 新增，已派发）</h4>
