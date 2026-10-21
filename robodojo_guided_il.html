@@ -46,15 +46,16 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <body><main>
 <header>
   <h1>RoboDojo 引导模仿</h1>
-  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-21 00:15 UTC</div>
+  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-21 03:20 UTC</div>
   <nav class="nav"><a href="#status">当前状态</a><a href="#dp">DP：加入引导数据</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#diagnosis">找原因 / DP</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
 </header>
 
-<section class="section status" id="status"><span class="kicker">当前状态</span><h2>第一个正面结果：加入 System 2 引导轨迹训练的 Diffusion Policy，留出布局成功率 4.2% → 15.0%（p = 0.002）</h2><p><b>模仿的意义（新）：</b>从零训练 Diffusion Policy，只用 pi0 自己的 58 个成功回合时，在没见过的布局上成功 5/120（4.2%）；加入 84 个 System 2 引导出的成功回合后成功 18/120（15.0%），成对比较 15 比 2，p = 0.0023。对照显示两种数据单独都只有约 4%（58 个引导回合 4/120，84 个引导回合 4/120），合起来 15%：System 2 的数据与 System 1 自己的成功回合互补。“142 个原生回合”的等总量对照正在收集数据。</p>
-<p><b>模仿后更少需要 System 2（新）：</b>同样有 System 2 帮助时，模仿了 System 2 数据的 DP 学生接管次数少 12%（p = 0.046）、教师步数少 17%（p = 0.004），系统成功 23/100 对 14/100。</p><p><b>成立：</b>System 2 在 pi0 快失败时接管，能把原本失败的回合救回来（成对 4/16 对 0/16；330 个引导回合成功率 25.5%，原生 17.8%）。</p>
-<p><b>pi0 微调仍未提升：</b>pi0 能学会纠错（留出纠错误差 0.100 → 0.070），但正常动作同时被带偏，闭环成功率都不高于原版；单因素扫描显示原生数据的防遗忘占比是主要杠杆，平滑无影响。流场锚定 + 更大原生锚定集（e2）把损失缩小到接近持平（11/96 对 13/96，p = 0.81），但仍没有提升。</p></section>
+<section class="section status" id="status"><span class="kicker">当前状态</span><h2>模仿的意义已找到（Diffusion Policy）：加入 System 2 引导数据，新布局成功率显著提高、且更少需要 System 2；pi0 微调仍未提升</h2><p><b>1. 成功率：</b>从零训练 Diffusion Policy，只用 pi0 自己的成功回合时在没见过的布局上只有 1–4%（58 个回合 5/120；原生加倍到 111 个回合 1/120）；加入 84 个 System 2 引导出的成功回合后 11–15%（dpG 18/120，p = 0.002；dpNG 13/120，vs 等量原生 p = 0.002）。四个独立训练的“原生 + 引导”模型都好于只用原生；换训练种子方向一致但幅度变小（+3.4 pp）。</p>
+<p><b>2. 为什么：</b>原生成功只出现在 pi0 本来能做好的布局上，加更多原生数据只是重复这些布局；System 2 把 33 个“pi0 从来做不成”的布局变成了成功示范。只用引导数据也不行（4/120），两者互补。</p>
+<p><b>3. 更少需要 System 2：</b>同样有 System 2 帮助时，模仿了 System 2 数据的 DP 学生接管次数少 12%（p = 0.046）、教师步数少 17%（p = 0.004），系统成功 23/100 对 14/100。</p>
+<p><b>pi0：</b>能学会纠错（留出纠错误差 0.100 → 0.070），但正常动作同时被带偏；流场锚定把损失缩小到接近持平（11/96 对 13/96），仍未超过原版。System 2 救回本身成立（引导 25.5% 对原生 17.8%；留出布局 24% 对约 15%）。</p></section>
 
-<section class="section" id="dp"><span class="kicker">模仿的意义</span><h2>从零训练的 Diffusion Policy：加入 System 2 引导轨迹后，留出布局成功率 4.2% → 15.0%（p = 0.002）</h2><p>同一套 Diffusion Policy（三路相机 + 关节状态，16 步动作、执行 8 步重规划，各 6 万步、各 4 张卡），只改训练数据，在<b>从未训练过的 set2 布局 40–54</b>上评测；两种策略在同一布局、同一采样种子（6100–6107）上成对运行，共 240 回合全部有效。</p>
+<section class="section" id="dp"><span class="kicker">模仿的意义</span><h2>模仿的意义：System 2 引导数据让从零训练的策略在新布局上 4% → 15%，并更少需要 System 2</h2><p>同一套 Diffusion Policy（三路相机 + 关节状态，16 步动作、执行 8 步重规划，各 6 万步、各 4 张卡），只改训练数据，在<b>从未训练过的 set2 布局 40–54</b>上评测；两种策略在同一布局、同一采样种子（6100–6107）上成对运行，共 240 回合全部有效。</p>
 <div class="table-wrap"><table><tr><th>策略</th><th>训练数据</th><th>成功</th><th>95% 区间</th></tr>
 <tr><td>dpN</td><td>58 个原生成功回合（pi0 自己做成的）</td><td class="n">5 / 120（4.2%）</td><td class="n">1.8–9.4%</td></tr>
 <tr><td>dpG</td><td>同样 58 个原生回合 + 84 个 System 2 引导成功回合（接管前 50 步的“快失败”动作和失败的教师段不作为训练样本）</td><td class="n good">18 / 120（15.0%）</td><td class="n">9.7–22.5%</td></tr></table></div>
@@ -98,7 +99,13 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <tr><td>dpGF</td><td>58 原生 + 84 引导成功 + 失败回合中已完成的纠错段</td><td class="n good">16 / 119</td><td>vs dpN 13 比 2，p = 0.0074；vs dpG（18/120）p = 0.83</td></tr>
 <tr><td>dpGFo</td><td>84 引导成功 + 失败回合纠错段（不含原生）</td><td class="n">10 / 120</td><td>vs dpGo（4/120）p = 0.15</td></tr></table></div>
 <p class="note">dpGF 是独立训练、数据组成不同的另一个模型，再次显著好于只用原生（p = 0.007），“原生 + System 2 数据”的结论又得到一次独立复现；但 5 倍纠错段相对 dpG 没有额外收益。不含原生时，更多 System 2 数据有一定帮助（4 → 10），仍不如与原生组合。</p>
-<p class="note"><b>最后一个待排除的解释：</b>dpG 共 142 个回合。正在补收原生回合（训练布局、新种子，3 × 160 回合），训练“142 个原生回合”的 dpNb 与 dpG 比较；同时训练“全部原生 + 84 个引导”。另有训练种子重复（dpN2 vs dpG2）和加入失败回合纠错段（约 5 倍纠错数据）的 DP 正在训练。<a href="rd/records/dp_heldout_240.json">dpN / dpG 逐回合记录</a>。</p></section>
+<h3>等总量对照：原生数据加倍也没用，加入引导数据才有用</h3>
+<div class="table-wrap"><table><tr><th>DP（同一批 120 个留出起点）</th><th>训练数据</th><th>成功</th><th>对照</th></tr>
+<tr><td>dpN</td><td>58 个原生成功回合</td><td class="n">5 / 120</td><td>—</td></tr>
+<tr><td>dpNb</td><td>111 个原生成功回合（6.1 万个训练起点，约等于 dpG 的数据量）</td><td class="n bad">1 / 120</td><td>vs dpN p = 0.22</td></tr>
+<tr><td>dpG</td><td>58 原生 + 84 引导</td><td class="n good">18 / 120</td><td>vs dpNb 18 比 1，p = 0.0001</td></tr>
+<tr><td>dpNG</td><td>111 原生 + 84 引导</td><td class="n good">13 / 120</td><td>vs dpNb 13 比 1，p = 0.0018</td></tr></table></div>
+<p>原生成功回合从 58 个加到 111 个，成功率没有提高（5 → 1）；同样的原生数据加上 84 个 System 2 引导回合，成功率到 11–15%。<b>提升不是数据量带来的，而是 System 2 引导数据带来的。</b>原因与覆盖一致：新增的原生成功大多落在 pi0 本来就能做好的布局上（42 个新成功中 27 个，有原生成功的布局只从 44 个增加到 56 个）；有 24 个布局在 818 个原生回合里一次都没成功过，却有 System 2 引导出的成功示范。共四个独立训练的“原生 + 引导”模型（dpG、dpG2、dpGF、dpNG）都好于对应的只用原生。<a href="rd/records/dp_heldout_240.json">dpN / dpG 逐回合记录</a>。</p></section>
 
 <section class="section"><div class="grid">
   <div class="card"><span class="small">任务与数据</span><span class="stat">1 个任务</span>stack_bowls（标准布局）；训练布局 110 个，留出布局另用</div>
