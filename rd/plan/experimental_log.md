@@ -159,6 +159,24 @@ All numbers below are from completed simulation runs (2026-10-19 … 2026-10-21)
 | GIL | 120 | 20 → 22 | 60 → 101 (p < 0.001) | 26 → 34 | 1 → 10 (p = 0.004) | 19 → 1 |
 | Self-imitation SI-1f (control) | 111 | 20 → 9 (p = 0.06) | 58 → 70 | 22 → 27 | 1 → 3 | 15 → 15 |
 
+### Table 10: Guided collection rounds on the training layouts (same System 2, set0/set1 layouts 0–54, unpaired seeds)
+
+| Round | Collector (System 1) + System 2 | Episodes | Official successes | Takeovers / episode | Teacher steps / episode | Controls / episode |
+|---|---|---|---|---|---|---|
+| 1 | pi0 base (seeds 2000–2002) | 330 | 84 (25.5%) | 1.74 | 280 | 745 |
+| 2 | DP student dpG (seeds 5300–5301) | 220 | 82 (37.3%) | 1.58 | 214 | 693 |
+
+Round 2 vs round 1 (unpaired, two-sided): success Fisher exact p = 0.0033; teacher steps per episode −24% (Mann–Whitney p = 3.8e-7); takeovers per episode p = 0.0037; controls per episode p = 0.00035. Round-2 successes cover 57 layouts, 18 of them without a round-1 guided success. Round-2 triggers (both batches): late 105, retry 64, stalled 64, unreturned 56, tipped 35, empty grasp 22, dropped 1. Training layouts are in-distribution for dpG; this is not a held-out result.
+
+### Table 11: Learned visible-input gate for System 1.5 (v1; label = System 2 trigger within 25 controls; episode split 70/15/15)
+
+| Split | Episodes | Samples | Positives | Threshold rule | TP | FP | Precision | Recall | AUROC |
+|---|---|---|---|---|---|---|---|---|---|
+| Validation | 137 | 8637 | 428 | max recall s.t. precision ≥ 0.5 → 0.4976 | 4 | 2 | 0.667 | 0.009 | 0.691 |
+| Test | 137 | 8519 | 423 | same threshold | 2 | 17 | 0.105 | 0.005 | 0.691 |
+
+Test AUROC by source: guided 0.719, native 0.681. Training loss fell monotonically over all 10 epochs (1.305 → 1.018). Pre-registered gate criterion (precision ≥ 0.5) failed on test; closed-loop System 1.5 evaluation NOT_RUN.
+
 ## 3. Qualitative Observations
 
 * Observation: Adding System-2-guided successes to native successes raised held-out success of a diffusion policy trained from scratch from 5/120 to 18/120 (15 vs 2 discordant pairs), while nearly doubling native data alone did not help (111 native episodes: 1/120).
@@ -171,6 +189,8 @@ All numbers below are from completed simulation runs (2026-10-19 … 2026-10-21)
 * Observation: Fine-tuning pi0 on correction segments reduced its error on held-out correction segments (0.100 → 0.070) but increased drift on ordinary frames (0.035 → 0.057); every closed-loop fine-tuned variant was at or below the original.
 * Observation: Smoothing of teacher commands had no measurable effect; fewer steps or a lower learning rate increased drift; increasing the share of native samples was the main lever against drift.
 * Observation: An anchoring loss that keeps the fine-tuned action field close to the original on native samples brought drift to 0.038, close to the 0.035 noise floor; in closed loop this reduced the loss from −6 to −2 percentage points (11/96 vs 13/96) but did not produce a gain.
+* Observation: When the DP student trained on native + guided successes replaced pi0 as the collector under the same System 2, guided collection on the training layouts succeeded more often (37.3% vs 25.5%, p = 0.0033) and needed 24% fewer teacher steps per episode.
+* Observation: A visible-input gate trained for 10 epochs to predict System 2 triggers 25 controls ahead was underfit (AUROC 0.69) and almost never fired at the precision-constrained threshold (test recall 0.5%), so the frozen-pi0 + corrector variant could not be evaluated as registered.
 * Observation: Teacher commands are stop-and-go: 29% of teacher-controlled steps are stationary versus 0% for pi0, and teacher jerk (90th percentile) is about 1.7× that of pi0.
 * Observation: Imitating whole guided trajectories (including the student's behaviour before each takeover) made pi0 stall far more often (60 → 101 of 120 episodes with a stall), the clearest sign that pre-takeover segments must be removed.
 * Observation: Several evaluations lost starts to shared-storage exhaustion at worker start-up. Lost starts were symmetric between the compared models and are excluded rather than re-run.

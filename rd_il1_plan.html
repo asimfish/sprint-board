@@ -89,15 +89,15 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <tr><td>P2</td><td>等量原生达不到原生 + 引导</td><td>等量原生 ≥ 原生 + 引导</td><td class="good">成立：1/120 vs 13/120，p = 0.002</td></tr>
 <tr><td>P3</td><td>只用引导不如原生 + 引导（互补）</td><td>只用引导 ≥ 原生 + 引导</td><td class="good">成立：4/120 vs 18/120，p = 0.001</td></tr>
 <tr><td>P4</td><td>学了 System 2 数据的学生更少需要 System 2，成功不降</td><td>接管 / 教师步数不显著降低或成功下降</td><td class="good">成立：−12% / −17%，成功 23 vs 14</td></tr>
-<tr><td>P5</td><td>第二轮学生优于第一轮，调用继续下降</td><td>第二轮 ≤ 第一轮</td><td>进行中（X1）</td></tr>
-<tr><td>P6</td><td>System 1.5 优于 pi0 单独</td><td>≤ pi0，或门控精度 &lt; 0.5</td><td>待做（X2）</td></tr>
+<tr><td>P5</td><td>第二轮学生优于第一轮，调用继续下降</td><td>第二轮 ≤ 第一轮</td><td>部分结果：第二轮收集（dpG + System 2）成功 82/220 = 37.3%，第一轮（pi0 + System 2）84/330 = 25.5%，p = 0.0033；每回合教师步数 214 vs 280（−24%，p &lt; 10⁻⁶）。训练布局、非配对。留出主检验 dpR2 vs dpG 训练中</td></tr>
+<tr><td>P6</td><td>System 1.5 优于 pi0 单独</td><td>≤ pi0，或门控精度 &lt; 0.5</td><td class="bad">门控 v1 未达标：测试精度 0.105、召回 0.005（AUROC 0.69，欠拟合）→ P6（v1）不成立，闭环评测 NOT_RUN。X2b 门控 v2 已预登记并在训练（达标才进闭环）</td></tr>
 <tr><td>P7</td><td>换成通用 VLM 规划器（Astra）当 System 2 也成立</td><td>不复现</td><td>待做（X4）</td></tr></table></div>
 </section>
 
 <section class="section" id="po"><span class="kicker">PaperOrchestra 输入</span><h2>可直接交给 PaperOrchestra 的三份文件</h2>
 <ul>
 <li><a href="rd/plan/idea.md">idea.md</a>：Sparse Idea 格式（Problem Statement / Core Hypothesis / Proposed Methodology / Expected Contribution），第一人称将来时，无公式、无引用。</li>
-<li><a href="rd/plan/experimental_log.md">experimental_log.md</a>：Experimental Setup / Raw Numeric Data（9 张表）/ Qualitative Observations，所有数字来自已完成的作业。</li>
+<li><a href="rd/plan/experimental_log.md">experimental_log.md</a>：Experimental Setup / Raw Numeric Data（11 张表）/ Qualitative Observations，所有数字来自已完成的作业。</li>
 <li><a href="rd/plan/conference_guidelines.md">conference_guidelines.md</a>：占位，按 ICLR 风格；<b>投稿会议与截止日期待确认</b>（它决定文献综述的截止日期）。</li>
 </ul>
 <p class="note">PaperOrchestra 自带的预检脚本 check_idea_density.py：通过（idea.md 651 词、含假设；experimental_log.md 9 张表、521 个数值；两者 Jaccard 0.21 不重复）。</p>
@@ -105,11 +105,11 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 
 <section class="section" id="next"><span class="kicker">下一步</span><h2>实验与分工（规则先写好）</h2>
 <div class="table-wrap"><table><tr><th>#</th><th>实验</th><th>检验</th><th>负责</th><th>判定规则</th><th>状态</th></tr>
-<tr><td>X1</td><td>迭代淡出引导：System 2 引导 dpG（训练布局 110 × 2 种子）→ 聚合两轮引导数据训练 dpR2（两个训练种子）→ 与 dpG 同 120 个留出起点成对</td><td>P5</td><td>Claude（现有流水线）</td><td>dpR2 &gt; dpG（p &lt; 0.05）且第二轮教师步数更少</td><td>收集已提交</td></tr>
-<tr><td>X2</td><td>System 1.5：冻结 pi0 + 门控 + DP 纠错器</td><td>P6</td><td>Codex（asbs_模仿_cc）写模块与 CPU 自测；Claude 接入与评测</td><td>pi0+S1.5 &gt; pi0（p &lt; 0.05），门控精度 ≥ 0.5</td><td>已下发</td></tr>
-<tr><td>X3</td><td>覆盖消融：去掉 33 个“只有引导”布局上的引导回合后重训</td><td>I2 的证伪</td><td>Claude</td><td>收益不降则覆盖解释被否定</td><td>待做</td></tr>
+<tr><td>X1</td><td>迭代淡出引导：System 2 引导 dpG（训练布局 110 × 2 种子）→ 聚合两轮引导数据训练 dpR2（两个训练种子）→ 与 dpG 同 120 个留出起点成对</td><td>P5</td><td>Claude（现有流水线）</td><td>dpR2 &gt; dpG（p &lt; 0.05）且第二轮教师步数更少</td><td>收集完成（见 P5）；dpR2 训练中，留出评测自动提交</td></tr>
+<tr><td>X2</td><td>System 1.5：冻结 pi0 + 门控 + DP 纠错器</td><td>P6</td><td>Codex（asbs_模仿_cc）写模块与 CPU 自测；Claude 接入与评测</td><td>pi0+S1.5 &gt; pi0（p &lt; 0.05），门控精度 ≥ 0.5</td><td>v1 门控未达标；X2b：v2 门控测试精度 ≥ 0.5 且召回 ≥ 0.05 才进闭环</td></tr>
+<tr><td>X3</td><td>覆盖消融（体量匹配）：58 原生 + 43 条“新布局”引导（33 个原生未覆盖布局） vs 58 原生 + 41 条“重叠布局”引导（27 个已覆盖布局），各两个训练种子</td><td>I2 的证伪</td><td>Claude</td><td>新布局臂 &gt; 重叠布局臂（合并 240 对，p &lt; 0.05）支持覆盖解释；≤ 则否定</td><td>已预登记并提交训练</td></tr>
 <tr><td>X4</td><td>Astra 当 System 2，同接管协议收集与模仿</td><td>P7</td><td>Codex（asbs_模仿）</td><td>引导成功率 &gt; 原生；dpN + Astra 引导 &gt; dpN</td><td>待下发（需要该会话的执行权限）</td></tr>
-<tr><td>X5</td><td>用 PaperOrchestra 起草论文</td><td>—</td><td>Codex（asbs_模仿_cc）</td><td>可编译初稿，数字可追溯</td><td>排在 X2 之后</td></tr></table></div>
+<tr><td>X5</td><td>用 PaperOrchestra 起草论文</td><td>—</td><td>Codex（asbs_模仿_cc）</td><td>可编译初稿，数字可追溯</td><td>初稿 v1 已编译（12 页，0 错误）；等 X1/X3 结果后更新，暂不公开</td></tr></table></div>
 <p class="note">全文：<a href="rd/plan/next_experiments.md">next_experiments.md</a>。风险：共享存储（并发回合需临时空间，余量低于门槛会在启动时失败）、DP 训练种子波动（新结论至少两个训练种子）。</p>
 </section>
 </main></body></html>
