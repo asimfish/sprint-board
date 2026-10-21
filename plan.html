@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>System 2 固化方案</title>
+<link rel="stylesheet" href="consolidation/style.css?v=20261021a">
+<style>
+  .prose{max-width:62em}
+  .prose h1{font-size:30px;margin:8px 0 12px}
+  .prose h3{font-size:21px;margin:34px 0 10px;padding-top:12px;border-top:1px solid var(--line)}
+  .prose h4{font-size:16px;margin:22px 0 6px;color:var(--accent-ink)}
+  .prose p{color:var(--ink-2);margin:8px 0}
+  .prose .list{margin:6px 0 10px}
+  .prose hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="consolidation.html"><span class="brand-mark">S2</span><span>System 2 固化<span class="long"> · 方案</span></span></a>
+    <nav aria-label="页面目录"><a href="#h1">第一部分 找缺口</a><a href="#h5">第二部分 创新候选</a><a href="#h11">第三部分 构思报告</a><a href="consolidation.html">实验记录</a><a href="index.html">总览</a></nav>
+  </div>
+</header>
+<main class="page">
+  <section class="intro">
+    <div class="eyebrow"><span>方案 · IdeaScientist 式整理</span><span>更新 2026-10-21 08:21Z</span></div>
+    <p class="lead">按“找缺口 → 跨领域创新 → 构思报告”整理当前方案；数字来自 <a href="consolidation.html">实验记录</a>，π0 上为探索性实验，π0.5 上的 E20、E22-M 为正式登记。论文写作用的 PaperOrchestra 输入（idea.md、experimental_log.md）在项目仓库里。</p>
+  </section>
+  <article class="panel prose">
+<h1 id="h0">方案（IdeaScientist 式整理）：找缺口 → 跨领域创新 → 构思报告（2026-10-21）</h1>
+<p>按 arXiv 2610.04074（IdeaScientist）的三个角色组织：第一部分是“找缺口”（每条缺口用对照句写成：已有方法用 Y 做 X，但 Y 留下了什么），第二部分是“创新”（每个候选写明借用的外领域机制、怎样映射、为什么可能有效、主要风险），第三部分是最终“构思报告”（14 个字段，字段名沿用原文）。数字全部来自已完成的实验；π0 上的实验是探索性的（规则先写、只分析一次），π0.5 上的 E20、E22-M 是正式登记。引用只用 2026-10-10 / 10-12 两轮核实过的文献。</p>
+<hr>
+<h3 id="h1">第一部分 找缺口（Gap finder）</h3>
+<h4 id="h2">轴 A：System 2 的结果怎样固化进 System 1</h4>
+<p><b>缺口 A1（权重固化抓不住噪声里的经验）</b></p>
+<ul class="list"><li>对照句：已有方法（成功筛选后的行为克隆、STaR / ReST 式自我改进、DAgger 式蒸馏）通过模仿 System 2 挑出的动作来固化，但流匹配策略的成败主要取决于噪声落在哪里，而模仿同一网络的动作样本几乎不带这部分信号。</li><li>Near-miss methods and coverage：Golden Ticket（arXiv 2603.15757）把结果存成每任务一张固定噪声，不改权重；DSRL（2506.15799）、NSL（2610.13943）另训练一个噪声策略，主干冻结、多一个网络；Noise Hypernetworks（2508.09968）方向相反，把权重微调的效果搬进噪声。</li><li>Methodological deficiency：边际流匹配（老师的动作样本 + 独立采的训练噪声）丢掉了“哪个噪声 → 哪个动作”的对应关系。</li><li>Why it matters：不带外部噪声模块的部署只能靠权重；我们测到权重路线最多保住噪声路线约三分之一的提升。</li><li>Evidence route：PLA v1（自我模仿 −10.0 pp）、v1c（4,000 步回到原水平，学习率 0 逐回合复现原模型）、PLA-D v1（+5.4 pp）、PLA-D v2（DAgger 式 +4.4 pp，换完整动作块作标签反而 −5.2 pp，训练损失 0.013 → 0.012 几乎不降）、PLA-D v3（蒸馏权重 + 平移不超过只加平移；在 D_ALL 权重上平移几乎失效）。</li></ul>
+<p><b>缺口 A2（小预算下“哪一层能被固化”没人系统测过）</b></p>
+<ul class="list"><li>对照句：已有噪声空间方法通过大量交互学噪声（Golden Ticket 在 LIBERO 上每任务约 1,400 张票；DSRL、NSL 在线强化学习），但在几百个二元成败结果的预算下，每起点、每任务、每状态哪一层能被可靠识别并固化，没有被系统、事先登记地测过。</li><li>Near-miss：NSL 报告学到的噪声均值变化 52.8–79.9 % 来自任务之间（说明任务级是主成分），但没有给出小预算下各粒度的可识别性；Retrieve-then-Steer（2605.10094）、TraceFlow（2609.20646）做记忆，不给预算—粒度关系。</li><li>Methodological deficiency：缺一张“预算 × 粒度 → 能否在没测过的起点上兑现”的图。</li><li>Why it matters：决定一个部署系统该存什么（一张票、一个方向、还是一个状态条件的提议器）。</li><li>Evidence route：每起点记忆 E15 +19.1 pp [15.1, 23.4]；任务级平移 π0.5 两次登记 +13.0、+12.8 pp，π0 四次新测试 +15.4 / +23.1 / +22.5 / +18.7 pp、10 个新任务 +10.3 pp；每状态评分器 AUC 0.51（E17）；E23 显示同一任务不同起点的有利方向确实不同，但要几千回合才可识别；第二轮搜索没有额外收益（v5）；预算曲线 6 / 12 / 24 / 48 张 → +9.0 / +8.0 / +16.2 / +20.3 pp（v7）。</li></ul>
+<h4 id="h3">轴 B：固化与测试时计算的关系</h4>
+<p><b>缺口 B1（固化能换掉多少测试时计算）</b></p>
+<ul class="list"><li>对照句：已有测试时搜索工作（多次采样 + 验证器、SVA 2607.03751 的 MCTS 蒸馏成选择器）把 System 2 的计算花在每次部署时，但没有量化“固化之后还需要多少测试时计算”。</li><li>Methodological deficiency：只比单次成功率，不报告 pass@k 意义下的计算换算。</li><li>Evidence route（事后、描述性）：平移试 1 次 ≈ 原生试 2–3 次；k = 3–4 时差距仍在，10 个低成功率新任务上反而扩大（53.0 % vs 37.0 %，k = 4）。</li></ul>
+<h4 id="h4">轴 C：能力边界</h4>
+<p><b>缺口 C1（噪声固化能不能“创造”成功）</b></p>
+<ul class="list"><li>对照句：噪声空间方法通常在原生已有一定成功率的任务上评估，很少报告它们在原生从不成功的任务上是否有效。</li><li>Evidence route：PLA-Z v1，12 个原生 0 / 16 的任务各搜 96 回合，共 1,152 回合只成功 5 次（0.43 %）；π0.5 上同类检查 0 / 2,304。固化只能放大偶尔已经出现的成功。</li></ul>
+<hr>
+<h3 id="h5">第二部分 创新候选（Innovator）</h3>
+<p>优先级：K1 &gt; K3 &gt; K4。K2 已做零成本检验并否定（见 K2 末尾）；K5 已有证据否定，列出备查。</p>
+<h4 id="h6">K1 耦合蒸馏：用 reflow 把噪声平移搬进权重（最高优先）</h4>
+<ul class="list"><li>Intuition：让学生学“从同一个噪声出发，老师会落到哪里”，而不是“老师会做什么动作”。</li><li>Gap it attacks：A1。</li><li>If improving prior candidate：改进 PLA-D v1 / v2 的边际流匹配蒸馏。</li><li>Source inspiration：图像生成里 rectified flow 的 reflow（用固定的“噪声—样本”配对重新训练流，arXiv 2209.03003）与一致性蒸馏（同一噪声起点的输出对齐，arXiv 2303.01469）。</li><li>How it maps to this problem：每个重规划点记下学生实际用的原生噪声 z，以及老师（同一网络、噪声 z + 2·d）在该观测下给出的 50 步动作块；训练时把 (z, 老师动作块) 作为流匹配的配对噪声和目标直接喂给动作专家（π0 的训练接口本身接受显式噪声），学生沿“z → 老师动作”的直线学速度场。部署时用原生噪声，不加平移。</li><li>Why it could work：PLA-D v2 的训练损失几乎不降，说明边际匹配下老师和学生的动作分布太像、没有信号；配对后每个样本都有确定目标，平移被写成“噪声 → 动作”的对应关系本身，正是平移起作用的那个量。</li><li>Novelty vs. closest in-domain work：Golden Ticket / DSRL / NSL 把改进留在噪声模块；Noise Hypernetworks 方向相反（权重 → 噪声）。我们没有在已核实文献里见到把噪声空间改进用配对方式搬进 VLA 权重的报告（投稿前需再检索一次）。</li><li>Main risk：学生只学会训练状态附近的对应关系；或配对目标改变整个速度场，像 D_ALL 那样破坏原有的噪声—动作映射。对照设计：耦合 vs 不耦合（同数据、同步数）、学生状态 vs 老师状态。</li></ul>
+<h4 id="h7">K2 从任务描述预测方向（超网络 / 任务向量式）</h4>
+<ul class="list"><li>Intuition：每个任务的方向只有 35 个数；如果能从指令预测，新任务就不用搜索。</li><li>Gap it attacks：A2 的搜索成本、新任务冷启动。</li><li>Source inspiration：NLP 的 prompt tuning（arXiv 2104.08691）、超网络（1609.09106）、任务算术（2212.04089）：用小向量表示任务，在任务之间插值。</li><li>How it maps：用已有 23 个任务（13 个中等 + 10 个低成功率）的方向做留一法：指令嵌入 → 方向的岭回归 / 核回归，看预测方向与真实方向的余弦，再看同场景、同动词的任务是否共享分量。</li><li>Why it could work：同一场景、同类动作（如“放进篮子”）可能共享平移的部分分量。</li><li>Novelty vs. closest in-domain work：NSL 用观察条件、跨任务共享的噪声 actor，需要在线强化学习；这里只用已有的闭式方向，零额外交互。</li><li>Main risk：π0.5 上 E18 发现任务之间没有共同方向；23 个点对 35 维偏少。先做零 GPU 的留一检验，余弦中位数 &gt; 0.3 才上卡。</li><li><b>零成本检验结果（2026-10-21，23 个 π0 任务方向，事先定的门槛：留一余弦中位数 &gt; 0.3）：否定。</b> 同场景两两余弦均值 0.001、不同场景 0.012、同动作不同场景 −0.008；23 个方向的平均向量长度 0.234，与随机单位向量的期望 0.209 相当；用其余任务平均方向预测的留一余弦中位数 0.068（随机方向 |余弦| 的 95 % 分位 0.34）。方向在任务之间几乎不共享，与 π0.5 的 E18 一致。K2 不上卡；跨任务只能靠更强的任务表征（例如观测特征，即 NSL 的做法），不是靠指令文本。</li></ul>
+<h4 id="h8">K3 按起点相似度局部加权的方向（每任务与每起点之间插值）</h4>
+<ul class="list"><li>Intuition：同一任务里不同起点的有利方向不同（E23）；按测试起点与搜索起点的相似度加权拟合方向。</li><li>Gap it attacks：A2 的状态级。</li><li>Source inspiration：局部加权回归、情景控制（episodic control）。</li><li>How it maps：搜索时记录每个起点的物体初始位姿；部署前按与测试起点的距离给搜索回合加权，再做同样的岭回归。</li><li>Why it could work：E15 的每起点记忆 +19 pp 说明起点级信息有价值；局部加权在“每起点”（不泛化）和“每任务”（太粗）之间折中。</li><li>Novelty vs. closest in-domain work：NSL 的状态条件 actor 需要在线训练；这里闭式、零训练、同样的搜索回合。</li><li>Main risk：每起点只有 24 个二元结果，加权后更噪；需要换成“更多起点 × 更少票”的搜索设计（例如 32 × 6）。</li></ul>
+<h4 id="h9">K4 用姐妹任务的方向当搜索中心（Go-Explore 式），攻从不成功的任务</h4>
+<ul class="list"><li>Gap it attacks：C1。Source：Go-Explore（1901.10995）、课程迁移。</li><li>How it maps：同一场景里可解任务的方向作为搜索中心，在原生 0 / 16 的任务上搜索。</li><li>Main risk：任务之间方向不共享（E18）；PLA-Z 基线只有 0.43 %。优先级低。</li></ul>
+<h4 id="h10">K5（已被证据否定，备查）</h4>
+<ul class="list"><li>第二轮以平移为中心再搜（CEM 式）：v5 中两轮相加不比同推力只沿第一轮更好（+1.8 pp，未显示）。</li><li>剂量加大到 3 倍：v4 中与 2 倍相同（+0.4 pp）。</li><li>门槛 G10（成功票太少就不加平移）：v6 新任务上否定，会丢掉一半以上收益。</li></ul>
+<hr>
+<h3 id="h11">第三部分 构思报告（Report writer，14 个字段）</h3>
+<ol class="list"><li><b>Title</b>：Propose or Remember? Consolidating Verifier Feedback into the Noise of Frozen Flow-Matching VLAs</li><li><b>Topic relevance</b>：测试时计算（System 2：多试 + 判据）如何沉淀进机器人基础策略（System 1）；流匹配 VLA 的噪声是一个被忽视的、可以只存几十个数的固化位置。</li><li><b>One-sentence thesis</b>：几十到几百个带成败标签的回合，就足以把冻结流匹配 VLA 的提升固化成一个任务级噪声平移，它在没测过的起点和新任务上稳定生效，并把每次部署需要的测试时尝试减少约 2–3 倍；而把同一份经验固化进权重只能保住约三分之一。</li><li><b>Core problem</b>：System 2 很贵（每次部署都要多次尝试和判据），System 1 冻结；能否、以及以什么粒度，把 System 2 的成败经验低成本地存进 System 1，使下一次一次做成。</li><li><b>Key novelty</b>：(a) 小预算下的可识别性图：每起点可记忆、每任务可平移、每状态在我们的数据和评分器下不可识别；(b) 噪声固化 vs 权重固化的正面比较与诊断（权重路线卡在三分之一，原因是边际模仿丢掉噪声—动作对应）；(c) System 2 预算曲线与测试时计算换算率；(d)（待验证）耦合蒸馏把平移写回权重。</li><li><b>Problem definition</b>：冻结策略在观测和初始噪声下给出动作块；原生部署每次采标准正态噪声。System 2 = 同一任务上多次执行 + 官方成功判据。“固化”= 只用这些成败结果，产出一个可部署的改动（噪声分布或权重），在没参与拟合的起点 / 任务上与原生比较。</li><li><b>Key terms</b>：噪声票（整局固定的噪声）、执行块（每次推理中真正被执行的那部分噪声：LIBERO 前 5 步 × 7 维，RoboDojo 50 步 × 14 维）、平移（执行块加 α·d）、原生、起点、配对种子、按任务聚类区间、判定（GAIN / HARM / 未显示）。</li><li><b>Related work</b>：倾斜噪声分布的框架（Noise Hypernetworks 2508.09968、Uehara et al. 2402.15194、Outsourced diffusion sampling 2502.06999）；冻结策略的噪声空间适配（Golden Ticket 2603.15757、DSRL 2506.15799、NSL 2610.13943、LP-DS 2606.01151）；冻结 VLA 的记忆（Retrieve-then-Steer 2605.10094、TraceFlow 2609.20646）；VLA 的测试时搜索（SVA 2607.03751）；自我改进与蒸馏（STaR、ReST、DAgger）；流的配对蒸馏（rectified flow 2209.03003、一致性模型 2303.01469）。</li><li><b>Method</b>：搜索（每任务 24 张噪声票 × 8 个训练起点，判据打分）→ 闭式方向（执行块上的岭回归，单位化）→ 部署（新采噪声的执行块加 2·d，不改权重、不再搜索）。对照：原生、随机正交平移、最好的单张噪声票、自我模仿微调、蒸馏（边际 / DAgger 式 / 耦合）。</li><li><b>Model details</b>：π0（官方 pi0_libero）与 π0.5（LIBERO 微调版），50 步动作块、每 5 步重规划；岭 λ = 10，剂量 α = 2；权重路线只微调动作专家（fp32 主副本，AdamW，3,000 步）。RoboDojo：π0 双臂 ARX-X5，50 步全执行，执行块 50 × 14（进行中）。</li><li><b>Comparison to state of the art</b>：与 Golden Ticket 相比，我们用约 1/60 的搜索（24 张 vs 约 1,400 张），部署用新采噪声加平移；直接复用最好的一张票平均有提升但在 3 个任务上远低于原生（v3），平移从不低于原生。与 NSL 尚未在同条件下比较（缺口，需补：NSL-AWR 风格的成败加权 actor，等回合数）。</li><li><b>Proposed evaluation</b>：LIBERO-90（π0：13 个中等任务 + 10 个低成功率任务；π0.5：17 个任务），只在没参与拟合的起点上测，各组共用噪声种子逐回合配对，按任务聚类自助法 95 % 区间；RoboDojo（进行中）；SmolVLA（计划）；等测试时计算的比较（pass@k）；等回合数对比 NSL 风格基线。</li><li><b>Falsifiable predictions</b>：P1 耦合蒸馏在 v2 测试集上达到平移收益的 2/3 以上（否则“权重路线上限约三分之一”成立）；P2 指令 → 方向的留一余弦中位数 &gt; 0.3（已检验：0.068，否定，跨任务迁移不能靠指令文本）；P3 RoboDojo 上原生 10–80 % 的任务，平移相对原生 &gt; 0；P4 SmolVLA 上平移相对原生 &gt; 0；P5 预算再翻倍（96 张）相对 48 张提升 ≤ 3 pp（饱和）。</li><li><b>Limitations</b>：只在仿真；π0 上是探索性实验；任务按原生成功率带选择；只固化到任务级；未与 NSL 同条件比较；不能救活原生从不成功的任务；权重路线的结论只覆盖动作专家微调。</li></ol>
+  </article>
+</main>
+</body>
+</html>
