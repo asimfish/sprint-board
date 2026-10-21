@@ -47,7 +47,7 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <header>
   <h1>RoboDojo 引导模仿</h1>
   <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-21 03:20 UTC</div>
-  <nav class="nav"><a href="#status">当前状态</a><a href="#dp">DP：加入引导数据</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#diagnosis">找原因 / DP</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
+  <nav class="nav"><a href="#status">当前状态</a><a href="rd_il1_plan.html"><b>方案（IdeaScientist / PaperOrchestra）</b></a><a href="#dp">DP：加入引导数据</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#diagnosis">找原因 / DP</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
 </header>
 
 <section class="section status" id="status"><span class="kicker">当前状态</span><h2>模仿的意义已找到（Diffusion Policy）：加入 System 2 引导数据，新布局成功率显著提高、且更少需要 System 2；pi0 微调仍未提升</h2><p><b>1. 成功率：</b>从零训练 Diffusion Policy，只用 pi0 自己的成功回合时在没见过的布局上只有 1–4%（58 个回合 5/120；原生加倍到 111 个回合 1/120）；加入 84 个 System 2 引导出的成功回合后 11–15%（dpG 18/120，p = 0.002；dpNG 13/120，vs 等量原生 p = 0.002）。四个独立训练的“原生 + 引导”模型都好于只用原生；换训练种子方向一致但幅度变小（+3.4 pp）。</p>
