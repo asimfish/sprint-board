@@ -174,8 +174,10 @@ Round 2 vs round 1 (unpaired, two-sided): success Fisher exact p = 0.0033; teach
 |---|---|---|---|---|---|---|---|---|---|
 | Validation | 137 | 8637 | 428 | max recall s.t. precision ≥ 0.5 → 0.4976 | 4 | 2 | 0.667 | 0.009 | 0.691 |
 | Test | 137 | 8519 | 423 | same threshold | 2 | 17 | 0.105 | 0.005 | 0.691 |
+| v2 validation (40 epochs, best validation-AUROC epoch 12, ±6 px shift) | 137 | 8637 | 428 | same rule → 0.4486 | 6 | 4 | 0.600 | 0.014 | 0.702 |
+| v2 test | 137 | 8519 | 423 | same threshold | 6 | 8 | 0.429 | 0.014 | 0.711 |
 
-Test AUROC by source: guided 0.719, native 0.681. Training loss fell monotonically over all 10 epochs (1.305 → 1.018). Pre-registered gate criterion (precision ≥ 0.5) failed on test; closed-loop System 1.5 evaluation NOT_RUN.
+Test AUROC by source: guided 0.719, native 0.681. Training loss fell monotonically over all 10 epochs (1.305 → 1.018). Pre-registered gate criterion (precision ≥ 0.5) failed on test; closed-loop System 1.5 evaluation NOT_RUN. Gate v2 (rows 3–4) peaked at validation AUROC 0.70 and then overfit (training loss 1.31 → 0.50); its test AUROC was 0.711 (guided 0.804, native 0.687). It also failed the pre-registered criterion (test precision ≥ 0.5 and recall ≥ 0.05), so the closed-loop evaluation is NOT_RUN for v2 as well.
 
 ## 3. Qualitative Observations
 
@@ -190,7 +192,7 @@ Test AUROC by source: guided 0.719, native 0.681. Training loss fell monotonical
 * Observation: Smoothing of teacher commands had no measurable effect; fewer steps or a lower learning rate increased drift; increasing the share of native samples was the main lever against drift.
 * Observation: An anchoring loss that keeps the fine-tuned action field close to the original on native samples brought drift to 0.038, close to the 0.035 noise floor; in closed loop this reduced the loss from −6 to −2 percentage points (11/96 vs 13/96) but did not produce a gain.
 * Observation: When the DP student trained on native + guided successes replaced pi0 as the collector under the same System 2, guided collection on the training layouts succeeded more often (37.3% vs 25.5%, p = 0.0033) and needed 24% fewer teacher steps per episode.
-* Observation: A visible-input gate trained for 10 epochs to predict System 2 triggers 25 controls ahead was underfit (AUROC 0.69) and almost never fired at the precision-constrained threshold (test recall 0.5%), so the frozen-pi0 + corrector variant could not be evaluated as registered.
+* Observation: Predicting System 2 takeovers 25 controls ahead from visible inputs alone stayed weak: AUROC 0.69 after 10 epochs and 0.71 after 40 epochs with epoch selection and augmentation, and recall stayed at about 1% at the precision-constrained threshold. The learned trigger, not the corrector, is what blocked the frozen-pi0 + corrector variant.
 * Observation: Teacher commands are stop-and-go: 29% of teacher-controlled steps are stationary versus 0% for pi0, and teacher jerk (90th percentile) is about 1.7× that of pi0.
 * Observation: Imitating whole guided trajectories (including the student's behaviour before each takeover) made pi0 stall far more often (60 → 101 of 120 episodes with a stall), the clearest sign that pre-takeover segments must be removed.
 * Observation: Several evaluations lost starts to shared-storage exhaustion at worker start-up. Lost starts were symmetric between the compared models and are excluded rather than re-run.

@@ -90,7 +90,7 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <tr><td>P3</td><td>只用引导不如原生 + 引导（互补）</td><td>只用引导 ≥ 原生 + 引导</td><td class="good">成立：4/120 vs 18/120，p = 0.001</td></tr>
 <tr><td>P4</td><td>学了 System 2 数据的学生更少需要 System 2，成功不降</td><td>接管 / 教师步数不显著降低或成功下降</td><td class="good">成立：−12% / −17%，成功 23 vs 14</td></tr>
 <tr><td>P5</td><td>第二轮学生优于第一轮，调用继续下降</td><td>第二轮 ≤ 第一轮</td><td>部分结果：第二轮收集（dpG + System 2）成功 82/220 = 37.3%，第一轮（pi0 + System 2）84/330 = 25.5%，p = 0.0033；每回合教师步数 214 vs 280（−24%，p &lt; 10⁻⁶）。训练布局、非配对。留出主检验 dpR2 vs dpG 训练中</td></tr>
-<tr><td>P6</td><td>System 1.5 优于 pi0 单独</td><td>≤ pi0，或门控精度 &lt; 0.5</td><td class="bad">门控 v1 未达标：测试精度 0.105、召回 0.005（AUROC 0.69，欠拟合）→ P6（v1）不成立，闭环评测 NOT_RUN。X2b 门控 v2 已预登记并在训练（达标才进闭环）</td></tr>
+<tr><td>P6</td><td>System 1.5 优于 pi0 单独</td><td>≤ pi0，或门控精度 &lt; 0.5</td><td class="bad">不成立（可见输入学习门控）：v1 测试精度 0.105 / 召回 0.005；v2（40 epoch、按验证 AUROC 选 epoch、平移增强，预登记）测试精度 0.429 / 召回 0.014，AUROC 0.71。两版都未过预登记门槛，闭环 NOT_RUN，不再调门控。分解诊断 X2c（System 2 只监视、模仿得到的纠正器执行）已预登记</td></tr>
 <tr><td>P7</td><td>换成通用 VLM 规划器（Astra）当 System 2 也成立</td><td>不复现</td><td>待做（X4）</td></tr></table></div>
 </section>
 
@@ -106,7 +106,7 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <section class="section" id="next"><span class="kicker">下一步</span><h2>实验与分工（规则先写好）</h2>
 <div class="table-wrap"><table><tr><th>#</th><th>实验</th><th>检验</th><th>负责</th><th>判定规则</th><th>状态</th></tr>
 <tr><td>X1</td><td>迭代淡出引导：System 2 引导 dpG（训练布局 110 × 2 种子）→ 聚合两轮引导数据训练 dpR2（两个训练种子）→ 与 dpG 同 120 个留出起点成对</td><td>P5</td><td>Claude（现有流水线）</td><td>dpR2 &gt; dpG（p &lt; 0.05）且第二轮教师步数更少</td><td>收集完成（见 P5）；dpR2 训练中，留出评测自动提交</td></tr>
-<tr><td>X2</td><td>System 1.5：冻结 pi0 + 门控 + DP 纠错器</td><td>P6</td><td>Codex（asbs_模仿_cc）写模块与 CPU 自测；Claude 接入与评测</td><td>pi0+S1.5 &gt; pi0（p &lt; 0.05），门控精度 ≥ 0.5</td><td>v1 门控未达标；X2b：v2 门控测试精度 ≥ 0.5 且召回 ≥ 0.05 才进闭环</td></tr>
+<tr><td>X2</td><td>System 1.5：冻结 pi0 + 门控 + DP 纠错器</td><td>P6</td><td>Codex（asbs_模仿_cc）写模块与 CPU 自测；Claude 接入与评测</td><td>pi0+S1.5 &gt; pi0（p &lt; 0.05），门控精度 ≥ 0.5</td><td class="bad">门控两版均未达标（见 P6）；转入 X2c</td></tr><tr><td>X2c</td><td>检测/纠正分解：System 2 的特权检测器只负责“何时介入”，触发后由只用教师段训练的 DP 纠正器执行（每次最多 150 步，最多 4 次，教师动作为 0）；与 pi0 单独在 120 个留出起点上配对</td><td>P6 的失败归因</td><td>Codex（asbs_模仿_cc）写外部触发模式与循环分支 + CPU 自测；Claude 接入与评测</td><td>pi0 + S2 监视 + 纠正器 &gt; pi0（p &lt; 0.05）→ 模仿得到的纠正有价值、瓶颈在检测；否则纠正器也是瓶颈</td><td>已预登记，任务 G 已下发</td></tr>
 <tr><td>X3</td><td>覆盖消融（体量匹配）：58 原生 + 43 条“新布局”引导（33 个原生未覆盖布局） vs 58 原生 + 41 条“重叠布局”引导（27 个已覆盖布局），各两个训练种子</td><td>I2 的证伪</td><td>Claude</td><td>新布局臂 &gt; 重叠布局臂（合并 240 对，p &lt; 0.05）支持覆盖解释；≤ 则否定</td><td>已预登记并提交训练</td></tr>
 <tr><td>X4</td><td>Astra 当 System 2，同接管协议收集与模仿</td><td>P7</td><td>Codex（asbs_模仿）</td><td>引导成功率 &gt; 原生；dpN + Astra 引导 &gt; dpN</td><td>待下发（需要该会话的执行权限）</td></tr>
 <tr><td>X5</td><td>用 PaperOrchestra 起草论文</td><td>—</td><td>Codex（asbs_模仿_cc）</td><td>可编译初稿，数字可追溯</td><td>初稿 v1 已编译（12 页，0 错误）；等 X1/X3 结果后更新，暂不公开</td></tr></table></div>
