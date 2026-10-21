@@ -20,7 +20,7 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-21 14:22Z</span><span class="chip">PLA-B v1 等待平台</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-21 19:35Z</span><span class="chip">PLA-B v1 运行中</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在 13 个任务的四次测试里都显著提高成功率，换到 10 个原本很少成功的新任务上也提高（+10.3 pp）；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约四分之一到三分之一，连训练时把噪声也配对（耦合蒸馏，PLA-D v4）也一样。</p>
     <div class="tiles">
@@ -211,6 +211,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>10-21 19:40Z</time><span>PLA-B 冒烟软件检查通过，4 卡完整版（1,560 个测试回合 + 诊断 F）19:34Z 开始排队。SmolVLA 第一次准备作业在依赖解析处失败，正在做 v2。RoboDojo profile 重新提交。</span></li>
       <li><time>10-21 14:35Z</time><span>PLA-R v1（事后描述）：平移的逐任务收益在四个独立测试集之间可复现（平均 Spearman 0.60）；10 / 13 个任务每次都提高。PLA-B 完整版按卡利用率改为 4 卡 × 每卡 8 个 worker。作业被平台创建延迟和项目存储不足卡住。</span></li>
       <li><time>10-21 11:35Z</time><span>PLA-D v4（耦合蒸馏）：K_ON 266 / 520 vs 原生 248（+3.5 pp，未显示），未达事先门槛 302；搬进比例 22.5 %。PLA-B v1（平移是否只等于固定动作偏置）规则写定并排队；RoboDojo profile 等名额。</span></li>
       <li><time>10-20 22:05Z</time><span>加两张图：各次测试的提高与区间、搜索预算曲线。</span></li>
