@@ -19,6 +19,17 @@ Principle: the plan and its decision rules are written down before results arriv
 - **X4**: still blocked (needs a send-scoped asbs_模仿 token).
 - **X5**: draft v1 compiled (12 pages, 0 LaTeX errors, 0 overfull boxes) at draft_v1/paper.pdf. One open placeholder remains: the RoboDojo citation.
 
+**Pooling clarification (11:42Z, written before any dpR2 / X3 outcome).** The original X1 rule did not say how dpG's two training seeds pair with dpR2's, so the rule is clarified here. Arms are paired by training seed: dpR2 with dpG at seed 0 and dpR2s with dpG2 at seed 1; for X3, both arms are paired within each seed. A start is a (layout, policy seed) pair; if it is missing in either arm, it is dropped from both, with no reruns. Discordant pairs are summed over the two seeds for one exact two-sided McNemar test. The rule holds only if the direction is correct and p < 0.05. Per-seed results are reported descriptively. No multiplicity correction is applied.
+
+## Status (2026-10-21 19:45Z): evaluations blocked by shared storage
+
+- All models have finished training: dpR2/dpR2s, dpGnov/dpGovl/dpGnov2/dpGovl2, and the corrector dpC.
+- Every evaluation episode needs at least 100 GiB free on the shared DATA filesystem before it starts. That 10 TB filesystem is shared by several projects, and its free space fell to single-digit GB. Our directory has had no writes since 14:22Z.
+- Our own contribution is fixed: each episode used to leave about a 1 GB simulator kit cache, and the backend now deletes it after the episode.
+- 14:27Z amendment: if infrastructure failures leave fewer than 90% of a half's episodes valid, the whole half is rerun and the partial attempt is discarded. This affects X3 va (4/120 valid) and wa (49/120 valid); both partial attempts are discarded.
+- The pooled-scoring script reproduces the existing main result (26/239 vs 9/239, p = 0.0015).
+- The resubmission chain resumes automatically once free space reaches 128 GB.
+
 ## Risks and countermeasures
 
 - **Shared storage (DATA).** Every concurrent episode briefly needs about 1 GB, and a worker refuses to start with < 100 GB free. Keep at most 4 concurrent evaluation jobs, and clean up our own regenerable files before each batch.
