@@ -46,7 +46,7 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <body><main>
 <header>
   <h1>RoboDojo 引导模仿</h1>
-  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-21 00:00 UTC</div>
+  <div class="sub">System 2 在 System 1（pi0）快要失败时接管 → 收集引导出的成功轨迹 → 模仿学习进 pi0 → 验证 pi0 独立运行的成功率是否提升 · 任务 stack_bowls · 更新于 2026-10-21 00:15 UTC</div>
   <nav class="nav"><a href="#status">当前状态</a><a href="#dp">DP：加入引导数据</a><a href="#trajectories">轨迹在哪些任务、多少条</a><a href="#field-dictionary">字段含义</a><a href="#rescue">救回证据与视频</a><a href="#collection">引导收集</a><a href="#imitation">模仿学习</a><a href="#diagnosis">找原因 / DP</a><a href="#history">更正与教训</a><a href="#records">原始记录</a><a href="index.html">返回总览</a></nav>
 </header>
 
@@ -92,7 +92,12 @@ code{font-size:13px;background:#eef2f8;padding:1px 4px;border-radius:4px}
 <tr><td>训练种子 0（上表）</td><td class="n">5 / 120</td><td class="n">18 / 120</td><td class="n">2 / 15</td><td class="n">0.0023</td></tr>
 <tr><td>训练种子 1（重新训练两者）</td><td class="n">4 / 119</td><td class="n">8 / 119</td><td class="n">3 / 7</td><td class="n">0.34</td></tr>
 <tr><td>两个训练种子合并</td><td class="n">9 / 239</td><td class="n good">26 / 239</td><td class="n">5 / 22</td><td class="n">0.0015</td></tr></table></div>
-<p class="note">换一个训练种子，加入引导数据仍然更好，但提升从 +10.8 个百分点降到 +3.4 个百分点，说明从零训练的 DP 本身波动较大，单个训练种子的数字不能当精确效应量。合并检验把两个种子的同一起点当作两对，属近似。另：再加入失败引导回合中已完成的纠错段（约 5 倍纠错数据），前半评测与 dpG 持平（9/59 对 9/60），没有额外收益。</p>
+<p class="note">换一个训练种子，加入引导数据仍然更好，但提升从 +10.8 个百分点降到 +3.4 个百分点，说明从零训练的 DP 本身波动较大，单个训练种子的数字不能当精确效应量。合并检验把两个种子的同一起点当作两对，属近似。</p>
+<h3>更多 System 2 数据：再加入失败引导回合中已完成的纠错段（约 5 倍纠错数据）</h3>
+<div class="table-wrap"><table><tr><th>同一批 120 个留出起点</th><th>训练数据</th><th>成功</th><th>对照</th></tr>
+<tr><td>dpGF</td><td>58 原生 + 84 引导成功 + 失败回合中已完成的纠错段</td><td class="n good">16 / 119</td><td>vs dpN 13 比 2，p = 0.0074；vs dpG（18/120）p = 0.83</td></tr>
+<tr><td>dpGFo</td><td>84 引导成功 + 失败回合纠错段（不含原生）</td><td class="n">10 / 120</td><td>vs dpGo（4/120）p = 0.15</td></tr></table></div>
+<p class="note">dpGF 是独立训练、数据组成不同的另一个模型，再次显著好于只用原生（p = 0.007），“原生 + System 2 数据”的结论又得到一次独立复现；但 5 倍纠错段相对 dpG 没有额外收益。不含原生时，更多 System 2 数据有一定帮助（4 → 10），仍不如与原生组合。</p>
 <p class="note"><b>最后一个待排除的解释：</b>dpG 共 142 个回合。正在补收原生回合（训练布局、新种子，3 × 160 回合），训练“142 个原生回合”的 dpNb 与 dpG 比较；同时训练“全部原生 + 84 个引导”。另有训练种子重复（dpN2 vs dpG2）和加入失败回合纠错段（约 5 倍纠错数据）的 DP 正在训练。<a href="rd/records/dp_heldout_240.json">dpN / dpG 逐回合记录</a>。</p></section>
 
 <section class="section"><div class="grid">
