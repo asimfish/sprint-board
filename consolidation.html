@@ -20,7 +20,7 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-21 19:35Z</span><span class="chip">PLA-B v1 运行中</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-24 16:20Z</span><span class="chip">PLA-I v1 排队中</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在 13 个任务的四次测试里都显著提高成功率，换到 10 个原本很少成功的新任务上也提高（+10.3 pp）；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约四分之一到三分之一，连训练时把噪声也配对（耦合蒸馏，PLA-D v4）也一样。</p>
     <div class="tiles">
@@ -37,6 +37,7 @@
       <ul class="list">
         <li><b>能说：</b>把 System 2（多试 + 官方判据）的挑选写成任务级噪声平移，π0 在 13 个任务的四次新测试里都显著提高（+15.4 / +23.1 / +22.5 / +18.7 pp），换到 10 个新的低成功率任务上也提高（+10.3 pp）。见 <a href="#exp-pla_n_v2">v2</a>、<a href="#exp-pla_n_v3">v3</a>、<a href="#exp-pla_n_v4">v4</a>、<a href="#exp-pla_n_v5">v5</a>、<a href="#exp-pla_n_v6">v6</a>。</li>
         <li><b>能说（事后描述）：</b>每个任务的提高可以复现：四个独立测试集之间逐任务收益的平均 Spearman 相关 0.60（随机打乱的 95 % 分位 0.21）；13 个任务里 10 个在四次测试中都提高，没有一个四次都下降。任务 51 的正负取决于起点（起点 20–29 两次下降，起点 10–19 两次上升）。</li>
+        <li><b>能说：</b>平移的收益约 89 % 可以用每个任务一个固定的动作偏置拿到（<a href="#exp-pla_b_v1">PLA-B v1</a>：偏置 61.3 % vs 平移 63.1 %，差 +1.7 pp 未显示）；平移在单个状态上造成的动作变化随状态而变，但起作用的主要是它的平均部分。</li>
         <li><b>能说：</b>起作用的是拟合出的方向，不是“随便推一下”（v2：对随机正交平移 +18.3 pp）；也比直接复用最好的一张固定噪声更稳（v3：后者在 3 个任务上远低于原生）。</li>
         <li><b>能说：</b>用权重固化同一份经验效果差得多：自我模仿没有提升（PLA v1 / v1c），蒸馏平移策略只保住约三分之一（PLA-D v1 / v2），训练时把噪声也配对仍只有 22.5 %（<a href="#exp-pla_d_v4">PLA-D v4</a>），蒸馏权重再加平移也不超过只加平移（PLA-D v3）。</li>
         <li><b>能说：</b>搜得越多收益越大：6 / 24 / 48 张固定噪声分别 +9.0 / +16.2 / +20.3 pp（<a href="#exp-pla_n_v7">v7</a>）；48 对 24 还不显著。</li>
@@ -189,6 +190,7 @@
     <div class="section-head"><span class="kicker">原始记录</span><h2>逐回合记录</h2>
       <p>每个文件的 <code>rows</code> 是 <code>[任务, 起点, 种子, 组别编号, 是否成功, 控制步数]</code>；<code>arms</code> 给出组别编号的含义。汇总数字在 <a href="consolidation/data/summary.json">summary.json</a>。</p></div>
     <div class="panel"><ul class="list" id="raw-list">
+      <li><a href="consolidation/data/pla_b_v1.json">PLA-B v1</a> · 1,560 个测试回合</li>
       <li><a href="consolidation/data/pla_d_v4.json">PLA-D v4</a> · 1,040 个测试回合 + 参照</li>
       <li><a href="consolidation/data/pla_n_v7.json">PLA-N v7</a> · 1,950 个测试回合</li>
       <li><a href="consolidation/data/pla_z_v1.json">PLA-Z v1</a> · 12 个任务的每票得分（1,152 个搜索回合）</li>
@@ -211,6 +213,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>10-24 16:20Z</time><span>PLA-B v1：固定动作偏置 319 / 520、平移 328、原生 248；平移 − 偏置 +1.7 pp 未显示，偏置 − 原生 +13.7 pp GAIN；诊断 F：耦合学生在训练和测试状态上都没复现老师（F −0.90 / −0.92）。PLA-I v1（在 System 2 稳定有效的 5 个任务上做模仿）已提交。</span></li>
       <li><time>10-21 19:40Z</time><span>PLA-B 冒烟软件检查通过，4 卡完整版（1,560 个测试回合 + 诊断 F）19:34Z 开始排队。SmolVLA 第一次准备作业在依赖解析处失败，正在做 v2。RoboDojo profile 重新提交。</span></li>
       <li><time>10-21 14:35Z</time><span>PLA-R v1（事后描述）：平移的逐任务收益在四个独立测试集之间可复现（平均 Spearman 0.60）；10 / 13 个任务每次都提高。PLA-B 完整版按卡利用率改为 4 卡 × 每卡 8 个 worker。作业被平台创建延迟和项目存储不足卡住。</span></li>
       <li><time>10-21 11:35Z</time><span>PLA-D v4（耦合蒸馏）：K_ON 266 / 520 vs 原生 248（+3.5 pp，未显示），未达事先门槛 302；搬进比例 22.5 %。PLA-B v1（平移是否只等于固定动作偏置）规则写定并排队；RoboDojo profile 等名额。</span></li>
