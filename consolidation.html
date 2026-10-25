@@ -20,7 +20,7 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-25 12:58Z</span><span class="chip">PLA-G v2：门有效，固化 +13.2 pp，但会忘掉其它任务</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-10-25 15:33Z</span><span class="chip">PLA-C C-A：动作空间搜索≈噪声平移（差 +5.4 未显示）</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在 13 个任务的四次测试里都显著提高成功率，换到 10 个原本很少成功的新任务上也提高（+10.3 pp）；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约四分之一到三分之一，连训练时把噪声也配对（耦合蒸馏，PLA-D v4）也一样。</p>
     <div class="tiles">
@@ -37,6 +37,7 @@
       <ul class="list">
         <li><b>能说：</b>把 System 2（多试 + 官方判据）的挑选写成任务级噪声平移，π0 在 13 个任务的四次新测试里都显著提高（+15.4 / +23.1 / +22.5 / +18.7 pp），换到 10 个新的低成功率任务上也提高（+10.3 pp）。见 <a href="#exp-pla_n_v2">v2</a>、<a href="#exp-pla_n_v3">v3</a>、<a href="#exp-pla_n_v4">v4</a>、<a href="#exp-pla_n_v5">v5</a>、<a href="#exp-pla_n_v6">v6</a>。</li>
         <li><b>能说（事后描述）：</b>每个任务的提高可以复现：四个独立测试集之间逐任务收益的平均 Spearman 相关 0.60（随机打乱的 95 % 分位 0.21）；13 个任务里 10 个在四次测试中都提高，没有一个四次都下降。任务 51 的正负取决于起点（起点 20–29 两次下降，起点 10–19 两次上升）。</li>
+        <li><b>能说：</b>同样 192 次 rollout，直接在动作空间搜一个固定偏置也能拿到噪声平移约 80 % 的收益（51.4 % vs 56.8 %，差别未显示；<a href="#exp-pla_c_v1_ca">PLA-C C-A</a>）；不能说“必须在噪声空间搜索”。</li>
         <li><b>能说：</b>只用训练起点上的配对结果就能预先判断 System 2 在哪些任务上对新起点有用（过门 +27.5 vs 未过门 +1.1 个百分点）；在这些任务上模仿后，π0 本身 +13.2 个百分点（两个种子），约为 System 2 收益的一半；但只练这些任务会让其它任务掉约 14 个百分点（<a href="#exp-pla_g_v2">PLA-G v2</a>）。</li>
         <li><b>能说：</b>在 System 2 稳定有效的任务上，模仿它的引导轨迹能把约 91 % 的收益搬进 π0 本身：新起点上 43.5 % → 73.0 %（+29.5 pp，McNemar p = 2e-11），测试时不带 System 2（<a href="#exp-pla_i_v1">PLA-I v1</a>）；System 2 在 π0 单独失败的情况里救回 71 %。</li>
         <li><b>能说：</b>13 个任务混在一起蒸馏时效果被抵消（<a href="#exp-pla_o_v1">PLA-O v1</a>：+0.4 pp）；关键是只固化 System 2 稳定有效的任务。</li>
@@ -193,6 +194,7 @@
     <div class="section-head"><span class="kicker">原始记录</span><h2>逐回合记录</h2>
       <p>每个文件的 <code>rows</code> 是 <code>[任务, 起点, 种子, 组别编号, 是否成功, 控制步数]</code>；<code>arms</code> 给出组别编号的含义。汇总数字在 <a href="consolidation/data/summary.json">summary.json</a>。</p></div>
     <div class="panel"><ul class="list" id="raw-list">
+      <li><a href="consolidation/data/pla_c_v1_ca.json">PLA-C v1 C-A</a> · 840 个测试回合 + 每任务票的成功率离散度</li>
       <li><a href="consolidation/data/pla_g_v2.json">PLA-G v2</a> · 2,760 个测试回合 + 每任务的门</li>
       <li><a href="consolidation/data/pla_i_v1.json">PLA-I v1</a> · 1,200 个测试回合</li>
       <li><a href="consolidation/data/pla_o_v1.json">PLA-O v1</a> · 2,080 个测试回合 + 参照</li>
@@ -219,6 +221,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>10-25 15:33Z</time><span>PLA-C C-A：14 个过门任务上原生 30.4 %、噪声平移 56.8 %、动作空间搜索 51.4 %（平移 − 动作 +5.4，未显示）。PLA-G v3 开始运行，C-B 排在它之后。</span></li>
       <li><time>10-25 12:58Z</time><span>PLA-G v2：14/23 个任务过门；过门任务上门控学生 42.5 % vs 原生 29.3 %（+13.2 pp），System 2 56.8 %；未过门任务上学生 −13.9 pp。PLA-C v1（等预算对照）已排队。</span></li>
       <li><time>10-25 08:50Z</time><span>PLA-I v1：5 个精选任务上，模仿后的 π0 在新起点 73.0 % vs 原生 43.5 %（+29.5 pp），System 2 76.0 %；救回率 71.3 %。PLA-O v1：13 个任务的偏置蒸馏 +0.4 pp，未显示提升。</span></li>
       <li><time>10-24 16:20Z</time><span>PLA-B v1：固定动作偏置 319 / 520、平移 328、原生 248；平移 − 偏置 +1.7 pp 未显示，偏置 − 原生 +13.7 pp GAIN；诊断 F：耦合学生在训练和测试状态上都没复现老师（F −0.90 / −0.92）。PLA-I v1（在 System 2 稳定有效的 5 个任务上做模仿）已提交。</span></li>
