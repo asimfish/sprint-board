@@ -20,7 +20,7 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-11-18 23:37Z</span><span class="chip">两个策略上一致：剂量要调（π0.5 调后 72–74 %，原生 53.8 %）；学生 ≈ 原生 + 约 1 个剂量单位</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-11-18 23:46Z</span><span class="chip">π0.5：搜索方向 + 调好的剂量（6 倍）74.4 %，原生 53.8 %；正交方向无效，剂量过大断崖下跌</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在 13 个任务的四次测试里都显著提高成功率，换到 10 个原本很少成功的新任务上也提高（+10.3 pp）；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约四分之一到三分之一，连训练时把噪声也配对（耦合蒸馏，PLA-D v4）也一样。</p>
     <div class="tiles">
@@ -35,6 +35,7 @@
     <div class="section-head"><span class="kicker">结论汇总</span><h2>到目前为止能说什么、不能说什么</h2></div>
     <div class="panel">
       <ul class="list">
+        <li><b>能说：</b>剂量有一个内部最优点，过大比不加还差（π0.5）：0 / 1 / 2 / 3 / 4 / 6 / 8 / 12 / 16 倍为 53.8 / 59.9 / 62.9 / 68.8 / 72.1 / 74.4 / 69.7 / 40.4 / 14.7 %；16 倍比 6 倍低 59.7 个百分点（区间 −76.0 到 −42.8）。在训练起点上用少量试跑选出的统一强度就是 6 倍，比原生高 20.6（<a href="#exp-pla_dose_p05x_v1">PLA-DOSE-P05X</a>）。</li>
         <li><b>能说：</b>增益是搜索方向特有的（π0.5，同一批 680 个测试回合）：沿搜索方向 −6 / −3 / 0 / +3 / +6 倍为 26.6 / 38.5 / 53.8 / 68.8 / 74.4 %；同样大小的平移加在正交方向上为 53.7 / 51.0 %（与原生无差别）。6 倍下搜索方向比正交方向高 23.4 个百分点（区间 +10.0 到 +39.4），比相反方向高 47.8（<a href="#exp-pla_ctrl_p05_v1">PLA-CTRL-P05</a>）。</li>
         <li><b>能说：</b>剂量结论在两个策略上一致。π0.5（17 个任务）在 0 / 1 / 2 / 3 / 4 / 6 倍下为 53.8 / 59.9 / 62.9 / 68.8 / 72.1 / 74.4 %；在训练起点上调过剂量的表 72.5 %，比固定 2 倍高 9.6 个百分点（区间 +1.9 到 +20.4），比原生高 18.7；固化后的学生相当于原生策略多了约 0.8 个剂量单位（区间 0.35–1.80，残差约 1 个百分点），上限并不更高（<a href="#exp-pla_dose_p05_v1">PLA-DOSE-P05</a>；π0 上对应为 71.8 %、+16.4、1.18 个单位）。</li>
         <li><b>能说：</b>在第二个策略 π0.5 上（17 个任务，每臂 680 回合）：固化后的学生 59.9 %，比原生 52.8 % 高 7.1 个百分点（区间 +2.3 到 +12.1，登记的主假设确认）；不训练的 2 倍 / 3 倍平移为 64.3 / 70.3 %，学生没有超过 2 倍、明显低于 3 倍；学生保留了 2 倍平移收益的 62 %（<a href="#exp-pi05_formal_v1">π0.5 正式实验</a>）。</li>
@@ -204,6 +205,7 @@
     <div class="section-head"><span class="kicker">原始记录</span><h2>逐回合记录</h2>
       <p>每个文件的 <code>rows</code> 是 <code>[任务, 起点, 种子, 组别编号, 是否成功, 控制步数]</code>；<code>arms</code> 给出组别编号的含义。汇总数字在 <a href="consolidation/data/summary.json">summary.json</a>。</p></div>
     <div class="panel"><ul class="list" id="raw-list">
+      <li><a href="consolidation/data/pla_dose_p05x_v1.json">PLA-DOSE-P05X v1</a> · 2,856 个新回合（另含 0–6 倍的参照回合）</li>
       <li><a href="consolidation/data/pla_ctrl_p05_v1.json">PLA-CTRL-P05 v1</a> · 2,720 个对照回合</li>
       <li><a href="consolidation/data/pla_dose_p05_v1.json">PLA-DOSE-P05 v1</a> · 11,152 个回合（9,520 测试 + 1,632 选剂量）</li>
       <li><a href="consolidation/data/pi05_formal_v1.json">π0.5 正式实验</a> · 4,760 个测试回合</li>
@@ -242,6 +244,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>11-18 23:46Z</time><span>PLA-DOSE-P05X 分析（一次）：π0.5 的曲线在 6 倍见顶，12 倍低于原生，16 倍只剩 14.7 %；7 条预测 4 条成立，回落幅度比预计的陡得多。</span></li>
       <li><time>11-18 23:37Z</time><span>PLA-CTRL-P05 分析（一次）：两个登记问题都确认，8 条预测全部成立；正交方向的同等平移不带来增益，相反方向按强度变差。</span></li>
       <li><time>11-18 22:09Z</time><span>登记并提交两个 π0.5 后续实验：剂量延伸到 8 / 12 / 16 倍；正交方向与相反方向的对照（3 倍、6 倍）。</span></li>
       <li><time>11-18 22:03Z</time><span>PLA-DOSE-P05 分析（一次）：四个登记问题与 π0 上的结论一致（三个确认、一个“未显示差别”）；16 条预测 15 条成立；π0.5 的曲线到 6 倍仍未回落。</span></li>
