@@ -20,7 +20,7 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-11-18 01:02Z</span><span class="chip">PLA-DOSE：学生 ≈ 原生 + 1.2 个剂量单位；调过剂量的表 71.8 %</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-11-18 02:25Z</span><span class="chip">PLA-DOSE：学生 ≈ 原生 + 1.2 个剂量单位；调过剂量的表 71.8 %</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在 13 个任务的四次测试里都显著提高成功率，换到 10 个原本很少成功的新任务上也提高（+10.3 pp）；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约四分之一到三分之一，连训练时把噪声也配对（耦合蒸馏，PLA-D v4）也一样。</p>
     <div class="tiles">
@@ -236,6 +236,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>11-18 02:25Z</time><span>π0.5 正式实验：采集记录恢复并核对后，训练与测试作业已重新提交并运行；四个学生训练正常结束，测试进行中。分析作业已准备好并在合成数据上演练过，测试结束后运行一次。</span></li>
       <li><time>11-18 01:02Z</time><span>PLA-DOSE 分析（一次）：四个登记问题里三个确认、一个“未显示差别”，与预测方向一致；学生 ≈ 原生 + 1.2 个剂量单位，调过剂量的表 71.8 %。结果行是从存储归档里按校验和取回的。π0.5 训练阶段待重新提交。</span></li>
       <li><time>11-17 19:53Z</time><span>补记 PLA-R3（11-09 分析）：三个假设都未确认，学生 + 2 倍平移 64.6 % ≈ 3 倍平移 65.7 %。PLA-DOSE 与 π0.5 数据阶段已在 11-15 跑完；π0.5 训练与测试阶段今天提交。</span></li>
       <li><time>11-08 16:48Z</time><span>PLA-R2：在学生上再搜索一轮 +5.4（未确认）；但学生 + 第一轮平移 66.4 %，比查表 +11.1，收益相加。PLA-R3 确认中；π0.5 冒烟测试开始。</span></li>
