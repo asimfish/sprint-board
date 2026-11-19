@@ -20,7 +20,7 @@
 
 <main class="page" id="top">
   <section class="intro">
-    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-11-19 00:15Z</span><span class="chip">π0.5：搜索方向 + 调好的剂量（6 倍）74.4 %，原生 53.8 %；正交方向无效，剂量过大断崖下跌</span></div>
+    <div class="eyebrow"><span>π0 · LIBERO-90 · 13 + 10 个任务</span><span>更新 2026-11-19 01:26Z</span><span class="chip">π0.5：方向 + 调好的剂量 72–74 %，复核过的单张噪声票 69 %，原生 54 %；同等预算下未证明方向更好</span></div>
     <h1>把 System 2 的挑选固化进学生：噪声平移有效，权重微调基本无效</h1>
     <p class="lead">学生是冻结的官方 π0；System 2 是“多试几次 + 官方成功判据”。把挑选结果写成一个任务级的噪声平移（35 个数），在 13 个任务的四次测试里都显著提高成功率，换到 10 个原本很少成功的新任务上也提高（+10.3 pp）；用学生自己的成功回合微调权重没有提升，把平移后的策略蒸馏进权重只保住约四分之一到三分之一，连训练时把噪声也配对（耦合蒸馏，PLA-D v4）也一样。</p>
     <div class="tiles">
@@ -43,7 +43,7 @@
         <li><b>能说：</b>把 System 2（多试 + 官方判据）的挑选写成任务级噪声平移，π0 在 13 个任务的四次新测试里都显著提高（+15.4 / +23.1 / +22.5 / +18.7 pp），换到 10 个新的低成功率任务上也提高（+10.3 pp）。见 <a href="#exp-pla_n_v2">v2</a>、<a href="#exp-pla_n_v3">v3</a>、<a href="#exp-pla_n_v4">v4</a>、<a href="#exp-pla_n_v5">v5</a>、<a href="#exp-pla_n_v6">v6</a>。</li>
         <li><b>能说（事后描述）：</b>每个任务的提高可以复现：四个独立测试集之间逐任务收益的平均 Spearman 相关 0.60（随机打乱的 95 % 分位 0.21）；13 个任务里 10 个在四次测试中都提高，没有一个四次都下降。任务 51 的正负取决于起点（起点 20–29 两次下降，起点 10–19 两次上升）。</li>
         <li><b>能说：</b>在 π0 自己的候选动作块里逐状态挑选，即使用仿真前瞻的理想裁判也只 +0.9 个百分点（区间 −5.2 到 +6.2），从未成功的任务 512 次续跑 0 次成功（<a href="#exp-pla_q_v1">PLA-Q</a>）。</li>
-        <li><b>不能说：</b>同等预算下拟合的方向优于“留下最好的那张噪声票”。π0.5 上单张票 66.2 %，同样 192 次搜索、2 倍强度的方向 62.9 %（差 −3.2，区间 −10.1 到 +3.5）；只有调好剂量（6 倍，74.4 %）才超过单张票（+8.2，区间 +1.6 到 +15.9），而调剂量另外花了试跑（<a href="#exp-pla_tkt_p05_v1">PLA-TKT-P05</a>）。</li>
+        <li><b>不能说：</b>同等预算下拟合的方向优于“留下最好的那张噪声票”（π0.5）。只花搜索预算时：单张票 66.2 %，2 倍强度的方向 62.9 %（差 −3.2，区间 −10.1 到 +3.5）。总预算相等（双方都多花每任务 80 次试跑）时：复核过的单张票 69.1 %，按任务调剂量的方向 72.5 %（+3.4，区间 −2.5 到 +10.3），统一 6 倍 74.4 %（+5.3，区间 −1.2 到 +12.8），都没有与 0 分开（<a href="#exp-pla_tkt_p05_v1">PLA-TKT-P05</a>、<a href="#exp-pla_tkt_p05_v2">v2</a>）。</li>
         <li><b>不能说：</b>“学生 + 平移”优于查表。确认实验 <a href="#exp-pla_r3_v1">PLA-R3</a> 的三个登记假设都没有确认：学生 + 2 倍平移 64.6 %，与不训练、只把平移加到 3 倍的 65.7 % 几乎一样（PLA-R2 的 +11.1 是事后观察，不成立为固化的优势）。</li>
         <li><b>不能说：</b>固化能迁移到没参与训练的任务——方向一致的留出任务也没有提升（−3.8 / −13.1；<a href="#exp-pla_x_v1">PLA-X</a>）。成败型 System 2 的知识就是每任务一个固定偏置，按指令查表比改权重更好。</li>
         <li><b>能说：</b>过门任务学 System 2 的成功轨迹、其它任务用 π0 自己的样本做锚，固化后的 π0 在 23 个任务整体上提高 +8.5 个百分点（两个种子都显著；<a href="#exp-pla_g_v4b">PLA-G v4</a>）；每任务更多引导数据没有更好。</li>
@@ -206,6 +206,7 @@
     <div class="section-head"><span class="kicker">原始记录</span><h2>逐回合记录</h2>
       <p>每个文件的 <code>rows</code> 是 <code>[任务, 起点, 种子, 组别编号, 是否成功, 控制步数]</code>；<code>arms</code> 给出组别编号的含义。汇总数字在 <a href="consolidation/data/summary.json">summary.json</a>。</p></div>
     <div class="panel"><ul class="list" id="raw-list">
+      <li><a href="consolidation/data/pla_tkt_p05_v2.json">PLA-TKT-P05 v2</a> · 1,360 个复核回合 + 680 个测试回合（另含参照回合）</li>
       <li><a href="consolidation/data/pla_tkt_p05_v1.json">PLA-TKT-P05 v1</a> · 680 个基线回合（另含参照回合）</li>
       <li><a href="consolidation/data/pla_dose_p05x_v1.json">PLA-DOSE-P05X v1</a> · 2,856 个新回合（另含 0–6 倍的参照回合）</li>
       <li><a href="consolidation/data/pla_ctrl_p05_v1.json">PLA-CTRL-P05 v1</a> · 2,720 个对照回合</li>
@@ -246,6 +247,7 @@
   <section class="section">
     <div class="section-head"><span class="kicker">更新记录</span><h2>改了什么</h2></div>
     <div class="panel"><ul class="log">
+      <li><time>11-19 01:26Z</time><span>PLA-TKT-P05 v2 分析（一次）：总预算相等时，调过剂量的方向没有被证明优于复核过的单张噪声票（+3.4 / +5.3，区间含 0）；5 条预测全部成立。“不能说”一条相应扩充；上一张卡片补充了“固定噪声票的回合是确定的”这一说明。</span></li>
       <li><time>11-19 00:15Z</time><span>PLA-TKT-P05 分析（一次）：最好的单张噪声票 66.2 %；同等预算、2 倍强度的方向没有超过它，调好剂量后才超过。结论汇总里加入这条“不能说”，并删去已过时的“不能说 3 倍比 2 倍好”（PLA-DOSE 与 PLA-DOSE-P05 已在两个策略上确认 3 倍好于 2 倍）。</span></li>
       <li><time>11-18 23:46Z</time><span>PLA-DOSE-P05X 分析（一次）：π0.5 的曲线在 6 倍见顶，12 倍低于原生，16 倍只剩 14.7 %；7 条预测 4 条成立，回落幅度比预计的陡得多。</span></li>
       <li><time>11-18 23:37Z</time><span>PLA-CTRL-P05 分析（一次）：两个登记问题都确认，8 条预测全部成立；正交方向的同等平移不带来增益，相反方向按强度变差。</span></li>
